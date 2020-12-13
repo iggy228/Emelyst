@@ -1,3 +1,4 @@
+import 'package:emelyst/components/navigation.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -133,35 +134,39 @@ class _HomeState extends State<Home> {
                 child: ListView.builder(
                   itemCount: rooms.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return Container(
-                      margin: EdgeInsets.symmetric(vertical: 8),
-                      padding: EdgeInsets.fromLTRB(16, 16, 0, 0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(16),
-                        image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image: AssetImage('images/${rooms[index]['icon']}.png'),
-                        )
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            rooms[index]['name'],
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontFamily: 'Emelyst',
-                              color: Colors.white,
+                    return GestureDetector(
+                      onTap: () => Navigator.pushNamed(context, '/room'),
+                      child: Container(
+                        margin: EdgeInsets.symmetric(vertical: 8),
+                        padding: EdgeInsets.fromLTRB(16, 16, 0, 0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: AssetImage('images/${rooms[index]['icon']}.png'),
+                          )
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              rooms[index]['name'],
+                              style: TextStyle(
+                                fontSize: 24,
+                                fontFamily: 'Emelyst',
+                                color: Colors.white,
+                              ),
                             ),
-                          ),
-                          SizedBox(height: 8),
-                          Image.asset('icons/${rooms[index]['icon']}.png', width: 90, height: 90,)
-                        ],
+                            SizedBox(height: 8),
+                            Image.asset('icons/${rooms[index]['icon']}.png', width: 90, height: 90)
+                          ],
+                        ),
                       ),
                     );
                   },
                 ),
-              )
+              ),
+              Navigation(),
             ],
           ),
         ),

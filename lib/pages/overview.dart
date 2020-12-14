@@ -1,3 +1,5 @@
+import 'package:emelyst/components/header.dart';
+import 'package:emelyst/styles/radial_background.dart';
 import 'package:flutter/material.dart';
 
 class Overview extends StatefulWidget {
@@ -8,6 +10,12 @@ class Overview extends StatefulWidget {
 class _OverviewState extends State<Overview> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return RadialBackground(
+      child: Column(
+        children: [
+          Header(),
+        ],
+      )
+    );
   }
 }

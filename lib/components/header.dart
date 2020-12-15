@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget {
+  final String title;
+
+  Header({this.title});
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -21,7 +25,7 @@ class Header extends StatelessWidget {
             onPressed: null,
           ),
           Text(
-            'Prehľad',
+            title,
             style: TextStyle(
               color: Colors.white,
               fontSize: 24,

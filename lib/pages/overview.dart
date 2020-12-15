@@ -45,7 +45,7 @@ class _OverviewState extends State<Overview> {
     return RadialBackground(
       child: Column(
         children: [
-          Header(),
+          Header(title: 'Prehľad'),
           Expanded(
             child: ListView(
               children: [
@@ -137,6 +137,7 @@ class _OverviewState extends State<Overview> {
                     ),
                   ],
                 ),
+                // box for chart
                 Container(
                   margin: EdgeInsets.all(16),
                   padding: EdgeInsets.all(16),

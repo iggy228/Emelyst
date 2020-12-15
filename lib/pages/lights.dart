@@ -89,4 +89,10 @@ class _LightsState extends State<Lights> {
       ),
     );
   }
+
+  @override
+  void deactivate() {
+    mqttClient.disconnect();
+    super.deactivate();
+  }
 }

@@ -1,6 +1,6 @@
-import 'package:emelyst/components/header.dart';
-import 'package:emelyst/components/navigation.dart';
-import 'package:emelyst/components/radial_background.dart';
+import 'package:emelyst/widgets/header.dart';
+import 'package:emelyst/widgets/navigation.dart';
+import 'package:emelyst/widgets/radial_background.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 

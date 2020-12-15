@@ -16,7 +16,7 @@ class Navigation extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           IconButton(
-            onPressed: () => Navigator.pushNamed(context, '/home'),
+            onPressed: () => Navigator.popUntil(context, ModalRoute.withName('/home')),
             icon: Image.asset('icons/home.png'),
             iconSize: 30,
           ),

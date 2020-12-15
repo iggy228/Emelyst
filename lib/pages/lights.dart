@@ -1,8 +1,11 @@
-import 'package:emelyst/components/header.dart';
-import 'package:emelyst/components/navigation.dart';
-import 'package:emelyst/components/radial_background.dart';
+import 'package:emelyst/widgets/header.dart';
+import 'package:emelyst/widgets/light_card.dart';
+import 'package:emelyst/widgets/navigation.dart';
+import 'package:emelyst/widgets/radial_background.dart';
 import 'package:emelyst/model/Light.dart';
 import 'package:flutter/material.dart';
+import 'package:mqtt_client/mqtt_client.dart';
+import 'package:mqtt_client/mqtt_server_client.dart';
 
 class Lights extends StatefulWidget {
   @override
@@ -11,12 +14,52 @@ class Lights extends StatefulWidget {
 
 class _LightsState extends State<Lights> {
 
+  MqttServerClient mqttClient;
+
   List lights = [
     Light(name: 'kuchyna', data: false),
     Light(name: 'spalna', data: false),
     Light(name: 'garaz', data: false),
     Light(name: 'obyvacka', data: false),
   ];
+
+  Future<void> mqttConnect() async {
+    mqttClient = MqttServerClient.withPort('test.mosquitto.org', 'mobileID-15662', 1883);
+
+    try {
+      await mqttClient.connect();
+    } catch (e) {
+      print('This is your error: $e');
+    }
+
+    for (int i = 0; i < lights.length; i++) {
+      mqttClient.subscribe(lights[i].name, MqttQos.atLeastOnce);
+    }
+    mqttClient.updates.listen((event) {
+      MqttPublishMessage message = event[0].payload;
+      var data = MqttPublishPayload.bytesToStringAsString(message.payload.message);
+      print(data);
+      for (int i = 0; i < lights.length; i++) {
+        if (event[0].topic == lights[i].name) {
+          setState(() {
+            lights[i].data = data == 'true' ? true : false;
+          });
+        }
+      }
+    });
+  }
+
+  void mqttPublishMessage(int index) async {
+    final builder = MqttClientPayloadBuilder();
+    builder.addString(lights[index].data ? 'false' : 'true');
+    mqttClient.publishMessage(lights[index].name, MqttQos.atLeastOnce, builder.payload);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    mqttConnect();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,51 +72,14 @@ class _LightsState extends State<Lights> {
               itemCount: lights.length,
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
               itemBuilder: (BuildContext context, int index) {
-                return GestureDetector(
-                  onTap: () {},
-                  child: Container(
-                    margin: EdgeInsets.all(8),
-                    padding: EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.black,
-                      borderRadius: BorderRadius.circular(32),
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          lights[index].name,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20,
-                            fontFamily: 'Emelyst',
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Image.asset(
-                            lights[index].data ? 'icons/light_on.png' : 'icons/light_off.png',
-                            width: 70,
-                            height: 70,
-                          ),
-                        ),
-                        Card(
-                          color: lights[index].data ? Colors.amberAccent : Colors.white,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              lights[index].data ? 'on' : 'off',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontFamily: 'Emelyst'
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                return LightCard(
+                  title: lights[index].name,
+                  data: lights[index].data,
+                  onPress: () {
+                    setState(() {
+                      mqttPublishMessage(index);
+                    });
+                  }
                 );
               },
             ),

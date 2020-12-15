@@ -1,4 +1,6 @@
-import 'package:emelyst/components/navigation.dart';
+import 'package:emelyst/widgets/category_card.dart';
+import 'package:emelyst/widgets/navigation.dart';
+import 'package:emelyst/widgets/room_card.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatefulWidget {
@@ -30,10 +32,7 @@ class _HomeState extends State<Home> {
                 Color.fromRGBO(52, 192, 209, 1),
                 Color.fromRGBO(26, 94, 103, 1),
               ],
-              stops: [
-                0.1,
-                1
-              ]
+              stops: [0.1, 1],
             )
           ),
           child: Column(
@@ -106,24 +105,10 @@ class _HomeState extends State<Home> {
                   itemBuilder: (BuildContext context, int index) {
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
-                      child: FlatButton.icon(
-                        onPressed: () => Navigator.pushNamed(context, '/${categories[index]["url"]}'),
-                        color: Colors.black,
-                        padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(32),
-                        ),
-                        icon: Image.asset(
-                          'icons/${categories[index]["icon"]}.png',
-                        ),
-                        label: Text(
-                          categories[index]["name"],
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Emelyst',
-                            fontSize: 20,
-                          ),
-                        ),
+                      child: CategoryCard(
+                        title: categories[index]['name'],
+                        imageUrl: categories[index]['icon'],
+                        routeName: categories[index]['url'],
                       ),
                     );
                   },
@@ -134,34 +119,9 @@ class _HomeState extends State<Home> {
                 child: ListView.builder(
                   itemCount: rooms.length,
                   itemBuilder: (BuildContext context, int index) {
-                    return GestureDetector(
-                      onTap: () => Navigator.pushNamed(context, '/room'),
-                      child: Container(
-                        margin: EdgeInsets.symmetric(vertical: 8),
-                        padding: EdgeInsets.fromLTRB(16, 16, 0, 0),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: AssetImage('images/${rooms[index]['icon']}.png'),
-                          )
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              rooms[index]['name'],
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontFamily: 'Emelyst',
-                                color: Colors.white,
-                              ),
-                            ),
-                            SizedBox(height: 8),
-                            Image.asset('icons/${rooms[index]['icon']}.png', width: 90, height: 90)
-                          ],
-                        ),
-                      ),
+                    return RoomCard(
+                      title: rooms[index]['name'],
+                      imageUrl: rooms[index]['icon'],
                     );
                   },
                 ),

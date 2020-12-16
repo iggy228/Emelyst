@@ -24,7 +24,7 @@ class Navigation extends StatelessWidget {
           Image.asset('images/logo.png', height: 30),
           SizedBox(width: 32),
           IconButton(
-            onPressed: () {},
+            onPressed: () => Navigator.pushNamed(context, '/settings'),
             icon: Image.asset('icons/settings.png'),
           ),
         ],

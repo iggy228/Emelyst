@@ -1,9 +1,12 @@
+import 'package:emelyst/model/Sensor.dart';
 import 'package:emelyst/widgets/header.dart';
+import 'package:emelyst/widgets/line_chart_wrapper.dart';
 import 'package:emelyst/widgets/navigation.dart';
 import 'package:emelyst/widgets/radial_background.dart';
 import 'package:emelyst/widgets/sensor_card.dart';
-import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:mqtt_client/mqtt_client.dart';
+import 'package:mqtt_client/mqtt_server_client.dart';
 
 class Overview extends StatefulWidget {
   @override
@@ -11,35 +14,46 @@ class Overview extends StatefulWidget {
 }
 
 class _OverviewState extends State<Overview> {
-  
-  List<LineChartBarData> chartData = [
-    LineChartBarData(
-      spots: [
-        FlSpot(1, 23),
-        FlSpot(2, 28),
-        FlSpot(3, 33),
-        FlSpot(4, 30),
-        FlSpot(5, 28),
-        FlSpot(6, 33),
-        FlSpot(7, 31),
-      ],
-      colors: [
-        Color.fromRGBO(52, 192, 209, 1),
-      ],
-    ),
+
+  MqttServerClient mqttClient;
+
+  List sensorData = [
+    Sensor(name: 'teplota', data: 0),
+    Sensor(name: 'vlhkost', data: 0),
   ];
 
-  String makeBottomTitle(value) {
-    switch (value.toInt()) {
-      case 1: return 'PO';
-      case 2: return 'UT';
-      case 3: return 'ST';
-      case 4: return 'ŠT';
-      case 5: return 'PI';
-      case 6: return 'SO';
-      case 7: return 'NE';
+  Future<void> mqttConnect() async {
+    mqttClient = MqttServerClient.withPort('test.mosquitto.org', 'mobileID-15662', 1883);
+
+    try {
+      await mqttClient.connect();
+    } catch (e) {
+      print('This is your error: $e');
     }
-    return '';
+
+    for (int i = 0; i < sensorData.length; i++) {
+      mqttClient.subscribe(sensorData[i].name, MqttQos.atLeastOnce);
+    }
+    mqttClient.updates.listen((event) {
+      MqttPublishMessage message = event[0].payload;
+      double data = double.parse(MqttPublishPayload.bytesToStringAsString(message.payload.message));
+
+
+      // Recognizing right topic
+      for (int i = 0; i < sensorData.length; i++) {
+        if (event[0].topic == sensorData[i].name) {
+          setState(() {
+            sensorData[i].data = data;
+          });
+        }
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    mqttConnect();
   }
 
   @override
@@ -62,14 +76,14 @@ class _OverviewState extends State<Overview> {
                     // Box for temperature
                     SensorCard(
                       title: 'Teplota',
-                      data: 25,
+                      data: sensorData[0].data,
                       postfix: '°C',
                       iconUrl: 'temperature',
                     ),
                     // Box for humidity
                     SensorCard(
                       title: 'Vlhkosť',
-                      data: 80,
+                      data: sensorData[1].data,
                       postfix: '%',
                       iconUrl: 'humidity',
                     ),
@@ -96,33 +110,7 @@ class _OverviewState extends State<Overview> {
                         ),
                       ),
                       SizedBox(height: 16),
-                      LineChart(
-                        LineChartData(
-                          lineBarsData: chartData,
-                          minY: 10,
-                          maxY: 40,
-                          gridData: FlGridData(
-                            show: false,
-                          ),
-                          borderData: FlBorderData(
-                            border: Border(bottom: BorderSide(color: Colors.white), left: BorderSide(color: Colors.white)),
-                          ),
-                          titlesData: FlTitlesData(
-                            bottomTitles: SideTitles(
-                              showTitles: true,
-                              getTextStyles: (value) => const TextStyle(color: Colors.white, fontSize: 12),
-                              getTitles: (value) {
-                                return makeBottomTitle(value);
-                              },
-                            ),
-                            leftTitles: SideTitles(
-                              showTitles: true,
-                              getTextStyles: (value) => const TextStyle(color: Colors.white),
-                              interval: 5
-                            )
-                          ),
-                        ),
-                      ),
+                      LineChartWrapper(),
                     ],
                   ),
                 ),

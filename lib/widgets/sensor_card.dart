@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class SensorCard extends StatelessWidget {
   final String title;
-  final int data;
+  final double data;
   final String postfix;
   final String iconUrl;
 
@@ -11,7 +11,7 @@ class SensorCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(24),
+      padding: EdgeInsets.symmetric(vertical: 24, horizontal: 16),
       decoration: BoxDecoration(
         color: Colors.black,
         borderRadius: BorderRadius.circular(32),

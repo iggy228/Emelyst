@@ -38,7 +38,8 @@ class _LightsState extends State<Lights> {
     mqttClient.updates.listen((event) {
       MqttPublishMessage message = event[0].payload;
       var data = MqttPublishPayload.bytesToStringAsString(message.payload.message);
-      print(data);
+
+      // Recognizing right topic
       for (int i = 0; i < lights.length; i++) {
         if (event[0].topic == lights[i].name) {
           setState(() {

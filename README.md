@@ -1,16 +1,10 @@
-# emelyst
+# Emelyst
 
-App for controlling smart home.
+Je to projekt ktorý bol na Spojenej škole Tvrdošín.
+Cieľom tohto projektu bolo postaviť model Inteligentného domu.
+Pracovalo na ňom 13 študentov.
+Mojim cieľom bolo naprogramovať mobilnú apku ktorou by sa tento dom ovládal.
 
-## Getting Started
+## funkcia repositára
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Funkcia tohto repositára je čisto naúčna aby sa další programátori mohli inšpirovať pri tvorbe svojich dalších projektov.

@@ -1,6 +1,7 @@
 import 'package:emelyst/widgets/header.dart';
 import 'package:emelyst/widgets/navigation.dart';
 import 'package:emelyst/widgets/radial_background.dart';
+import 'package:emelyst/widgets/sensor_card.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -24,7 +25,7 @@ class _OverviewState extends State<Overview> {
       ],
       colors: [
         Color.fromRGBO(52, 192, 209, 1),
-      ]
+      ],
     ),
   ];
 
@@ -38,6 +39,7 @@ class _OverviewState extends State<Overview> {
       case 6: return 'SO';
       case 7: return 'NE';
     }
+    return '';
   }
 
   @override
@@ -58,82 +60,18 @@ class _OverviewState extends State<Overview> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     // Box for temperature
-                    Container(
-                      padding: EdgeInsets.all(24),
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(32),
-                      ),
-                      child: Column(
-                        children: [
-                          Text(
-                            'Teplota',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Emelyst',
-                              fontSize: 24,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Image.asset(
-                                'icons/temperature.png',
-                                width: 60,
-                                height: 60,
-                              ),
-                              Text(
-                                '25°C',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 28,
-                                  fontFamily: 'GillSans'
-                                ),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
+                    SensorCard(
+                      title: 'Teplota',
+                      data: 25,
+                      postfix: '°C',
+                      iconUrl: 'temperature',
                     ),
                     // Box for humidity
-                    Container(
-                      padding: EdgeInsets.all(24),
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(32),
-                      ),
-                      child: Column(
-                        children: [
-                          Text(
-                            'Vlhkosť',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontFamily: 'Emelyst',
-                              fontSize: 24,
-                            ),
-                          ),
-                          SizedBox(height: 8),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Image.asset(
-                                'icons/humidity.png',
-                                width: 60,
-                                height: 60,
-                              ),
-                              Text(
-                                '80%',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 28,
-                                    fontFamily: 'GillSans'
-                                ),
-                              )
-                            ],
-                          ),
-                        ],
-                      ),
+                    SensorCard(
+                      title: 'Vlhkosť',
+                      data: 80,
+                      postfix: '%',
+                      iconUrl: 'humidity',
                     ),
                   ],
                 ),
@@ -161,7 +99,7 @@ class _OverviewState extends State<Overview> {
                       LineChart(
                         LineChartData(
                           lineBarsData: chartData,
-                          minY: 20,
+                          minY: 10,
                           maxY: 40,
                           gridData: FlGridData(
                             show: false,
@@ -172,13 +110,15 @@ class _OverviewState extends State<Overview> {
                           titlesData: FlTitlesData(
                             bottomTitles: SideTitles(
                               showTitles: true,
-                              reservedSize: 12,
-                              margin: 4,
                               getTextStyles: (value) => const TextStyle(color: Colors.white, fontSize: 12),
-                              // ignore: missing_return
                               getTitles: (value) {
-                                makeBottomTitle(value);
+                                return makeBottomTitle(value);
                               },
+                            ),
+                            leftTitles: SideTitles(
+                              showTitles: true,
+                              getTextStyles: (value) => const TextStyle(color: Colors.white),
+                              interval: 5
                             )
                           ),
                         ),

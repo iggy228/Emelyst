@@ -16,8 +16,11 @@ class CategoryCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(32),
       ),
-      icon: Image.asset(
-        'icons/$imageUrl.png',
+      icon: Hero(
+        tag: 'Emelyst-$imageUrl',
+        child: Image.asset(
+          'icons/$imageUrl.png',
+        ),
       ),
       label: Text(
         title,

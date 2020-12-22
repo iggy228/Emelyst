@@ -1,6 +1,7 @@
 import 'package:emelyst/model/Light.dart';
 import 'package:emelyst/widgets/door_card.dart';
 import 'package:emelyst/widgets/header.dart';
+import 'package:emelyst/widgets/header_icon_box.dart';
 import 'package:emelyst/widgets/navigation.dart';
 import 'package:emelyst/widgets/radial_background.dart';
 import 'package:emelyst/widgets/shutter_box.dart';
@@ -23,12 +24,12 @@ class _SecurityState extends State<Security> {
   @override
   Widget build(BuildContext context) {
     return RadialBackground(
-      child: Column(
+      child: ListView(
         children: [
           Header(
             title: 'Ochrana',
           ),
-
+          HeaderIconBox('security', 'icons/security.png'),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,

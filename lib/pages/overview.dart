@@ -1,5 +1,6 @@
 import 'package:emelyst/model/Sensor.dart';
 import 'package:emelyst/widgets/header.dart';
+import 'package:emelyst/widgets/header_icon_box.dart';
 import 'package:emelyst/widgets/line_chart_wrapper.dart';
 import 'package:emelyst/widgets/navigation.dart';
 import 'package:emelyst/widgets/radial_background.dart';
@@ -62,6 +63,7 @@ class _OverviewState extends State<Overview> {
       child: Column(
         children: [
           Header(title: 'Prehľad'),
+          HeaderIconBox('home', 'icons/home.png'),
           Expanded(
             child: ListView(
               children: [

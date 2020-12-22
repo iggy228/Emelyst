@@ -1,5 +1,6 @@
 import 'package:emelyst/widgets/category_card.dart';
 import 'package:emelyst/widgets/navigation.dart';
+import 'package:emelyst/widgets/radial_background.dart';
 import 'package:emelyst/widgets/room_card.dart';
 import 'package:flutter/material.dart';
 
@@ -12,6 +13,7 @@ class _HomeState extends State<Home> {
   List categories = [
     {'name': 'Prehľad', 'icon': 'home', 'url': 'overview'},
     {'name': 'Svetlá', 'icon': 'light', 'url': 'lights'},
+    {'name': 'Ochrana', 'icon': 'security', 'url': 'security'},
   ];
 
   List rooms = [
@@ -22,114 +24,100 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Container(
-          decoration: BoxDecoration(
-            gradient: RadialGradient(
-              radius: 2,
-              colors: [
-                Color.fromRGBO(52, 192, 209, 1),
-                Color.fromRGBO(26, 94, 103, 1),
-              ],
-              stops: [0.1, 1],
-            )
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(16),
-                    bottomRight: Radius.circular(16),
+    return RadialBackground(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.black,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(16),
+                bottomRight: Radius.circular(16),
+              ),
+              image: DecorationImage(
+                image: AssetImage('images/header_img.png'),
+                alignment: Alignment.centerRight,
+              ),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(12, 13, 0, 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5),
+                    child: Text(
+                      'Víta Vás',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontFamily: 'Emelyst',
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
-                  image: DecorationImage(
-                    image: AssetImage('images/header_img.png'),
-                    alignment: Alignment.centerRight,
+                  Text(
+                    'vaša inteligentná domácnosť',
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontFamily: 'Emelyst',
+                      color: Colors.white
+                    ),
                   ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.fromLTRB(12, 13, 0, 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5),
-                        child: Text(
-                          'Víta Vás',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontFamily: 'Emelyst',
-                            color: Colors.white,
-                          ),
-                        ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: Image.asset('icons/avatar.png'),
+                        iconSize: 40,
+                        padding: EdgeInsets.fromLTRB(0, 8, 24, 4),
                       ),
-                      Text(
-                        'vaša inteligentná domácnosť',
-                        style: TextStyle(
-                          fontSize: 12,
-                          fontFamily: 'Emelyst',
-                          color: Colors.white
-                        ),
+                      IconButton(
+                        onPressed: () {},
+                        icon: Image.asset('icons/bell.png'),
+                        iconSize: 40,
+                        padding: EdgeInsets.fromLTRB(0, 8, 16, 4),
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          IconButton(
-                            onPressed: () {},
-                            icon: Image.asset('icons/avatar.png'),
-                            iconSize: 40,
-                            padding: EdgeInsets.fromLTRB(0, 8, 24, 4),
-                          ),
-                          IconButton(
-                            onPressed: () {},
-                            icon: Image.asset('icons/bell.png'),
-                            iconSize: 40,
-                            padding: EdgeInsets.fromLTRB(0, 8, 16, 4),
-                          ),
-                        ],
-                      )
                     ],
-                  ),
-                ),
+                  )
+                ],
               ),
-              Container(
-                margin: EdgeInsets.only(top: 24, bottom: 24),
-                height: 60,
-                color: Color.fromRGBO(0, 0, 0, 0.4),
-                child: ListView.builder(
-                  itemCount: categories.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (BuildContext context, int index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
-                      child: CategoryCard(
-                        title: categories[index]['name'],
-                        imageUrl: categories[index]['icon'],
-                        routeName: categories[index]['url'],
-                      ),
-                    );
-                  },
-                ),
-              ),
-              Expanded(
-                flex: 1,
-                child: ListView.builder(
-                  itemCount: rooms.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return RoomCard(
-                      title: rooms[index]['name'],
-                      imageUrl: rooms[index]['icon'],
-                    );
-                  },
-                ),
-              ),
-              Navigation(),
-            ],
+            ),
           ),
-        ),
+          Container(
+            margin: EdgeInsets.only(top: 24, bottom: 24),
+            height: 60,
+            color: Color.fromRGBO(0, 0, 0, 0.4),
+            child: ListView.builder(
+              itemCount: categories.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (BuildContext context, int index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+                  child: CategoryCard(
+                    title: categories[index]['name'],
+                    imageUrl: categories[index]['icon'],
+                    routeName: categories[index]['url'],
+                  ),
+                );
+              },
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: ListView.builder(
+              itemCount: rooms.length,
+              itemBuilder: (BuildContext context, int index) {
+                return RoomCard(
+                  title: rooms[index]['name'],
+                  imageUrl: rooms[index]['icon'],
+                );
+              },
+            ),
+          ),
+          Navigation(),
+        ],
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:emelyst/widgets/header.dart';
+import 'package:emelyst/widgets/header_icon_box.dart';
 import 'package:emelyst/widgets/light_card.dart';
 import 'package:emelyst/widgets/navigation.dart';
 import 'package:emelyst/widgets/radial_background.dart';
@@ -67,6 +68,7 @@ class _LightsState extends State<Lights> {
       child: Column(
         children: [
           Header(title: 'Svetlá'),
+          HeaderIconBox('light', 'icons/light.png'),
           Expanded(
             child: GridView.builder(
               itemCount: lights.length,

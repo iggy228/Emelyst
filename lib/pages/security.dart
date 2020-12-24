@@ -3,6 +3,7 @@ import 'package:emelyst/widgets/door_card.dart';
 import 'package:emelyst/widgets/header.dart';
 import 'package:emelyst/widgets/navigation.dart';
 import 'package:emelyst/widgets/radial_background.dart';
+import 'package:emelyst/widgets/road_card.dart';
 import 'package:emelyst/widgets/shutter_box.dart';
 import 'package:flutter/material.dart';
 
@@ -30,8 +31,7 @@ class _SecurityState extends State<Security> {
           ),
 
           Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+            child: ListView(
               children: [
                 DoorCard(name: 'Dvere', data: true, openIcon: 'icons/door_open.png', closeIcon: 'icons/door_close.png'),
                 DoorCard(name: 'Garaz', data: true, openIcon: 'icons/garage_open.png', closeIcon: 'icons/garage_close.png'),
@@ -101,7 +101,8 @@ class _SecurityState extends State<Security> {
                       )
                     ],
                   ),
-                )
+                ),
+                RoadCard(data: false),
               ],
             )
           ),

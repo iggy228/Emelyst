@@ -25,7 +25,7 @@ class _SecurityState extends State<Security> {
   @override
   Widget build(BuildContext context) {
     return RadialBackground(
-      child: ListView(
+      child: Column(
         children: [
           Header(
             title: 'Ochrana',
@@ -105,7 +105,7 @@ class _SecurityState extends State<Security> {
                 ),
                 RoadCard(data: false),
               ],
-            )
+            ),
           ),
           Navigation(),
         ],

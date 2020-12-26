@@ -20,11 +20,7 @@ class SensorCard extends StatelessWidget {
         children: [
           Text(
             title,
-            style: TextStyle(
-              color: Colors.white,
-              fontFamily: 'Emelyst',
-              fontSize: 24,
-            ),
+            style: Theme.of(context).textTheme.headline4
           ),
           SizedBox(height: 8),
           Row(
@@ -37,11 +33,7 @@ class SensorCard extends StatelessWidget {
               ),
               Text(
                 '$data$postfix',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 28,
-                    fontFamily: 'GillSans'
-                ),
+                style: Theme.of(context).textTheme.headline3,
               )
             ],
           ),

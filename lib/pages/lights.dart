@@ -24,6 +24,7 @@ class _LightsState extends State<Lights> {
     Light(name: 'obyvacka', data: false),
   ];
 
+  // Method for connecting to MQTT broker
   Future<void> mqttConnect() async {
     mqttClient = MqttServerClient.withPort('test.mosquitto.org', 'mobileID-15662', 1883);
 
@@ -51,6 +52,7 @@ class _LightsState extends State<Lights> {
     });
   }
 
+  // Method for publishing message on broker
   void mqttPublishMessage(int index) async {
     final builder = MqttClientPayloadBuilder();
     builder.addString(lights[index].data ? 'false' : 'true');

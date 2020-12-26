@@ -26,11 +26,7 @@ class Header extends StatelessWidget {
           ),
           Text(
             title,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-              fontFamily: 'Emelyst',
-            ),
+            style: Theme.of(context).textTheme.headline4
           ),
           IconButton(
             padding: EdgeInsets.all(0),

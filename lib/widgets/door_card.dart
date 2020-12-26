@@ -27,11 +27,7 @@ class DoorCard extends StatelessWidget {
                 children: [
                   Text(
                     name,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontFamily: 'Emelyst',
-                    ),
+                    style: Theme.of(context).textTheme.headline4,
                   ),
                   Text(
                     "Stav ${data ? 'otvorená' : 'zatvorená'}",
@@ -46,7 +42,6 @@ class DoorCard extends StatelessWidget {
                     onPressed: () {},
                     child: Text(
                       data ? 'zatvoriť' : 'otvoriť',
-                      style: TextStyle(fontFamily: 'Emelyst'),
                     ),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
                   ),

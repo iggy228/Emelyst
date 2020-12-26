@@ -23,6 +23,7 @@ class _OverviewState extends State<Overview> {
     Sensor(name: 'vlhkost', data: 0),
   ];
 
+  // Method for connecting to MQTT broker
   Future<void> mqttConnect() async {
     mqttClient = MqttServerClient.withPort('test.mosquitto.org', 'mobileID-15662', 1883);
 
@@ -105,11 +106,7 @@ class _OverviewState extends State<Overview> {
                       Text(
                         'Priemerná denná teplota za týždeň',
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontFamily: 'Emelyst',
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
+                        style: Theme.of(context).textTheme.headline6,
                       ),
                       SizedBox(height: 16),
                       LineChartWrapper(),

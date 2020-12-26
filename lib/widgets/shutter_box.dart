@@ -14,11 +14,7 @@ class ShutterBox extends StatelessWidget {
         children: [
           Text(
             name,
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 12,
-              fontFamily: 'Emelyst',
-            ),
+            style: Theme.of(context).textTheme.bodyText1
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 4),
@@ -33,9 +29,6 @@ class ShutterBox extends StatelessWidget {
             onPressed: () {},
             child: Text(
               data ? 'zatvoriť' : 'otvoriť',
-              style: TextStyle(
-                fontFamily: 'Emelyst'
-              ),
             ),
           ),
         ],

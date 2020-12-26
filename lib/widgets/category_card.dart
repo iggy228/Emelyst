@@ -24,11 +24,7 @@ class CategoryCard extends StatelessWidget {
       ),
       label: Text(
         title,
-        style: TextStyle(
-          color: Colors.white,
-          fontFamily: 'Emelyst',
-          fontSize: 20,
-        ),
+        style: Theme.of(context).textTheme.headline5,
       ),
     );
   }

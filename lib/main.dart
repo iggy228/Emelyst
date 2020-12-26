@@ -28,6 +28,32 @@ class Emelyst extends StatelessWidget {
         '/room': (context) => Room(),
         '/settings': (context) => Settings(),
       },
+      theme: ThemeData(
+        fontFamily: 'Emelyst',
+        textTheme: TextTheme(
+          headline3: TextStyle(
+              color: Colors.white,
+              fontSize: 28,
+              fontFamily: 'GillSans'
+          ),
+          headline4: TextStyle(
+            color: Colors.white,
+            fontSize: 24,
+          ),
+          headline5: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+          ),
+          headline6: TextStyle(
+            fontSize: 16,
+            color: Colors.white,
+          ),
+          bodyText1: TextStyle(
+            color: Colors.white,
+            fontSize: 12,
+          ),
+        ),
+      ),
     );
   }
 }

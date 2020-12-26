@@ -49,20 +49,12 @@ class _HomeState extends State<Home> {
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     child: Text(
                       'Víta Vás',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontFamily: 'Emelyst',
-                        color: Colors.white,
-                      ),
+                      style: Theme.of(context).textTheme.headline4,
                     ),
                   ),
                   Text(
                     'vaša inteligentná domácnosť',
-                    style: TextStyle(
-                      fontSize: 12,
-                      fontFamily: 'Emelyst',
-                      color: Colors.white
-                    ),
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -80,7 +72,7 @@ class _HomeState extends State<Home> {
                         padding: EdgeInsets.fromLTRB(0, 8, 16, 4),
                       ),
                     ],
-                  )
+                  ),
                 ],
               ),
             ),

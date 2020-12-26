@@ -24,11 +24,7 @@ class _RoadCardState extends State<RoadCard> {
           children: [
             Text(
               'Príjazdova cesta',
-              style: TextStyle(
-                color: Colors.white,
-                fontFamily: 'Emelyst',
-                fontSize: 24,
-              ),
+              style: Theme.of(context).textTheme.headline4
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -48,9 +44,6 @@ class _RoadCardState extends State<RoadCard> {
                       onPressed: () {},
                       child: Text(
                         widget.data ? 'vypnúť' : 'zapnúť',
-                        style: TextStyle(
-                          fontFamily: 'Emelyst',
-                        ),
                       ),
                     ),
                     SizedBox(height: 16),

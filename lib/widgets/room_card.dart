@@ -14,22 +14,18 @@ class RoomCard extends StatelessWidget {
         margin: EdgeInsets.symmetric(vertical: 8),
         padding: EdgeInsets.fromLTRB(16, 16, 0, 0),
         decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: AssetImage('images/$imageUrl.png'),
-            )
+          borderRadius: BorderRadius.circular(16),
+          image: DecorationImage(
+            fit: BoxFit.cover,
+            image: AssetImage('images/$imageUrl.png'),
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               title,
-              style: TextStyle(
-                fontSize: 24,
-                fontFamily: 'Emelyst',
-                color: Colors.white,
-              ),
+              style: Theme.of(context).textTheme.headline4,
             ),
             SizedBox(height: 8),
             Image.asset('icons/$imageUrl.png', width: 90, height: 90)

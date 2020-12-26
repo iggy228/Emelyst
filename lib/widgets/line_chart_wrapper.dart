@@ -47,18 +47,18 @@ class LineChartWrapper extends StatelessWidget {
           border: Border(bottom: BorderSide(color: Colors.white), left: BorderSide(color: Colors.white)),
         ),
         titlesData: FlTitlesData(
-            bottomTitles: SideTitles(
+          bottomTitles: SideTitles(
+            showTitles: true,
+            getTextStyles: (value) => const TextStyle(color: Colors.white),
+            getTitles: (value) {
+              return makeBottomTitle(value);
+            },
+          ),
+          leftTitles: SideTitles(
               showTitles: true,
-              getTextStyles: (value) => const TextStyle(color: Colors.white, fontSize: 12),
-              getTitles: (value) {
-                return makeBottomTitle(value);
-              },
-            ),
-            leftTitles: SideTitles(
-                showTitles: true,
-                getTextStyles: (value) => const TextStyle(color: Colors.white),
-                interval: 5
-            )
+              getTextStyles: (value) => const TextStyle(color: Colors.white),
+              interval: 5
+          ),
         ),
       ),
     );

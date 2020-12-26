@@ -23,11 +23,7 @@ class LightCard extends StatelessWidget {
           children: [
             Text(
               title,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-                fontFamily: 'Emelyst',
-              ),
+              style: Theme.of(context).textTheme.headline5,
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
@@ -40,12 +36,11 @@ class LightCard extends StatelessWidget {
             Card(
               color: data ? Colors.amberAccent : Colors.white,
               shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8)),
+                  borderRadius: BorderRadius.circular(16)),
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(8),
                 child: Text(
                   data ? 'on' : 'off',
-                  style: TextStyle(fontSize: 12, fontFamily: 'Emelyst'),
                 ),
               ),
             ),

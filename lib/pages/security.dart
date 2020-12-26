@@ -47,11 +47,7 @@ class _SecurityState extends State<Security> {
                         padding: const EdgeInsets.all(16.0),
                         child: Text(
                           'Rolety',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: 'Emelyst',
-                            fontSize: 24,
-                          ),
+                          style: Theme.of(context).textTheme.headline4,
                         ),
                       ),
                       Container(
@@ -74,11 +70,7 @@ class _SecurityState extends State<Security> {
                               padding: const EdgeInsets.only(top: 4),
                               child: Text(
                                 'Všetky rolety:',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 24,
-                                  fontFamily: 'Emelyst',
-                                ),
+                                style: Theme.of(context).textTheme.headline4,
                               ),
                             ),
                             Column(
@@ -87,19 +79,19 @@ class _SecurityState extends State<Security> {
                                   onPressed: () {},
                                   color: Colors.white,
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                                  child: Text(' Otvoriť ', style: TextStyle(fontFamily: 'Emelyst')),
+                                  child: Text(' Otvoriť '),
                                 ),
                                 FlatButton(
                                   onPressed: () {},
                                   color: Colors.white,
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                                  child: Text('Zatvoriť', style: TextStyle(fontFamily: 'Emelyst')),
+                                  child: Text('Zatvoriť'),
                                 ),
                               ],
                             ),
                           ],
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),

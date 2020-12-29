@@ -1,6 +1,6 @@
 class Sensor {
   String name;
-  double data;
+  int data;
 
   Sensor({this.name, this.data});
 }

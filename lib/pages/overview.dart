@@ -1,4 +1,5 @@
 import 'package:emelyst/model/Sensor.dart';
+import 'package:emelyst/service/mqtt_client_wrapper.dart';
 import 'package:emelyst/widgets/header.dart';
 import 'package:emelyst/widgets/header_icon_box.dart';
 import 'package:emelyst/widgets/line_chart_wrapper.dart';
@@ -6,8 +7,6 @@ import 'package:emelyst/widgets/navigation.dart';
 import 'package:emelyst/widgets/radial_background.dart';
 import 'package:emelyst/widgets/sensor_card.dart';
 import 'package:flutter/material.dart';
-import 'package:mqtt_client/mqtt_client.dart';
-import 'package:mqtt_client/mqtt_server_client.dart';
 
 class Overview extends StatefulWidget {
   @override
@@ -16,46 +15,26 @@ class Overview extends StatefulWidget {
 
 class _OverviewState extends State<Overview> {
 
-  MqttServerClient mqttClient;
-
   List sensorData = [
     Sensor(name: 'teplota', data: 0),
     Sensor(name: 'vlhkost', data: 0),
   ];
 
-  // Method for connecting to MQTT broker
-  Future<void> mqttConnect() async {
-    mqttClient = MqttServerClient.withPort('test.mosquitto.org', 'mobileID-15662', 1883);
-
-    try {
-      await mqttClient.connect();
-    } catch (e) {
-      print('This is your error: $e');
-    }
-
-    for (int i = 0; i < sensorData.length; i++) {
-      mqttClient.subscribe(sensorData[i].name, MqttQos.atLeastOnce);
-    }
-    mqttClient.updates.listen((event) {
-      MqttPublishMessage message = event[0].payload;
-      double data = double.parse(MqttPublishPayload.bytesToStringAsString(message.payload.message));
-
-
-      // Recognizing right topic
-      for (int i = 0; i < sensorData.length; i++) {
-        if (event[0].topic == sensorData[i].name) {
-          setState(() {
-            sensorData[i].data = data;
-          });
-        }
-      }
-    });
-  }
-
   @override
   void initState() {
     super.initState();
-    mqttConnect();
+    sensorData.forEach((light) {
+      MqttClientWrapper.subscribe(light.name);
+    });
+    MqttClientWrapper.onMessage((topic, message) {
+      sensorData.forEach((light) {
+        if (topic == light.name) {
+          setState(() {
+            light.data = int.parse(message);
+          });
+        }
+      });
+    });
   }
 
   @override

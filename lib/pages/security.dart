@@ -30,10 +30,10 @@ class _SecurityState extends State<Security> {
           Header(
             title: 'Ochrana',
           ),
-          HeaderIconBox('security', 'icons/security.png'),
           Expanded(
             child: ListView(
               children: [
+                HeaderIconBox('security', 'icons/security.png'),
                 DoorCard(name: 'Dvere', data: true, openIcon: 'icons/door_open.png', closeIcon: 'icons/door_close.png'),
                 DoorCard(name: 'Garaz', data: true, openIcon: 'icons/garage_open.png', closeIcon: 'icons/garage_close.png'),
                 Card(

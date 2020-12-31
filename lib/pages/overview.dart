@@ -43,10 +43,10 @@ class _OverviewState extends State<Overview> {
       child: Column(
         children: [
           Header(title: 'Prehľad'),
-          HeaderIconBox('home', 'icons/home.png'),
           Expanded(
             child: ListView(
               children: [
+                HeaderIconBox('home', 'icons/home.png'),
                 Padding(
                   padding: const EdgeInsets.all(24.0),
                   child: Image.asset('images/house.png'),

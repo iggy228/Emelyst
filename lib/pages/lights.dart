@@ -1,5 +1,6 @@
 import 'package:emelyst/service/mqtt_client_wrapper.dart';
 import 'package:emelyst/widgets/header.dart';
+import 'package:emelyst/widgets/header_grid_view.dart';
 import 'package:emelyst/widgets/header_icon_box.dart';
 import 'package:emelyst/widgets/light_card.dart';
 import 'package:emelyst/widgets/navigation.dart';
@@ -44,11 +45,10 @@ class _LightsState extends State<Lights> {
       child: Column(
         children: [
           Header(title: 'Svetlá'),
-          HeaderIconBox('light', 'icons/light.png'),
           Expanded(
-            child: GridView.builder(
+            child: HeaderGridView(
+              header: HeaderIconBox('lights', 'icons/light_off.png'),
               itemCount: lights.length,
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
               itemBuilder: (BuildContext context, int index) {
                 return LightCard(
                   title: lights[index].name,

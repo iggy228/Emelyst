@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 
 class RoadCard extends StatefulWidget {
   final bool data;
+  Function onPress;
 
-  RoadCard({this.data});
+  RoadCard({this.data, this.onPress});
 
   @override
   _RoadCardState createState() => _RoadCardState();
@@ -33,15 +34,15 @@ class _RoadCardState extends State<RoadCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Text(
-                      'Stav',
+                      'Stav ' + (widget.data ? 'zapnuté' : 'vypnuté'),
                       style: TextStyle(
-                        color: Colors.white
+                        color: widget.data ? Theme.of(context).primaryColor : Colors.white,
                       ),
                     ),
                     FlatButton(
                       color: Colors.white,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                      onPressed: () {},
+                      onPressed: widget.onPress,
                       child: Text(
                         widget.data ? 'vypnúť' : 'zapnúť',
                       ),
@@ -53,7 +54,7 @@ class _RoadCardState extends State<RoadCard> {
                 Image.asset(
                   widget.data ? 'icons/road_on.png' : 'icons/road_off.png',
                   width: 100,
-                )
+                ),
               ],
             ),
           ],

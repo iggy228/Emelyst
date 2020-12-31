@@ -20,7 +20,7 @@ class Header extends StatelessWidget {
             icon: Icon(
               Icons.arrow_back_rounded,
               size: 40,
-              color: Color.fromRGBO(52, 192, 209, 1),
+              color: Theme.of(context).primaryColor,
             ),
             onPressed: null,
           ),
@@ -33,7 +33,7 @@ class Header extends StatelessWidget {
             icon: Icon(
               Icons.arrow_forward_rounded,
               size: 40,
-              color: Color.fromRGBO(52, 192, 209, 1),
+              color: Theme.of(context).primaryColor,
             ),
             onPressed: null,
           ),

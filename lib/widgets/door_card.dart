@@ -6,8 +6,9 @@ class DoorCard extends StatelessWidget {
   final bool data;
   final String openIcon;
   final String closeIcon;
+  Function onClick;
 
-  DoorCard({this.name, this.data, this.openIcon, this.closeIcon});
+  DoorCard({this.name, this.data, this.openIcon, this.closeIcon, this.onClick});
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +40,7 @@ class DoorCard extends StatelessWidget {
                   SizedBox(height: 32),
                   FlatButton(
                     color: Colors.white,
-                    onPressed: () {},
+                    onPressed: onClick,
                     child: Text(
                       data ? 'zatvoriť' : 'otvoriť',
                     ),

@@ -1,4 +1,5 @@
 import 'package:emelyst/model/Light.dart';
+import 'package:emelyst/service/mqtt_client_wrapper.dart';
 import 'package:emelyst/widgets/door_card.dart';
 import 'package:emelyst/widgets/header.dart';
 import 'package:emelyst/widgets/header_icon_box.dart';
@@ -18,9 +19,51 @@ class _SecurityState extends State<Security> {
   List<Light> shutters = [
     Light(name: 'obyvacka', data: false),
     Light(name: 'kuchyna', data: false),
-    Light(name: 'garaz', data: false),
+    Light(name: 'izba', data: false),
     Light(name: 'spalna', data: false),
   ];
+
+  List<Light> doors = [
+    Light(name: 'dvere', data: false),
+    Light(name: 'garaz', data: false),
+  ];
+
+  bool isRoadOn = false;
+
+  @override
+  void initState() {
+    super.initState();
+    shutters.forEach((shutter) {
+      MqttClientWrapper.subscribe(shutter.name);
+    });
+    doors.forEach((door) {
+      MqttClientWrapper.subscribe(door.name);
+    });
+    MqttClientWrapper.subscribe('prijazd');
+
+    MqttClientWrapper.onMessage((topic, message) {
+      shutters.forEach((shutter) {
+        if (shutter.name == topic) {
+          setState(() {
+            shutter.data = message == 'true' ? true : false;
+          });
+        }
+      });
+      doors.forEach((door) {
+        if (door.name == topic) {
+          setState(() {
+            door.data = message == 'true' ? true : false;
+          });
+        }
+      });
+
+      if (topic == 'prijazd') {
+        setState(() {
+          isRoadOn = message == 'true' ? true : false;
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +77,16 @@ class _SecurityState extends State<Security> {
             child: ListView(
               children: [
                 HeaderIconBox('security', 'icons/security.png'),
-                DoorCard(name: 'Dvere', data: true, openIcon: 'icons/door_open.png', closeIcon: 'icons/door_close.png'),
-                DoorCard(name: 'Garaz', data: true, openIcon: 'icons/garage_open.png', closeIcon: 'icons/garage_close.png'),
+                DoorCard(name: doors[0].name, data: doors[0].data,
+                  openIcon: 'icons/door_open.png',
+                  closeIcon: 'icons/door_close.png',
+                  onClick: () => MqttClientWrapper.publish(doors[0].name, doors[0].data ? 'false' : 'true'),
+                ),
+                DoorCard(name: doors[1].name, data: doors[1].data,
+                  openIcon: 'icons/garage_open.png',
+                  closeIcon: 'icons/garage_close.png',
+                  onClick: () => MqttClientWrapper.publish(doors[1].name, doors[1].data ? 'false' : 'true'),
+                ),
                 Card(
                   margin: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
                   color: Colors.black,
@@ -56,7 +107,11 @@ class _SecurityState extends State<Security> {
                           scrollDirection: Axis.horizontal,
                           itemCount: shutters.length,
                           itemBuilder: (BuildContext context, int i) {
-                            return ShutterBox(name: shutters[i].name, data: shutters[i].data);
+                            return ShutterBox(
+                              name: shutters[i].name,
+                              data: shutters[i].data,
+                              onClick: () => MqttClientWrapper.publish(shutters[i].name, shutters[i].data ? 'false' : 'true')
+                            );
                           },
                         ),
                       ),
@@ -76,13 +131,21 @@ class _SecurityState extends State<Security> {
                             Column(
                               children: [
                                 FlatButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    shutters.forEach((shutter) {
+                                      MqttClientWrapper.publish(shutter.name, 'true');
+                                    });
+                                  },
                                   color: Colors.white,
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
                                   child: Text(' Otvoriť '),
                                 ),
                                 FlatButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    shutters.forEach((shutter) {
+                                      MqttClientWrapper.publish(shutter.name, 'false');
+                                    });
+                                  },
                                   color: Colors.white,
                                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
                                   child: Text('Zatvoriť'),
@@ -95,7 +158,10 @@ class _SecurityState extends State<Security> {
                     ],
                   ),
                 ),
-                RoadCard(data: false),
+                RoadCard(
+                  data: isRoadOn,
+                  onPress: () => MqttClientWrapper.publish('prijazd', isRoadOn ? 'false' : 'true'),
+                ),
               ],
             ),
           ),

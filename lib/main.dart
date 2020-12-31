@@ -30,6 +30,7 @@ class Emelyst extends StatelessWidget {
       },
       theme: ThemeData(
         fontFamily: 'Emelyst',
+        primaryColor: Color.fromRGBO(52, 192, 209, 1),
         textTheme: TextTheme(
           headline3: TextStyle(
               color: Colors.white,

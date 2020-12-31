@@ -24,7 +24,6 @@ class MqttClientWrapper {
     final builder = MqttClientPayloadBuilder();
     builder.addString(message);
     _client.publishMessage(topic, MqttQos.atLeastOnce, builder.payload);
-    print('Message publish');
   }
 
   static void onMessage(Function(String, String) func) {

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class ShutterBox extends StatelessWidget {
   final String name;
   final bool data;
-  Function onClick;
+  final Function onClick;
 
   ShutterBox({this.name, this.data, this.onClick});
 

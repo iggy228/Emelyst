@@ -84,13 +84,13 @@ class _HomeState extends State<Home> {
             child: ListView.builder(
               itemCount: categories.length,
               scrollDirection: Axis.horizontal,
-              itemBuilder: (BuildContext context, int index) {
+              itemBuilder: (BuildContext context, int i) {
                 return Padding(
                   padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
                   child: CategoryCard(
-                    title: categories[index]['name'],
-                    imageUrl: categories[index]['icon'],
-                    routeName: categories[index]['url'],
+                    title: categories[i]['name'],
+                    imageUrl: categories[i]['icon'],
+                    routeName: categories[i]['url'],
                   ),
                 );
               },

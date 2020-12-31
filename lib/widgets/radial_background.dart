@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class RadialBackground extends StatelessWidget {
-  Widget child;
+  final Widget child;
 
   RadialBackground({this.child});
 

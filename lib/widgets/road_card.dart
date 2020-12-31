@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class RoadCard extends StatefulWidget {
   final bool data;
-  Function onPress;
+  final Function onPress;
 
   RoadCard({this.data, this.onPress});
 

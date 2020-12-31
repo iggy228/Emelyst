@@ -6,7 +6,7 @@ class DoorCard extends StatelessWidget {
   final bool data;
   final String openIcon;
   final String closeIcon;
-  Function onClick;
+  final Function onClick;
 
   DoorCard({this.name, this.data, this.openIcon, this.closeIcon, this.onClick});
 

@@ -4,15 +4,26 @@ import 'package:mqtt_client/mqtt_server_client.dart';
 
 class MqttClientWrapper {
   static MqttClient _client;
+  static String _url = '';
+  static String _id = '';
+  static int _port = 1883;
+  static bool isConnected = false;
 
-  static Future<void> connect(url) async {
+  static String get url {
+    return _url;
+  }
+
+  static Future<void> connect(String url) async {
     int id = Random().nextInt(100000) + 1;
-    _client = MqttServerClient.withPort(url, 'mobileId-$id', 1883);
+    _id = 'mobileId-$id';
+    _url = url;
+    _client = MqttServerClient.withPort(_url, _id, _port);
 
     try {
       await _client.connect();
+      isConnected = true;
     } catch (e) {
-      print('This is your error: $e');
+      isConnected = false;
     }
   }
 

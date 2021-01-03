@@ -2,8 +2,18 @@ import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget {
   final String title;
+  final String prevRouteUrl;
+  final Map prevRouteData;
+  final String nextRouteUrl;
+  final Map nextRouteData;
 
-  Header({this.title});
+  Header({
+    this.title,
+    this.prevRouteUrl,
+    this.prevRouteData,
+    this.nextRouteData,
+    this.nextRouteUrl
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +32,7 @@ class Header extends StatelessWidget {
               size: 40,
               color: Theme.of(context).primaryColor,
             ),
-            onPressed: null,
+            onPressed: () => Navigator.pushReplacementNamed(context, '/$prevRouteUrl', arguments: prevRouteData),
           ),
           Text(
             title,
@@ -35,7 +45,7 @@ class Header extends StatelessWidget {
               size: 40,
               color: Theme.of(context).primaryColor,
             ),
-            onPressed: null,
+            onPressed: () => Navigator.pushReplacementNamed(context, '/$nextRouteUrl', arguments: nextRouteData),
           ),
         ],
       ),

@@ -91,6 +91,10 @@ class _HomeState extends State<Home> {
                     title: categories[i]['name'],
                     imageUrl: categories[i]['icon'],
                     routeName: categories[i]['url'],
+                    routeData: {
+                      "data": categories,
+                      "index": i,
+                    },
                   ),
                 );
               },

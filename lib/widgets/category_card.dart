@@ -4,13 +4,19 @@ class CategoryCard extends StatelessWidget {
   final String title;
   final String imageUrl;
   final String routeName;
+  final Map routeData;
 
-  CategoryCard({this.title, this.imageUrl, this.routeName});
+  CategoryCard({
+    this.title,
+    this.imageUrl,
+    this.routeName,
+    this.routeData,
+  });
 
   @override
   Widget build(BuildContext context) {
     return FlatButton.icon(
-      onPressed: () => Navigator.pushNamed(context, '/$routeName'),
+      onPressed: () => Navigator.pushNamed(context, '/$routeName', arguments: routeData),
       color: Colors.black,
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       shape: RoundedRectangleBorder(

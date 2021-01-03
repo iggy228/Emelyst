@@ -67,11 +67,27 @@ class _SecurityState extends State<Security> {
 
   @override
   Widget build(BuildContext context) {
+    Map routeData = ModalRoute.of(context).settings.arguments;
+    int index = routeData['index'];
+    List data = routeData['data'];
+    int prevIndex = index - 1 < 0 ? data.length - 1 : index - 1;
+    int nextIndex = index + 1 >= data.length ? 0 : index + 1;
+
     return RadialBackground(
       child: Column(
         children: [
           Header(
-            title: 'Ochrana',
+            title: data[index]['name'],
+            nextRouteUrl: data[nextIndex]['url'],
+            prevRouteUrl: data[prevIndex]['url'],
+            nextRouteData: {
+              'data': data,
+              'index': nextIndex,
+            },
+            prevRouteData: {
+              'data': data,
+              'index': nextIndex,
+            },
           ),
           Expanded(
             child: ListView(

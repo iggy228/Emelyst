@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 class RoomCard extends StatelessWidget {
   final String title;
   final String imageUrl;
+  final Map routeData;
 
-  RoomCard({this.title, this.imageUrl});
+  RoomCard({this.title, this.imageUrl, this.routeData});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, '/room'),
+      onTap: () => Navigator.pushNamed(context, '/room', arguments: routeData),
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 8),
         padding: EdgeInsets.fromLTRB(16, 16, 0, 0),

@@ -10,6 +10,8 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  String floorPrefix = 'prizemie/';
+
   List categories = [
     {'name': 'Prehľad', 'icon': 'home', 'url': 'overview'},
     {'name': 'Svetlá', 'icon': 'light', 'url': 'lights'},
@@ -17,10 +19,23 @@ class _HomeState extends State<Home> {
   ];
 
   List rooms = [
-    {'name': 'Obývačka', 'icon': 'hostroom'},
-    {'name': 'Kuchyňa', 'icon': 'kitchen'},
-    {'name': 'Spálňa', 'icon': 'bedroom'},
+    {'name': 'Obývačka', 'icon': 'hostroom', 'prefix': 'obyvacka'},
+    {'name': 'Kuchyňa', 'icon': 'kitchen', 'prefix': 'kuchyna'},
+    {'name': 'Spálňa', 'icon': 'bedroom', 'prefix': 'spalna'},
+    {'name': 'Pracovňa', 'icon': 'bedroom', 'prefix': 'pracovna'},
+    {'name': 'Chodba', 'icon': 'bedroom', 'prefix': 'chodba'},
+    {'name': 'Šatník', 'icon': 'bedroom', 'prefix': 'satnik'},
+    {'name': 'Kupeľna', 'icon': 'bedroom', 'prefix': 'kupelna'},
+    {'name': 'Garáž', 'icon': 'bedroom', 'prefix': 'garaz'},
   ];
+
+  List<String> getRoomsPrefixes() {
+    List<String> roomsPrefixes = [];
+    rooms.forEach((element) {
+      roomsPrefixes.add(element['prefix']);
+    });
+    return roomsPrefixes;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -94,6 +109,8 @@ class _HomeState extends State<Home> {
                     routeData: {
                       "data": categories,
                       "index": i,
+                      "prefix": floorPrefix,
+                      "roomsPrefixes": getRoomsPrefixes(),
                     },
                   ),
                 );
@@ -108,6 +125,9 @@ class _HomeState extends State<Home> {
                 return RoomCard(
                   title: rooms[index]['name'],
                   imageUrl: rooms[index]['icon'],
+                  routeData: {
+                    "prefix": floorPrefix,
+                  }
                 );
               },
             ),

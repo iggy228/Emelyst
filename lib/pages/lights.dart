@@ -15,24 +15,29 @@ class Lights extends StatefulWidget {
 
 class _LightsState extends State<Lights> {
 
-  List lights = [
-    Light(name: 'kuchyna', data: false),
-    Light(name: 'spalna', data: false),
-    Light(name: 'garaz', data: false),
-    Light(name: 'obyvacka', data: false),
-  ];
+  String prefix;
+  List roomsPrefixis;
+
+  List lights = [];
+
+  void generateLightsList(List<String> prefixes) {
+    prefixes.forEach((element) {
+      lights.add(Light(name: element, data: false));
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    lights.forEach((light) {
-      MqttClientWrapper.subscribe(light.name);
-    });
+    /* lights.forEach((light) {
+      MqttClientWrapper.subscribe(prefix + light.name + '/svetlo');
+    }); */
     MqttClientWrapper.onMessage((topic, message) {
+      print(topic);
       lights.forEach((light) {
-        if (topic == light.name) {
+        if (topic.contains(light.name)) {
           setState(() {
-            light.data = message == 'true' ? true : false;
+            light.data = message == 'on' ? true : false;
           });
         }
       });
@@ -44,6 +49,16 @@ class _LightsState extends State<Lights> {
     Map routeData = ModalRoute.of(context).settings.arguments;
     int index = routeData['index'];
     List data = routeData['data'];
+    prefix = routeData['prefix'];
+    roomsPrefixis = routeData['roomsPrefixes'];
+
+    if (lights.isEmpty) {
+      generateLightsList(roomsPrefixis);
+      lights.forEach((light) {
+        MqttClientWrapper.subscribe(prefix + light.name + '/svetlo');
+      });
+    }
+
     int prevIndex = index - 1 < 0 ? data.length - 1 : index - 1;
     int nextIndex = index + 1 >= data.length ? 0 : index + 1;
 
@@ -72,7 +87,7 @@ class _LightsState extends State<Lights> {
                   title: lights[index].name,
                   data: lights[index].data,
                   onPress: () {
-                    MqttClientWrapper.publish(lights[index].name, lights[index].data ? 'false' : 'true');
+                    MqttClientWrapper.publish(prefix + lights[index].name + '/svetlo', lights[index].data ? 'off' : 'on');
                   }
                 );
               },
@@ -87,7 +102,7 @@ class _LightsState extends State<Lights> {
   @override
   void deactivate() {
     lights.forEach((light) {
-      MqttClientWrapper.unsubscribe(light.name);
+      MqttClientWrapper.unsubscribe(prefix + light.name + '/svetlo');
     });
     super.deactivate();
   }

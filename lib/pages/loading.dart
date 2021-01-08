@@ -10,7 +10,7 @@ class Loading extends StatefulWidget {
 class _LoadingState extends State<Loading> {
 
   void setupConnectionToBroker() async {
-    await MqttClientWrapper.connect('test.mosquitto.org');
+    await MqttClientWrapper.connect('91.127.16.72');
     Navigator.pushReplacementNamed(context, '/home');
   }
 

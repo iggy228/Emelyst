@@ -6,8 +6,9 @@ class MqttClientWrapper {
   static MqttClient _client;
   static String _url = '';
   static String _id = '';
-  static int _port = 1883;
+  static int _port = 10000;
   static bool isConnected = false;
+  static String defaultPrefix = 'EMELYST/';
 
   static String get url {
     return _url;
@@ -27,14 +28,16 @@ class MqttClientWrapper {
     }
   }
 
-  static void subscribe(String topic) => _client.subscribe(topic, MqttQos.atLeastOnce);
+  static void subscribe(String topic) {
+    _client.subscribe(defaultPrefix + topic, MqttQos.atLeastOnce);
+  }
   
-  static void unsubscribe(String topic) => _client.unsubscribe(topic);
+  static void unsubscribe(String topic) => _client.unsubscribe(defaultPrefix + topic);
 
   static void publish(String topic, String message) {
     final builder = MqttClientPayloadBuilder();
     builder.addString(message);
-    _client.publishMessage(topic, MqttQos.atLeastOnce, builder.payload);
+    _client.publishMessage(defaultPrefix + topic, MqttQos.atLeastOnce, builder.payload);
   }
 
   static void onMessage(Function(String, String) func) {

@@ -58,7 +58,7 @@ class _OverviewState extends State<Overview> {
             },
             prevRouteData: {
               'data': data,
-              'index': nextIndex,
+              'index': prevIndex,
             },
           ),
           Expanded(

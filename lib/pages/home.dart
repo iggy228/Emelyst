@@ -1,4 +1,5 @@
 import 'package:emelyst/widgets/category_card.dart';
+import 'package:emelyst/widgets/home_scroll_view.dart';
 import 'package:emelyst/widgets/navigation.dart';
 import 'package:emelyst/widgets/radial_background.dart';
 import 'package:emelyst/widgets/room_card.dart';
@@ -92,34 +93,33 @@ class _HomeState extends State<Home> {
               ),
             ),
           ),
-          Container(
-            margin: EdgeInsets.only(top: 24, bottom: 24),
-            height: 60,
-            color: Color.fromRGBO(0, 0, 0, 0.4),
-            child: ListView.builder(
-              itemCount: categories.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (BuildContext context, int i) {
-                return Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
-                  child: CategoryCard(
-                    title: categories[i]['name'],
-                    imageUrl: categories[i]['icon'],
-                    routeName: categories[i]['url'],
-                    routeData: {
-                      "data": categories,
-                      "index": i,
-                      "prefix": floorPrefix,
-                      "roomsPrefixes": getRoomsPrefixes(),
-                    },
-                  ),
-                );
-              },
-            ),
-          ),
           Expanded(
-            flex: 1,
-            child: ListView.builder(
+            child: HomeScrollView(
+              header: Container(
+                margin: EdgeInsets.only(top: 24, bottom: 24),
+                height: 60,
+                color: Color.fromRGBO(0, 0, 0, 0.4),
+                child: ListView.builder(
+                  itemCount: categories.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (BuildContext context, int i) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
+                      child: CategoryCard(
+                        title: categories[i]['name'],
+                        imageUrl: categories[i]['icon'],
+                        routeName: categories[i]['url'],
+                        routeData: {
+                          "data": categories,
+                          "index": i,
+                          "prefix": floorPrefix,
+                          "roomsPrefixes": getRoomsPrefixes(),
+                        },
+                      ),
+                    );
+                  },
+                ),
+              ),
               itemCount: rooms.length,
               itemBuilder: (BuildContext context, int index) {
                 return RoomCard(
@@ -127,7 +127,7 @@ class _HomeState extends State<Home> {
                   imageUrl: rooms[index]['icon'],
                   routeData: {
                     "prefix": floorPrefix,
-                  }
+                  },
                 );
               },
             ),

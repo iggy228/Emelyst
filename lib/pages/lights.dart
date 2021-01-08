@@ -29,9 +29,6 @@ class _LightsState extends State<Lights> {
   @override
   void initState() {
     super.initState();
-    /* lights.forEach((light) {
-      MqttClientWrapper.subscribe(prefix + light.name + '/svetlo');
-    }); */
     MqttClientWrapper.onMessage((topic, message) {
       print(topic);
       lights.forEach((light) {

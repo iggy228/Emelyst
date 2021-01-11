@@ -30,7 +30,6 @@ class _LightsState extends State<Lights> {
   void initState() {
     super.initState();
     MqttClientWrapper.onMessage((topic, message) {
-      print(topic);
       lights.forEach((light) {
         if (topic.contains(light.name)) {
           setState(() {

@@ -26,7 +26,7 @@ class _HomeState extends State<Home> {
     {'name': 'Pracovňa', 'icon': 'bedroom', 'prefix': 'pracovna'},
     {'name': 'Chodba', 'icon': 'bedroom', 'prefix': 'chodba'},
     {'name': 'Šatník', 'icon': 'bedroom', 'prefix': 'satnik'},
-    {'name': 'Kupeľna', 'icon': 'bedroom', 'prefix': 'kupelna'},
+    {'name': 'Kupeľna', 'icon': 'bedroom', 'prefix': 'kupelka'},
     {'name': 'Garáž', 'icon': 'bedroom', 'prefix': 'garaz'},
   ];
 

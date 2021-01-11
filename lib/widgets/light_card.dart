@@ -2,10 +2,18 @@ import 'package:flutter/material.dart';
 
 class LightCard extends StatelessWidget {
   final String title;
-  final bool data;
+  final String text;
+  final String iconUrl;
   final Function onPress;
+  final Color color;
 
-  LightCard({this.title, this.data, this.onPress});
+  LightCard({
+    this.title,
+    this.text,
+    this.iconUrl,
+    this.color,
+    this.onPress,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -28,19 +36,19 @@ class LightCard extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Image.asset(
-                data ? 'icons/light_on.png' : 'icons/light_off.png',
+                iconUrl,
                 width: 70,
                 height: 70,
               ),
             ),
             Card(
-              color: data ? Colors.amberAccent : Colors.white,
+              color: color,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16)),
               child: Padding(
                 padding: const EdgeInsets.all(8),
                 child: Text(
-                  data ? 'on' : 'off',
+                  text,
                 ),
               ),
             ),

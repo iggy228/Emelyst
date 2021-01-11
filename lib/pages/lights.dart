@@ -81,7 +81,9 @@ class _LightsState extends State<Lights> {
               itemBuilder: (BuildContext context, int index) {
                 return LightCard(
                   title: lights[index].name,
-                  data: lights[index].data,
+                  text: lights[index].data ? 'on' : 'off',
+                  color: lights[index].data ? Colors.amberAccent : Colors.white,
+                  iconUrl: lights[index].data ? 'icons/light_on.png' : 'icons/light_off.png',
                   onPress: () {
                     MqttClientWrapper.publish(prefix + lights[index].name + '/svetlo', lights[index].data ? 'off' : 'on');
                   }

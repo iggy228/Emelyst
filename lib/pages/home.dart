@@ -125,9 +125,7 @@ class _HomeState extends State<Home> {
                 return RoomCard(
                   title: rooms[index]['name'],
                   imageUrl: rooms[index]['icon'],
-                  routeData: {
-                    "prefix": floorPrefix,
-                  },
+                  routeData: rooms[index],
                 );
               },
             ),

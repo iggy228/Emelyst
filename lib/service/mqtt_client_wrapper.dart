@@ -6,7 +6,7 @@ class MqttClientWrapper {
   static MqttClient _client;
   static String _url = '';
   static String _id = '';
-  static int _port = 10000;
+  static int _port;
   static bool isConnected = false;
   static String defaultPrefix = 'EMELYST/';
 
@@ -14,10 +14,11 @@ class MqttClientWrapper {
     return _url;
   }
 
-  static Future<void> connect(String url) async {
+  static Future<void> connect({String url, int port = 1883}) async {
     int id = Random().nextInt(100000) + 1;
     _id = 'mobileId-$id';
     _url = url;
+    _port = port;
     _client = MqttServerClient.withPort(_url, _id, _port);
 
     try {

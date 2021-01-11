@@ -35,7 +35,8 @@ class _SettingsState extends State<Settings> {
                           child: TextFormField(
                             style: TextStyle(color: Colors.white, fontFamily: 'GillSans', fontSize: 20),
                             validator: (url) {
-                              MqttClientWrapper.connect(url);
+                              List<String> urlSplit = url.split(':');
+                              MqttClientWrapper.connect(url: urlSplit[0], port: int.parse(urlSplit[1]));
                               if (MqttClientWrapper.isConnected) {
                                 return null;
                               }

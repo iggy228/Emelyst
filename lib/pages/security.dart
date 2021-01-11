@@ -1,4 +1,4 @@
-import 'package:emelyst/model/Light.dart';
+import 'package:emelyst/model/Sensor.dart';
 import 'package:emelyst/service/mqtt_client_wrapper.dart';
 import 'package:emelyst/widgets/door_card.dart';
 import 'package:emelyst/widgets/header.dart';
@@ -16,16 +16,16 @@ class Security extends StatefulWidget {
 
 class _SecurityState extends State<Security> {
 
-  List<Light> shutters = [
-    Light(name: 'obyvacka', data: false),
-    Light(name: 'kuchyna', data: false),
-    Light(name: 'izba', data: false),
-    Light(name: 'spalna', data: false),
+  List<Sensor<bool>> shutters = [
+    Sensor<bool>(name: 'obyvacka', data: false),
+    Sensor<bool>(name: 'kuchyna', data: false),
+    Sensor<bool>(name: 'izba', data: false),
+    Sensor<bool>(name: 'spalna', data: false),
   ];
 
-  List<Light> doors = [
-    Light(name: 'dvere', data: false),
-    Light(name: 'garaz', data: false),
+  List<Sensor<bool>> doors = [
+    Sensor<bool>(name: 'dvere', data: false),
+    Sensor<bool>(name: 'garaz', data: false),
   ];
 
   bool isRoadOn = false;

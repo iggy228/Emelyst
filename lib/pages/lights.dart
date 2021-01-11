@@ -1,3 +1,4 @@
+import 'package:emelyst/model/Sensor.dart';
 import 'package:emelyst/service/mqtt_client_wrapper.dart';
 import 'package:emelyst/widgets/header.dart';
 import 'package:emelyst/widgets/header_grid_view.dart';
@@ -5,7 +6,6 @@ import 'package:emelyst/widgets/header_icon_box.dart';
 import 'package:emelyst/widgets/light_card.dart';
 import 'package:emelyst/widgets/navigation.dart';
 import 'package:emelyst/widgets/radial_background.dart';
-import 'package:emelyst/model/Light.dart';
 import 'package:flutter/material.dart';
 
 class Lights extends StatefulWidget {
@@ -18,11 +18,11 @@ class _LightsState extends State<Lights> {
   String prefix;
   List roomsPrefixis;
 
-  List lights = [];
+  List<Sensor<bool>> lights = [];
 
   void generateLightsList(List<String> prefixes) {
     prefixes.forEach((element) {
-      lights.add(Light(name: element, data: false));
+      lights.add(Sensor<bool>(name: element, data: false));
     });
   }
 

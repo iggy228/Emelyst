@@ -1,6 +1,6 @@
-class Sensor {
+class Sensor<T> {
   String name;
-  int data;
+  T data;
 
   Sensor({this.name, this.data});
 }

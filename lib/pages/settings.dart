@@ -22,50 +22,40 @@ class _SettingsState extends State<Settings> {
               children: [
                 Container(
                   margin: EdgeInsets.fromLTRB(8, 16, 8, 8),
-                  padding: EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
                   decoration: BoxDecoration(
                     color: Colors.black,
                     borderRadius: BorderRadius.circular(24),
                   ),
-                  child: Form(
-                    key: _brokerFieldKey,
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            style: TextStyle(color: Colors.white, fontFamily: 'GillSans', fontSize: 20),
-                            validator: (url) {
-                              List<String> urlSplit = url.split(':');
-                              MqttClientWrapper.connect(url: urlSplit[0], port: int.parse(urlSplit[1]));
-                              if (MqttClientWrapper.isConnected) {
-                                return null;
-                              }
-                              return 'Zadal si neplatnu adresu';
-                            },
-                            initialValue: MqttClientWrapper.url,
-                            decoration: InputDecoration(
-                              hintText: 'Zadaj adresu brokera',
-                              hintStyle: TextStyle(color: Colors.white60),
-                              labelStyle: TextStyle(color: Colors.white),
-                              contentPadding: EdgeInsets.fromLTRB(0, 0, 0, -20),
-                              enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
-                              ),
-                              focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white),
-                              ),
-                            ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: TextFormField(
+                          key: _brokerFieldKey,
+                          style: TextStyle(color: Colors.white, fontFamily: 'GillSans', fontSize: 20),
+                          validator: (url) {
+                            List<String> urlSplit = url.split(':');
+                            MqttClientWrapper.connect(url: urlSplit[0], port: int.parse(urlSplit[1]));
+                            if (MqttClientWrapper.isConnected) {
+                              return null;
+                            }
+                            return 'Zadal si neplatnu adresu';
+                          },
+                          initialValue: '${MqttClientWrapper.url}:${MqttClientWrapper.port}',
+                          decoration: InputDecoration(
+                            hintText: 'Zadaj adresu brokera',
                           ),
                         ),
-                        FlatButton(
-                          color: Colors.white,
-                          onPressed: () => _brokerFieldKey.currentState.validate(),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                          padding: EdgeInsets.all(8),
-                          child: Text('Connect'),
-                        ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(width: 8),
+                      FlatButton(
+                        color: Colors.white,
+                        onPressed: () => _brokerFieldKey.currentState.validate(),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                        padding: EdgeInsets.all(8),
+                        child: Text('Connect'),
+                      ),
+                    ],
                   ),
                 ),
               ],

@@ -16,26 +16,21 @@ class Overview extends StatefulWidget {
 class _OverviewState extends State<Overview> {
 
   List sensorData = [
-    Sensor<int>(name: 'teplota', data: 0),
-    Sensor<int>(name: 'vlhkost', data: 0),
-  ];
-
-  List<String> prefixes = [
-    'EMELYST/von/meteo/teplota',
-    'EMELYST/von/meteo/vlhkost',
+    Sensor<int>(name: 'teplota', data: 0, prefix: 'von/meteo/teplota'),
+    Sensor<int>(name: 'vlhkost', data: 0, prefix: 'von/meteo/vlhkost'),
   ];
 
   @override
   void initState() {
     super.initState();
-    prefixes.forEach((prefix) {
-      MqttClientWrapper.subscribe(prefix);
+    sensorData.forEach((sensor) {
+      MqttClientWrapper.subscribe(sensor.prefix);
     });
     MqttClientWrapper.onMessage((topic, message) {
-      sensorData.forEach((light) {
-        if (topic.contains(light.name)) {
+      sensorData.forEach((sensor) {
+        if (topic.contains(sensor.prefix)) {
           setState(() {
-            light.data = int.parse(message);
+            sensor.data = int.parse(message);
           });
         }
       });
@@ -60,10 +55,14 @@ class _OverviewState extends State<Overview> {
             nextRouteData: {
               'data': data,
               'index': nextIndex,
+              'floorPrefix': routeData['floorPrefix'],
+              'roomsData': routeData['roomsData'],
             },
             prevRouteData: {
               'data': data,
               'index': prevIndex,
+              'floorPrefix': routeData['floorPrefix'],
+              'roomsData': routeData['roomsData'],
             },
           ),
           Expanded(
@@ -126,9 +125,9 @@ class _OverviewState extends State<Overview> {
 
   @override
   void dispose() {
-    super.dispose();
-    prefixes.forEach((prefix) {
-      MqttClientWrapper.unsubscribe(prefix);
+    sensorData.forEach((sensor) {
+      MqttClientWrapper.unsubscribe(sensor.prefix);
     });
+    super.dispose();
   }
 }

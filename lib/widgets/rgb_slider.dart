@@ -8,28 +8,27 @@ class CustomTrackShape extends RoundedRectSliderTrackShape {
 }
 
 class RGBSlider extends StatefulWidget {
-  double sliderVal = 0.0;
-
   @override
   _RGBSliderState createState() => _RGBSliderState();
 }
 
 class _RGBSliderState extends State<RGBSlider> {
+  double sliderVal = 0.0;
+
   @override
   Widget build(BuildContext context) {
     return Container(
       padding: EdgeInsets.zero,
       height: 20,
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(56),
-          gradient: LinearGradient(
-            colors: [
-              Colors.red[600],
-              Colors.green[600],
-              Colors.blue[600],
-            ],
-
-          )
+        borderRadius: BorderRadius.circular(56),
+        gradient: LinearGradient(
+          colors: [
+            Colors.red[600],
+            Colors.green[600],
+            Colors.blue[600],
+          ],
+        ),
       ),
       child: SliderTheme(
         data: SliderThemeData(
@@ -40,10 +39,10 @@ class _RGBSliderState extends State<RGBSlider> {
           trackShape: CustomTrackShape(),
         ),
         child: Slider(
-          value: widget.sliderVal,
+          value: sliderVal,
           onChanged: (double value) {
             setState(() {
-              widget.sliderVal = value;
+              sliderVal = value;
             });
           },
         ),

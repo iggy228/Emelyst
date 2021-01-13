@@ -20,7 +20,6 @@ class _RoomState extends State<Room> {
   Widget build(BuildContext context) {
     Map roomData = ModalRoute.of(context).settings.arguments;
 
-
     return RadialBackground(
       child: Column(
         children: [

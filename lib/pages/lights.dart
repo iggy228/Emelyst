@@ -1,3 +1,4 @@
+import 'package:emelyst/model/Room.dart';
 import 'package:emelyst/model/Sensor.dart';
 import 'package:emelyst/service/mqtt_client_wrapper.dart';
 import 'package:emelyst/widgets/header.dart';
@@ -15,14 +16,16 @@ class Lights extends StatefulWidget {
 
 class _LightsState extends State<Lights> {
 
-  String prefix;
-  List roomsPrefixis;
+  String floorPrefix;
+  List roomsData;
 
   List<Sensor<bool>> lights = [];
 
-  void generateLightsList(List<String> prefixes) {
-    prefixes.forEach((element) {
-      lights.add(Sensor<bool>(name: element, data: false));
+  void generateLightsList(List roomsData) {
+    roomsData.forEach((room) {
+      if (room['sensors'].any((i) => i == SensorTypes.light)) {
+        lights.add(Sensor<bool>(name: room['name'], data: false, prefix: '$floorPrefix${room["prefix"]}/svetlo'));
+      }
     });
   }
 
@@ -31,7 +34,7 @@ class _LightsState extends State<Lights> {
     super.initState();
     MqttClientWrapper.onMessage((topic, message) {
       lights.forEach((light) {
-        if (topic.contains(light.name)) {
+        if (topic.contains(light.prefix)) {
           setState(() {
             light.data = message == 'on' ? true : false;
           });
@@ -45,13 +48,13 @@ class _LightsState extends State<Lights> {
     Map routeData = ModalRoute.of(context).settings.arguments;
     int index = routeData['index'];
     List data = routeData['data'];
-    prefix = routeData['prefix'];
-    roomsPrefixis = routeData['roomsPrefixes'];
+    floorPrefix = routeData['floorPrefix'];
+    roomsData = routeData['roomsData'];
 
     if (lights.isEmpty) {
-      generateLightsList(roomsPrefixis);
+      generateLightsList(roomsData);
       lights.forEach((light) {
-        MqttClientWrapper.subscribe(prefix + light.name + '/svetlo');
+        MqttClientWrapper.subscribe(light.prefix);
       });
     }
 
@@ -68,10 +71,14 @@ class _LightsState extends State<Lights> {
             nextRouteData: {
               'data': data,
               'index': nextIndex,
+              'floorPrefix': routeData['floorPrefix'],
+              'roomsData': routeData['roomsData'],
             },
             prevRouteData: {
               'data': data,
               'index': nextIndex,
+              'floorPrefix': routeData['floorPrefix'],
+              'roomsData': routeData['roomsData'],
             },
           ),
           Expanded(
@@ -85,7 +92,7 @@ class _LightsState extends State<Lights> {
                   color: lights[index].data ? Colors.amberAccent : Colors.white,
                   iconUrl: lights[index].data ? 'icons/light_on.png' : 'icons/light_off.png',
                   onPress: () {
-                    MqttClientWrapper.publish(prefix + lights[index].name + '/svetlo', lights[index].data ? 'off' : 'on');
+                    MqttClientWrapper.publish(lights[index].prefix, lights[index].data ? 'off' : 'on');
                   }
                 );
               },
@@ -98,10 +105,10 @@ class _LightsState extends State<Lights> {
   }
 
   @override
-  void deactivate() {
+  void dispose() {
     lights.forEach((light) {
-      MqttClientWrapper.unsubscribe(prefix + light.name + '/svetlo');
+      MqttClientWrapper.unsubscribe(light.prefix);
     });
-    super.deactivate();
+    super.dispose();
   }
 }

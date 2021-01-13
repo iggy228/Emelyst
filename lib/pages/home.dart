@@ -1,3 +1,4 @@
+import 'package:emelyst/model/Room.dart';
 import 'package:emelyst/widgets/category_card.dart';
 import 'package:emelyst/widgets/home_scroll_view.dart';
 import 'package:emelyst/widgets/navigation.dart';
@@ -13,29 +14,42 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   String floorPrefix = 'prizemie/';
 
-  List categories = [
+  List<Map<String, String>> categories = [
     {'name': 'Prehľad', 'icon': 'home', 'url': 'overview'},
     {'name': 'Svetlá', 'icon': 'light', 'url': 'lights'},
     {'name': 'Ochrana', 'icon': 'security', 'url': 'security'},
   ];
 
-  List rooms = [
-    {'name': 'Obývačka', 'icon': 'hostroom', 'prefix': 'obyvacka'},
-    {'name': 'Kuchyňa', 'icon': 'kitchen', 'prefix': 'kuchyna'},
-    {'name': 'Spálňa', 'icon': 'bedroom', 'prefix': 'spalna'},
-    {'name': 'Pracovňa', 'icon': 'bedroom', 'prefix': 'pracovna'},
-    {'name': 'Chodba', 'icon': 'bedroom', 'prefix': 'chodba'},
-    {'name': 'Šatník', 'icon': 'bedroom', 'prefix': 'satnik'},
-    {'name': 'Kupeľna', 'icon': 'bedroom', 'prefix': 'kupelka'},
-    {'name': 'Garáž', 'icon': 'bedroom', 'prefix': 'garaz'},
-  ];
+  List<Room> rooms = [];
 
-  List<String> getRoomsPrefixes() {
-    List<String> roomsPrefixes = [];
-    rooms.forEach((element) {
-      roomsPrefixes.add(element['prefix']);
+  List<Map<String, dynamic>> getRoomsData() {
+    List<Map<String, dynamic>> roomsData = [];
+    rooms.forEach((room) {
+      roomsData.add({'name': room.name, 'prefix': room.prefix, 'sensors': room.sensors});
     });
-    return roomsPrefixes;
+    return roomsData;
+  }
+
+  List<String> getRoomsNames() {
+
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    List<Room> floorRooms = [
+      Room(name: 'Obývačka', iconName: 'hostroom', prefix: 'obyvacka', sensors: [SensorTypes.light]),
+      Room(name: 'Kuchyňa', iconName: 'kitchen', prefix: 'kuchyna', sensors: [SensorTypes.light]),
+      Room(name: 'Spáľna', iconName: 'bedroom', prefix: 'spalna', sensors: [SensorTypes.light, SensorTypes.engine]),
+      Room(name: 'Pracovňa', iconName: 'hostroom', prefix: 'pracovna', sensors: [SensorTypes.light]),
+      Room(name: 'Chodba', iconName: 'hostroom', prefix: 'chodba', sensors: [SensorTypes.light, SensorTypes.detector]),
+      Room(name: 'Šatník', iconName: 'hostroom', prefix: 'satnik', sensors: [SensorTypes.light]),
+      Room(name: 'Kúpeľna', iconName: 'hostroom', prefix: 'kupelka', sensors: [SensorTypes.light]),
+      Room(name: 'Garáž', iconName: 'hostroom', prefix: 'garaz', sensors: [SensorTypes.light, SensorTypes.engine]),
+    ];
+
+    rooms.addAll(floorRooms);
   }
 
   @override
@@ -112,8 +126,8 @@ class _HomeState extends State<Home> {
                         routeData: {
                           "data": categories,
                           "index": i,
-                          "prefix": floorPrefix,
-                          "roomsPrefixes": getRoomsPrefixes(),
+                          "floorPrefix": floorPrefix,
+                          "roomsData": getRoomsData(),
                         },
                       ),
                     );
@@ -123,9 +137,9 @@ class _HomeState extends State<Home> {
               itemCount: rooms.length,
               itemBuilder: (BuildContext context, int index) {
                 return RoomCard(
-                  title: rooms[index]['name'],
-                  imageUrl: rooms[index]['icon'],
-                  routeData: rooms[index],
+                  title: rooms[index].name,
+                  imageUrl: rooms[index].iconName,
+                  routeData: rooms[index].toMap(),
                 );
               },
             ),

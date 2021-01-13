@@ -1,3 +1,4 @@
+import 'package:emelyst/model/Room.dart';
 import 'package:emelyst/model/Sensor.dart';
 import 'package:emelyst/service/mqtt_client_wrapper.dart';
 import 'package:emelyst/widgets/door_card.dart';
@@ -15,13 +16,10 @@ class Security extends StatefulWidget {
 }
 
 class _SecurityState extends State<Security> {
+  String floorPrefix;
+  List roomsData;
 
-  List<Sensor<bool>> shutters = [
-    Sensor<bool>(name: 'obyvacka', data: false),
-    Sensor<bool>(name: 'kuchyna', data: false),
-    Sensor<bool>(name: 'izba', data: false),
-    Sensor<bool>(name: 'spalna', data: false),
-  ];
+  List<Sensor<bool>> shutters = [];
 
   List<Sensor<bool>> doors = [
     Sensor<bool>(name: 'dvere', data: false),
@@ -30,12 +28,18 @@ class _SecurityState extends State<Security> {
 
   bool isRoadOn = false;
 
+  void generateShuttersList(List roomsData) {
+    roomsData.forEach((room) {
+      if (room['sensors'].any((i) => i == SensorTypes.engine)) {
+        shutters.add(Sensor<bool>(name: room['name'], data: false, prefix: '$floorPrefix${room["prefix"]}/motorcek'));
+      }
+    });
+  }
+
+
   @override
   void initState() {
     super.initState();
-    shutters.forEach((shutter) {
-      MqttClientWrapper.subscribe(shutter.name);
-    });
     doors.forEach((door) {
       MqttClientWrapper.subscribe(door.name);
     });
@@ -43,7 +47,7 @@ class _SecurityState extends State<Security> {
 
     MqttClientWrapper.onMessage((topic, message) {
       shutters.forEach((shutter) {
-        if (shutter.name == topic) {
+        if (topic.contains(shutter.prefix)) {
           setState(() {
             shutter.data = message == 'true' ? true : false;
           });
@@ -70,8 +74,18 @@ class _SecurityState extends State<Security> {
     Map routeData = ModalRoute.of(context).settings.arguments;
     int index = routeData['index'];
     List data = routeData['data'];
+    floorPrefix = routeData['floorPrefix'];
+    roomsData = routeData['roomsData'];
     int prevIndex = index - 1 < 0 ? data.length - 1 : index - 1;
     int nextIndex = index + 1 >= data.length ? 0 : index + 1;
+
+    if (shutters.isEmpty) {
+      generateShuttersList(roomsData);
+      shutters.forEach((sensor) {
+        MqttClientWrapper.subscribe(sensor.prefix);
+      });
+    }
+
 
     return RadialBackground(
       child: Column(
@@ -83,10 +97,14 @@ class _SecurityState extends State<Security> {
             nextRouteData: {
               'data': data,
               'index': nextIndex,
+              'floorPrefix': routeData['floorPrefix'],
+              'roomsData': routeData['roomsData'],
             },
             prevRouteData: {
               'data': data,
               'index': nextIndex,
+              'floorPrefix': routeData['floorPrefix'],
+              'roomsData': routeData['roomsData'],
             },
           ),
           Expanded(
@@ -126,7 +144,7 @@ class _SecurityState extends State<Security> {
                             return ShutterBox(
                               name: shutters[i].name,
                               data: shutters[i].data,
-                              onClick: () => MqttClientWrapper.publish(shutters[i].name, shutters[i].data ? 'false' : 'true')
+                              onClick: () => MqttClientWrapper.publish(shutters[i].prefix, shutters[i].data ? 'false' : 'true')
                             );
                           },
                         ),
@@ -149,7 +167,7 @@ class _SecurityState extends State<Security> {
                                 FlatButton(
                                   onPressed: () {
                                     shutters.forEach((shutter) {
-                                      MqttClientWrapper.publish(shutter.name, 'true');
+                                      MqttClientWrapper.publish(shutter.prefix, 'true');
                                     });
                                   },
                                   color: Colors.white,
@@ -159,7 +177,7 @@ class _SecurityState extends State<Security> {
                                 FlatButton(
                                   onPressed: () {
                                     shutters.forEach((shutter) {
-                                      MqttClientWrapper.publish(shutter.name, 'false');
+                                      MqttClientWrapper.publish(shutter.prefix, 'false');
                                     });
                                   },
                                   color: Colors.white,

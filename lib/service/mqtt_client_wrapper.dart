@@ -14,6 +14,10 @@ class MqttClientWrapper {
     return _url;
   }
 
+  static int get port {
+    return _port;
+  }
+
   static Future<void> connect({String url, int port = 1883}) async {
     int id = Random().nextInt(100000) + 1;
     _id = 'mobileId-$id';

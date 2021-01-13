@@ -13,7 +13,7 @@ class HeaderIconBox extends StatelessWidget {
         padding: EdgeInsets.fromLTRB(38, 0, 38, 8),
         decoration: BoxDecoration(
           color: Colors.black,
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(100))
+          borderRadius: BorderRadius.vertical(bottom: Radius.circular(999))
         ),
         child: Hero(
           tag: 'Emelyst-$name',

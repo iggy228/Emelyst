@@ -54,6 +54,21 @@ class Emelyst extends StatelessWidget {
             fontSize: 12,
           ),
         ),
+        inputDecorationTheme: InputDecorationTheme(
+          isDense: true,
+          labelStyle: TextStyle(color: Colors.white),
+          hintStyle: TextStyle(color: Colors.white60),
+          contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 2),
+          border: UnderlineInputBorder(
+            borderSide: BorderSide(color: Colors.white)
+          ),
+          enabledBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.white)
+          ),
+          focusedBorder: UnderlineInputBorder(
+              borderSide: BorderSide(color: Colors.white)
+          ),
+        ),
       ),
     );
   }

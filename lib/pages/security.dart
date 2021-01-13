@@ -22,11 +22,11 @@ class _SecurityState extends State<Security> {
   List<Sensor<bool>> shutters = [];
 
   List<Sensor<bool>> doors = [
-    Sensor<bool>(name: 'dvere', data: false),
-    Sensor<bool>(name: 'garaz', data: false),
+    Sensor<bool>(name: 'Dvere', data: false, prefix: 'von/vchod/vstup'),
+    Sensor<bool>(name: 'Garáž', data: false, prefix: 'von/vchod/servo'),
   ];
 
-  bool isRoadOn = false;
+  Sensor<bool> comingRoad = Sensor(name: 'Príjazdová cesta', data: false, prefix: 'von/prijazd/motorcek');
 
   void generateShuttersList(List roomsData) {
     roomsData.forEach((room) {
@@ -41,9 +41,9 @@ class _SecurityState extends State<Security> {
   void initState() {
     super.initState();
     doors.forEach((door) {
-      MqttClientWrapper.subscribe(door.name);
+      MqttClientWrapper.subscribe(door.prefix);
     });
-    MqttClientWrapper.subscribe('prijazd');
+    MqttClientWrapper.subscribe(comingRoad.prefix);
 
     MqttClientWrapper.onMessage((topic, message) {
       shutters.forEach((shutter) {
@@ -54,16 +54,16 @@ class _SecurityState extends State<Security> {
         }
       });
       doors.forEach((door) {
-        if (door.name == topic) {
+        if (topic.contains(door.prefix)) {
           setState(() {
             door.data = message == 'true' ? true : false;
           });
         }
       });
 
-      if (topic == 'prijazd') {
+      if (topic.contains(comingRoad.prefix)) {
         setState(() {
-          isRoadOn = message == 'true' ? true : false;
+          comingRoad.data = message == 'true' ? true : false;
         });
       }
     });
@@ -114,12 +114,12 @@ class _SecurityState extends State<Security> {
                 DoorCard(name: doors[0].name, data: doors[0].data,
                   openIcon: 'icons/door_open.png',
                   closeIcon: 'icons/door_close.png',
-                  onClick: () => MqttClientWrapper.publish(doors[0].name, doors[0].data ? 'false' : 'true'),
+                  onClick: () => MqttClientWrapper.publish(doors[0].prefix, doors[0].data ? 'false' : 'true'),
                 ),
                 DoorCard(name: doors[1].name, data: doors[1].data,
                   openIcon: 'icons/garage_open.png',
                   closeIcon: 'icons/garage_close.png',
-                  onClick: () => MqttClientWrapper.publish(doors[1].name, doors[1].data ? 'false' : 'true'),
+                  onClick: () => MqttClientWrapper.publish(doors[1].prefix, doors[1].data ? 'false' : 'true'),
                 ),
                 Card(
                   margin: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
@@ -193,8 +193,8 @@ class _SecurityState extends State<Security> {
                   ),
                 ),
                 RoadCard(
-                  data: isRoadOn,
-                  onPress: () => MqttClientWrapper.publish('prijazd', isRoadOn ? 'false' : 'true'),
+                  data: comingRoad.data,
+                  onPress: () => MqttClientWrapper.publish(comingRoad.prefix, comingRoad.data ? 'false' : 'true'),
                 ),
               ],
             ),

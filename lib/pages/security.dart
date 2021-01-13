@@ -204,4 +204,16 @@ class _SecurityState extends State<Security> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    shutters.forEach((sensor) {
+      MqttClientWrapper.unsubscribe(sensor.prefix);
+    });
+    doors.forEach((sensor) {
+      MqttClientWrapper.unsubscribe(sensor.prefix);
+    });
+    MqttClientWrapper.unsubscribe(comingRoad.prefix);
+    super.dispose();
+  }
 }

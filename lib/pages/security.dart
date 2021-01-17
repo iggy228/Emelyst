@@ -22,18 +22,18 @@ class _SecurityState extends State<Security> {
   List<Sensor<bool>> shutters = [];
 
   List<Sensor<bool>> doors = [
-    Sensor<bool>(name: 'Dvere', data: false, prefix: 'von/vchod/vstup'),
-    Sensor<bool>(name: 'Garáž', data: false, prefix: 'von/vchod/servo'),
+    Sensor<bool>(name: 'Dvere', data: false, topic: 'von/vchod/vstup'),
+    Sensor<bool>(name: 'Garáž', data: false, topic: 'von/vchod/servo'),
   ];
 
-  Sensor<bool> comingRoad = Sensor(name: 'Príjazdová cesta', data: false, prefix: 'von/prijazd/motorcek');
+  Sensor<bool> comingRoad = Sensor(name: 'Príjazdová cesta', data: false, topic: 'von/prijazd/motorcek');
 
   void generateShuttersList(List roomsData) {
-    roomsData.forEach((room) {
+    /* roomsData.forEach((room) {
       if (room['sensors'].any((i) => i == SensorTypes.engine)) {
-        shutters.add(Sensor<bool>(name: room['name'], data: false, prefix: '$floorPrefix${room["prefix"]}/motorcek'));
+        shutters.add(Sensor<bool>(name: room['name'], data: false, topic: '$floorPrefix${room["prefix"]}/motorcek'));
       }
-    });
+    }); */
   }
 
 
@@ -41,27 +41,27 @@ class _SecurityState extends State<Security> {
   void initState() {
     super.initState();
     doors.forEach((door) {
-      MqttClientWrapper.subscribe(door.prefix);
+      MqttClientWrapper.subscribe(door.topic);
     });
-    MqttClientWrapper.subscribe(comingRoad.prefix);
+    MqttClientWrapper.subscribe(comingRoad.topic);
 
     MqttClientWrapper.onMessage((topic, message) {
       shutters.forEach((shutter) {
-        if (topic.contains(shutter.prefix)) {
+        if (topic.contains(shutter.topic)) {
           setState(() {
             shutter.data = message == 'true' ? true : false;
           });
         }
       });
       doors.forEach((door) {
-        if (topic.contains(door.prefix)) {
+        if (topic.contains(door.topic)) {
           setState(() {
             door.data = message == 'true' ? true : false;
           });
         }
       });
 
-      if (topic.contains(comingRoad.prefix)) {
+      if (topic.contains(comingRoad.topic)) {
         setState(() {
           comingRoad.data = message == 'true' ? true : false;
         });
@@ -82,7 +82,7 @@ class _SecurityState extends State<Security> {
     if (shutters.isEmpty) {
       generateShuttersList(roomsData);
       shutters.forEach((sensor) {
-        MqttClientWrapper.subscribe(sensor.prefix);
+        MqttClientWrapper.subscribe(sensor.topic);
       });
     }
 
@@ -114,12 +114,12 @@ class _SecurityState extends State<Security> {
                 DoorCard(name: doors[0].name, data: doors[0].data,
                   openIcon: 'icons/door_open.png',
                   closeIcon: 'icons/door_close.png',
-                  onClick: () => MqttClientWrapper.publish(doors[0].prefix, doors[0].data ? 'false' : 'true'),
+                  onClick: () => MqttClientWrapper.publish(doors[0].topic, doors[0].data ? 'false' : 'true'),
                 ),
                 DoorCard(name: doors[1].name, data: doors[1].data,
                   openIcon: 'icons/garage_open.png',
                   closeIcon: 'icons/garage_close.png',
-                  onClick: () => MqttClientWrapper.publish(doors[1].prefix, doors[1].data ? 'false' : 'true'),
+                  onClick: () => MqttClientWrapper.publish(doors[1].topic, doors[1].data ? 'false' : 'true'),
                 ),
                 Card(
                   margin: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
@@ -144,7 +144,7 @@ class _SecurityState extends State<Security> {
                             return ShutterBox(
                               name: shutters[i].name,
                               data: shutters[i].data,
-                              onClick: () => MqttClientWrapper.publish(shutters[i].prefix, shutters[i].data ? 'false' : 'true')
+                              onClick: () => MqttClientWrapper.publish(shutters[i].topic, shutters[i].data ? 'false' : 'true')
                             );
                           },
                         ),
@@ -167,7 +167,7 @@ class _SecurityState extends State<Security> {
                                 FlatButton(
                                   onPressed: () {
                                     shutters.forEach((shutter) {
-                                      MqttClientWrapper.publish(shutter.prefix, 'true');
+                                      MqttClientWrapper.publish(shutter.topic, 'true');
                                     });
                                   },
                                   color: Colors.white,
@@ -177,7 +177,7 @@ class _SecurityState extends State<Security> {
                                 FlatButton(
                                   onPressed: () {
                                     shutters.forEach((shutter) {
-                                      MqttClientWrapper.publish(shutter.prefix, 'false');
+                                      MqttClientWrapper.publish(shutter.topic, 'false');
                                     });
                                   },
                                   color: Colors.white,
@@ -194,7 +194,7 @@ class _SecurityState extends State<Security> {
                 ),
                 RoadCard(
                   data: comingRoad.data,
-                  onPress: () => MqttClientWrapper.publish(comingRoad.prefix, comingRoad.data ? 'false' : 'true'),
+                  onPress: () => MqttClientWrapper.publish(comingRoad.topic, comingRoad.data ? 'false' : 'true'),
                 ),
               ],
             ),
@@ -208,12 +208,12 @@ class _SecurityState extends State<Security> {
   @override
   void dispose() {
     shutters.forEach((sensor) {
-      MqttClientWrapper.unsubscribe(sensor.prefix);
+      MqttClientWrapper.unsubscribe(sensor.topic);
     });
     doors.forEach((sensor) {
-      MqttClientWrapper.unsubscribe(sensor.prefix);
+      MqttClientWrapper.unsubscribe(sensor.topic);
     });
-    MqttClientWrapper.unsubscribe(comingRoad.prefix);
+    MqttClientWrapper.unsubscribe(comingRoad.topic);
     super.dispose();
   }
 }

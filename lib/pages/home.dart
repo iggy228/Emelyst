@@ -25,35 +25,17 @@ class _HomeState extends State<Home> {
   List<Map<String, dynamic>> getRoomsData() {
     List<Map<String, dynamic>> roomsData = [];
     rooms.forEach((room) {
-      roomsData.add({'name': room.name, 'prefix': room.prefix, 'sensors': room.sensors});
+      roomsData.add({'name': room.name, 'sensors': room.sensors});
     });
     return roomsData;
   }
 
-  List<String> getRoomsNames() {
-
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    List<Room> floorRooms = [
-      Room(name: 'Obývačka', iconName: 'hostroom', prefix: 'obyvacka', sensors: [SensorTypes.light]),
-      Room(name: 'Kuchyňa', iconName: 'kitchen', prefix: 'kuchyna', sensors: [SensorTypes.light]),
-      Room(name: 'Spáľna', iconName: 'bedroom', prefix: 'spalna', sensors: [SensorTypes.light, SensorTypes.engine]),
-      Room(name: 'Pracovňa', iconName: 'hostroom', prefix: 'pracovna', sensors: [SensorTypes.light]),
-      Room(name: 'Chodba', iconName: 'hostroom', prefix: 'chodba', sensors: [SensorTypes.light, SensorTypes.detector]),
-      Room(name: 'Šatník', iconName: 'hostroom', prefix: 'satnik', sensors: [SensorTypes.light]),
-      Room(name: 'Kúpeľna', iconName: 'hostroom', prefix: 'kupelka', sensors: [SensorTypes.light]),
-      Room(name: 'Garáž', iconName: 'hostroom', prefix: 'garaz', sensors: [SensorTypes.light, SensorTypes.engine]),
-    ];
-
-    rooms.addAll(floorRooms);
-  }
-
   @override
   Widget build(BuildContext context) {
+    if (rooms.isEmpty) {
+      rooms = ModalRoute.of(context).settings.arguments;
+    }
+
     return RadialBackground(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -127,7 +109,7 @@ class _HomeState extends State<Home> {
                           "data": categories,
                           "index": i,
                           "floorPrefix": floorPrefix,
-                          "roomsData": getRoomsData(),
+                          "roomsData": rooms,
                         },
                       ),
                     );

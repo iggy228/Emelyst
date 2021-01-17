@@ -18,26 +18,26 @@ class _RoomState extends State<Room> {
 
   List<Sensor> sensors = [];
 
-  void generateSensorsList(Map room) {
+  /*void generateSensorsList(Map room) {
     room['sensors'].forEach((sensor) {
       if (sensor == SensorTypes.light) {
-        sensors.add(Sensor(name: 'Svetlo', data: false, prefix: '$floorPrefix${room["prefix"]}/svetlo'));
+        sensors.add(Sensor(name: 'Svetlo', data: false, topic: '$floorPrefix${room["prefix"]}/svetlo'));
       }
       if (sensor == SensorTypes.engine) {
-        sensors.add(Sensor(name: 'Roleta', data: false, prefix: '$floorPrefix${room["prefix"]}/motorcek'));
+        sensors.add(Sensor(name: 'Roleta', data: false, topic: '$floorPrefix${room["prefix"]}/motorcek'));
       }
       if (sensor == SensorTypes.detector) {
-        sensors.add(Sensor(name: 'Pohyb', data: false, prefix: '$floorPrefix${room["prefix"]}/pohyb'));
+        sensors.add(Sensor(name: 'Pohyb', data: false, topic: '$floorPrefix${room["prefix"]}/pohyb'));
       }
     });
-  }
+  }*/
 
   @override
   void initState() {
     super.initState();
     MqttClientWrapper.onMessage((topic, message) {
       sensors.forEach((sensor) {
-        if (topic.contains(sensor.prefix)) {
+        if (topic.contains(sensor.topic)) {
           setState(() {
             sensor.data = message == 'on' ? true : false;
           });
@@ -53,9 +53,9 @@ class _RoomState extends State<Room> {
     floorPrefix = data['floorPrefix'];
 
     if (sensors.isEmpty) {
-      generateSensorsList(roomData);
+      // generateSensorsList(roomData);
       sensors.forEach((sensor) {
-        MqttClientWrapper.subscribe(sensor.prefix);
+        MqttClientWrapper.subscribe(sensor.topic);
       });
     }
 
@@ -73,7 +73,7 @@ class _RoomState extends State<Room> {
                   iconUrl: sensors[index].data ? 'icons/light_on.png' : 'icons/light_off.png',
                   text: sensors[index].data ? 'vypnúť' : 'zapnúť',
                   color: sensors[index].data ? Colors.amberAccent : Colors.white,
-                  onPress: () => MqttClientWrapper.publish(sensors[index].prefix, sensors[index].data ? 'off' : 'on'),
+                  onPress: () => MqttClientWrapper.publish(sensors[index].topic, sensors[index].data ? 'off' : 'on'),
                 );
               },
             ),

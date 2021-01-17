@@ -23,9 +23,16 @@ class _LightsState extends State<Lights> {
 
   void generateLightsList(List roomsData) {
     roomsData.forEach((room) {
-      if (room['sensors'].any((i) => i == SensorTypes.light)) {
-        lights.add(Sensor<bool>(name: room['name'], data: false, prefix: '$floorPrefix${room["prefix"]}/svetlo'));
-      }
+      room.sensors.forEach((sensor) {
+        if (sensor.sensorType == SensorType.light) {
+          lights.add(Sensor<bool>(
+            name: room.name,
+            data: sensor.data,
+            topic: sensor.topic,
+            sensorType: sensor.sensorType,
+          ));
+        }
+      });
     });
   }
 
@@ -34,7 +41,7 @@ class _LightsState extends State<Lights> {
     super.initState();
     MqttClientWrapper.onMessage((topic, message) {
       lights.forEach((light) {
-        if (topic.contains(light.prefix)) {
+        if (topic.contains(light.topic)) {
           setState(() {
             light.data = message == 'on' ? true : false;
           });
@@ -53,9 +60,6 @@ class _LightsState extends State<Lights> {
 
     if (lights.isEmpty) {
       generateLightsList(roomsData);
-      lights.forEach((light) {
-        MqttClientWrapper.subscribe(light.prefix);
-      });
     }
 
     int prevIndex = index - 1 < 0 ? data.length - 1 : index - 1;
@@ -92,7 +96,7 @@ class _LightsState extends State<Lights> {
                   color: lights[index].data ? Colors.amberAccent : Colors.white,
                   iconUrl: lights[index].data ? 'icons/light_on.png' : 'icons/light_off.png',
                   onPress: () {
-                    MqttClientWrapper.publish(lights[index].prefix, lights[index].data ? 'off' : 'on');
+                    MqttClientWrapper.publish(lights[index].topic, lights[index].data ? 'off' : 'on');
                   }
                 );
               },
@@ -107,7 +111,7 @@ class _LightsState extends State<Lights> {
   @override
   void dispose() {
     lights.forEach((light) {
-      MqttClientWrapper.unsubscribe(light.prefix);
+      MqttClientWrapper.unsubscribe(light.topic);
     });
     super.dispose();
   }

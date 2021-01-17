@@ -16,19 +16,19 @@ class Overview extends StatefulWidget {
 class _OverviewState extends State<Overview> {
 
   List sensorData = [
-    Sensor<int>(name: 'teplota', data: 0, prefix: 'von/meteo/teplota'),
-    Sensor<int>(name: 'vlhkost', data: 0, prefix: 'von/meteo/vlhkost'),
+    Sensor<int>(name: 'teplota', data: 0, topic: 'von/meteo/teplota'),
+    Sensor<int>(name: 'vlhkost', data: 0, topic: 'von/meteo/vlhkost'),
   ];
 
   @override
   void initState() {
     super.initState();
     sensorData.forEach((sensor) {
-      MqttClientWrapper.subscribe(sensor.prefix);
+      MqttClientWrapper.subscribe(sensor.topic);
     });
     MqttClientWrapper.onMessage((topic, message) {
       sensorData.forEach((sensor) {
-        if (topic.contains(sensor.prefix)) {
+        if (topic.contains(sensor.topic)) {
           setState(() {
             sensor.data = int.parse(message);
           });
@@ -126,7 +126,7 @@ class _OverviewState extends State<Overview> {
   @override
   void dispose() {
     sensorData.forEach((sensor) {
-      MqttClientWrapper.unsubscribe(sensor.prefix);
+      MqttClientWrapper.unsubscribe(sensor.topic);
     });
     super.dispose();
   }

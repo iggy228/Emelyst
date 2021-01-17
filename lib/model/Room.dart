@@ -12,11 +12,12 @@ class Room {
 
   Room({this.name, this.iconName, this.prefix, this.sensors});
 
-  Map<String, String> toMap() {
+  Map<String, dynamic> toMap() {
     return {
       'name': name,
       'iconName': iconName,
-      'prefix': prefix
+      'prefix': prefix,
+      'sensors': sensors,
     };
   }
 }

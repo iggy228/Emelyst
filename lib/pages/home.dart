@@ -1,4 +1,5 @@
 import 'package:emelyst/model/Room.dart';
+import 'package:emelyst/service/mqtt_client_wrapper.dart';
 import 'package:emelyst/widgets/category_card.dart';
 import 'package:emelyst/widgets/home_scroll_view.dart';
 import 'package:emelyst/widgets/navigation.dart';
@@ -28,6 +29,14 @@ class _HomeState extends State<Home> {
       roomsData.add({'name': room.name, 'sensors': room.sensors});
     });
     return roomsData;
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    MqttClientWrapper.onMessage((topic, message) {
+      
+    });
   }
 
   @override

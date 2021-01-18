@@ -1,9 +1,9 @@
 import 'package:emelyst/model/Room.dart';
 import 'package:emelyst/model/Sensor.dart';
 import 'package:emelyst/service/mqtt_client_wrapper.dart';
+import 'package:emelyst/service/sensors_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:mysql1/mysql1.dart';
 
 class Loading extends StatefulWidget {
   @override
@@ -33,24 +33,17 @@ class _LoadingState extends State<Loading> {
 
   void setupConnectionToBroker() async {
     await MqttClientWrapper.connect(url: '91.127.16.72', port: 10000);
+  }
 
-    var settings = ConnectionSettings(
-      host: '91.127.16.72',
-      port: 3306,
-      user: 'david',
-      password: 'barta',
-      db: 'dht'
-    );
-
-    var conn = await MySqlConnection.connect(settings);
-
-    var result = await conn.query('SELECT * FROM stav');
+  Future<void> setupSensorsData() async {
+    await SensorState.connect();
+    List data = await SensorState.getData();
 
     List<Room> rooms = [];
 
-    String lastroom = "";
+    String lastroom = '';
 
-    for (var row in result) {
+    for (var row in data) {
       List<String> paths = row['topic'].split('/');
       if (paths[1] == 'prizemie') {
         if (lastroom != paths[2]) {
@@ -73,6 +66,7 @@ class _LoadingState extends State<Loading> {
   void initState() {
     super.initState();
     setupConnectionToBroker();
+    setupSensorsData();
   }
   
   @override

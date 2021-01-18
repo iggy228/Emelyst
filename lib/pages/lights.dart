@@ -1,6 +1,7 @@
 import 'package:emelyst/model/Room.dart';
 import 'package:emelyst/model/Sensor.dart';
 import 'package:emelyst/service/mqtt_client_wrapper.dart';
+import 'package:emelyst/service/sensors_state.dart';
 import 'package:emelyst/widgets/header.dart';
 import 'package:emelyst/widgets/header_grid_view.dart';
 import 'package:emelyst/widgets/header_icon_box.dart';
@@ -21,7 +22,7 @@ class _LightsState extends State<Lights> {
 
   List<Sensor<bool>> lights = [];
 
-  void generateLightsList(List roomsData) {
+  Future<void> generateLightsList(List roomsData) async {
     roomsData.forEach((room) {
       room.sensors.forEach((sensor) {
         if (sensor.sensorType == SensorType.light) {
@@ -33,6 +34,10 @@ class _LightsState extends State<Lights> {
           ));
         }
       });
+    });
+
+    lights = await SensorState.updateState(lights);
+    setState(() {
     });
   }
 
@@ -60,6 +65,9 @@ class _LightsState extends State<Lights> {
 
     if (lights.isEmpty) {
       generateLightsList(roomsData);
+      lights.forEach((light) { 
+        MqttClientWrapper.subscribe(light.topic);
+      });
     }
 
     int prevIndex = index - 1 < 0 ? data.length - 1 : index - 1;
@@ -113,6 +121,7 @@ class _LightsState extends State<Lights> {
     lights.forEach((light) {
       MqttClientWrapper.unsubscribe(light.topic);
     });
+    lights = [];
     super.dispose();
   }
 }

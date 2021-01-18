@@ -53,5 +53,4 @@ class MqttClientWrapper {
       func(event[0].topic, data);
     });
   }
-
 }

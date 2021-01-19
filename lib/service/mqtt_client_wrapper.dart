@@ -45,7 +45,7 @@ class MqttClientWrapper {
     _client.publishMessage(defaultPrefix + topic, MqttQos.atLeastOnce, builder.payload);
   }
 
-  static void onMessage(Function(String, String) func) {
+  static void onMessage(Function(String topic, String message) func) {
     _client.updates.listen((event) {
       MqttPublishMessage message = event[0].payload;
       var data = MqttPublishPayload.bytesToStringAsString(message.payload.message);

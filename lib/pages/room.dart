@@ -1,6 +1,6 @@
-import 'package:emelyst/model/Room.dart';
 import 'package:emelyst/model/Sensor.dart';
 import 'package:emelyst/service/mqtt_client_wrapper.dart';
+import 'package:emelyst/service/sensors_state.dart';
 import 'package:emelyst/widgets/header.dart';
 import 'package:emelyst/widgets/light_card.dart';
 import 'package:emelyst/widgets/navigation.dart';
@@ -18,24 +18,28 @@ class _RoomState extends State<Room> {
 
   List<Sensor> sensors = [];
 
-  /*void generateSensorsList(Map room) {
+  Future<void> generateSensorsList(Map room) async {
     room['sensors'].forEach((sensor) {
-      if (sensor == SensorTypes.light) {
-        sensors.add(Sensor(name: 'Svetlo', data: false, topic: '$floorPrefix${room["prefix"]}/svetlo'));
+      if (sensor.sensorType == SensorType.light) {
+        sensors.add(Sensor(name: 'Svetlo', data: sensor.data, topic: sensor.topic));
       }
-      if (sensor == SensorTypes.engine) {
-        sensors.add(Sensor(name: 'Roleta', data: false, topic: '$floorPrefix${room["prefix"]}/motorcek'));
+      if (sensor.sensorType == SensorType.engine) {
+        sensors.add(Sensor(name: 'Roleta', data: sensor.data, topic: sensor.topic));
       }
-      if (sensor == SensorTypes.detector) {
-        sensors.add(Sensor(name: 'Pohyb', data: false, topic: '$floorPrefix${room["prefix"]}/pohyb'));
+      if (sensor.sensorType == SensorType.detector) {
+        sensors.add(Sensor(name: 'Pohyb', data: sensor.data, topic: sensor.topic));
       }
     });
-  }*/
+
+    sensors = await SensorState.updateState(sensors);
+  }
 
   @override
   void initState() {
     super.initState();
     MqttClientWrapper.onMessage((topic, message) {
+      print(topic);
+      print(message);
       sensors.forEach((sensor) {
         if (topic.contains(sensor.topic)) {
           setState(() {
@@ -53,7 +57,9 @@ class _RoomState extends State<Room> {
     floorPrefix = data['floorPrefix'];
 
     if (sensors.isEmpty) {
-      // generateSensorsList(roomData);
+      setState(() {
+        generateSensorsList(roomData);
+      });
       sensors.forEach((sensor) {
         MqttClientWrapper.subscribe(sensor.topic);
       });
@@ -82,5 +88,14 @@ class _RoomState extends State<Room> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    sensors.forEach((sensor) {
+      MqttClientWrapper.unsubscribe(sensor.topic);
+    });
+    sensors = [];
+    super.dispose();
   }
 }

@@ -1,5 +1,5 @@
 import 'package:emelyst/model/Room.dart';
-import 'package:emelyst/service/mqtt_client_wrapper.dart';
+import 'package:emelyst/service/sensors_state.dart';
 import 'package:emelyst/widgets/category_card.dart';
 import 'package:emelyst/widgets/home_scroll_view.dart';
 import 'package:emelyst/widgets/navigation.dart';
@@ -16,9 +16,9 @@ class _HomeState extends State<Home> {
   String floorPrefix = 'prizemie/';
 
   List<Map<String, String>> categories = [
-    {'name': 'Prehľad', 'icon': 'home', 'url': 'overview'},
-    {'name': 'Svetlá', 'icon': 'light', 'url': 'lights'},
-    {'name': 'Ochrana', 'icon': 'security', 'url': 'security'},
+    {'name': 'Prehľad', 'icon': 'home', 'url': '/overview'},
+    {'name': 'Svetlá', 'icon': 'light', 'url': '/lights'},
+    {'name': 'Ochrana', 'icon': 'security', 'url': '/security'},
   ];
 
   List<Room> rooms = [];
@@ -31,12 +31,15 @@ class _HomeState extends State<Home> {
     return roomsData;
   }
 
+  void updateRoomsData() async {
+    for (Room room in rooms) {
+      room.sensors = await SensorState.updateState(room.sensors);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    MqttClientWrapper.onMessage((topic, message) {
-      
-    });
   }
 
   @override
@@ -113,12 +116,14 @@ class _HomeState extends State<Home> {
                       child: CategoryCard(
                         title: categories[i]['name'],
                         imageUrl: categories[i]['icon'],
-                        routeName: categories[i]['url'],
-                        routeData: {
-                          "data": categories,
-                          "index": i,
-                          "floorPrefix": floorPrefix,
-                          "roomsData": rooms,
+                        onPress: () {
+                          Navigator.pushNamed(context, categories[i]['url'], arguments: {
+                            "data": categories,
+                            "index": i,
+                            "floorPrefix": floorPrefix,
+                            "roomsData": rooms,
+                          });
+                          setState(() {});
                         },
                       ),
                     );
@@ -142,5 +147,12 @@ class _HomeState extends State<Home> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    rooms = [];
+    print(rooms);
+    super.dispose();
   }
 }

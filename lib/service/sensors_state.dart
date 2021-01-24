@@ -5,7 +5,7 @@ class SensorState {
 
   static Future<void> connect() async {
     ConnectionSettings settings = ConnectionSettings(
-        host: '91.127.16.72',
+        host: '91.127.172.175',
         port: 3306,
         user: 'david',
         password: 'barta',

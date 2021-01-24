@@ -32,7 +32,7 @@ class _LoadingState extends State<Loading> {
   }
 
   void setupConnectionToBroker() async {
-    await MqttClientWrapper.connect(url: '91.127.16.72', port: 10000);
+    await MqttClientWrapper.connect(url: '91.127.172.175', port: 10000);
   }
 
   Future<void> setupSensorsData() async {

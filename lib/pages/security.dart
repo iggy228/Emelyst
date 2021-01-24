@@ -1,6 +1,7 @@
 import 'package:emelyst/model/Room.dart';
 import 'package:emelyst/model/Sensor.dart';
 import 'package:emelyst/service/mqtt_client_wrapper.dart';
+import 'package:emelyst/service/sensors_state.dart';
 import 'package:emelyst/widgets/door_card.dart';
 import 'package:emelyst/widgets/header.dart';
 import 'package:emelyst/widgets/header_icon_box.dart';
@@ -17,7 +18,7 @@ class Security extends StatefulWidget {
 
 class _SecurityState extends State<Security> {
   String floorPrefix;
-  List roomsData;
+  List<Room> roomsData;
 
   List<Sensor<bool>> shutters = [];
 
@@ -28,12 +29,16 @@ class _SecurityState extends State<Security> {
 
   Sensor<bool> comingRoad = Sensor(name: 'Príjazdová cesta', data: false, topic: 'von/prijazd/motorcek');
 
-  void generateShuttersList(List roomsData) {
-    /* roomsData.forEach((room) {
-      if (room['sensors'].any((i) => i == SensorTypes.engine)) {
-        shutters.add(Sensor<bool>(name: room['name'], data: false, topic: '$floorPrefix${room["prefix"]}/motorcek'));
-      }
-    }); */
+  void generateShuttersList(List roomsData) async {
+    roomsData.forEach((room) {
+      room.sensors.forEach((sensor) {
+        if (sensor.sensorType == SensorType.engine) {
+          shutters.add(Sensor<bool>(name: room.name, data: sensor.data, topic: sensor.topic));
+        }
+      });
+    });
+
+    shutters = await SensorState.updateState(shutters);
   }
 
 

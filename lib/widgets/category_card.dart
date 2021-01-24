@@ -3,20 +3,18 @@ import 'package:flutter/material.dart';
 class CategoryCard extends StatelessWidget {
   final String title;
   final String imageUrl;
-  final String routeName;
-  final Map routeData;
+  final VoidCallback onPress;
 
   CategoryCard({
     this.title,
     this.imageUrl,
-    this.routeName,
-    this.routeData,
+    this.onPress,
   });
 
   @override
   Widget build(BuildContext context) {
     return FlatButton.icon(
-      onPressed: () => Navigator.pushNamed(context, '/$routeName', arguments: routeData),
+      onPressed: onPress,
       color: Colors.black,
       padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       shape: RoundedRectangleBorder(

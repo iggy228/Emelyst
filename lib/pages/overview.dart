@@ -1,5 +1,6 @@
 import 'package:emelyst/model/Sensor.dart';
 import 'package:emelyst/service/mqtt_client_wrapper.dart';
+import 'package:emelyst/service/sensors_state.dart';
 import 'package:emelyst/widgets/header.dart';
 import 'package:emelyst/widgets/header_icon_box.dart';
 import 'package:emelyst/widgets/line_chart_wrapper.dart';
@@ -15,14 +16,24 @@ class Overview extends StatefulWidget {
 
 class _OverviewState extends State<Overview> {
 
+  List<double> avgTemperatures = [];
+
   List sensorData = [
-    Sensor<int>(name: 'teplota', data: 0, topic: 'von/meteo/teplota'),
-    Sensor<int>(name: 'vlhkost', data: 0, topic: 'von/meteo/vlhkost'),
+    Sensor<double>(name: 'teplota', data: 0, topic: 'von/meteo/teplota'),
+    Sensor<double>(name: 'vlhkost', data: 0, topic: 'von/meteo/vlhkost'),
   ];
+
+  Future<void> initTemperature() async {
+    avgTemperatures = await SensorState.getAvgTemperature();
+    setState(() {});
+  }
 
   @override
   void initState() {
     super.initState();
+
+    initTemperature();
+
     sensorData.forEach((sensor) {
       MqttClientWrapper.subscribe(sensor.topic);
     });
@@ -30,7 +41,7 @@ class _OverviewState extends State<Overview> {
       sensorData.forEach((sensor) {
         if (topic.contains(sensor.topic)) {
           setState(() {
-            sensor.data = int.parse(message);
+            sensor.data = double.parse(message);
           });
         }
       });
@@ -76,7 +87,7 @@ class _OverviewState extends State<Overview> {
                 // row for boxes
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
+                  children: <Widget>[
                     // Box for temperature
                     SensorCard(
                       title: 'Teplota',
@@ -110,7 +121,7 @@ class _OverviewState extends State<Overview> {
                         style: Theme.of(context).textTheme.headline6,
                       ),
                       SizedBox(height: 16),
-                      LineChartWrapper(),
+                      LineChartWrapper(avgTemperatures),
                     ],
                   ),
                 ),

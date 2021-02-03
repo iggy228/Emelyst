@@ -2,25 +2,16 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class LineChartWrapper extends StatelessWidget {
+  final List<FlSpot> _chartData = [];
 
-  List<LineChartBarData> chartData = [
-    LineChartBarData(
-      spots: [
-        FlSpot(1, 23),
-        FlSpot(2, 28),
-        FlSpot(3, 33),
-        FlSpot(4, 30),
-        FlSpot(5, 28),
-        FlSpot(6, 33),
-        FlSpot(7, 31),
-      ],
-      colors: [
-        Color.fromRGBO(52, 192, 209, 1),
-      ],
-    ),
-  ];
+  LineChartWrapper(List<double> data) {
+    for (int i = 0; i < data.length; i++) {
+      FlSpot spot = FlSpot(i + 1.0, double.parse(data[i].toStringAsFixed(2)));
+      _chartData.add(spot);
+    }
+  }
 
-  String makeBottomTitle(value) {
+  String makeBottomTitle(double value) {
     switch (value.toInt()) {
       case 1: return 'PO';
       case 2: return 'UT';
@@ -37,7 +28,14 @@ class LineChartWrapper extends StatelessWidget {
   Widget build(BuildContext context) {
     return LineChart(
       LineChartData(
-        lineBarsData: chartData,
+        lineBarsData: <LineChartBarData>[
+          LineChartBarData(
+            spots: _chartData,
+            colors: [
+              Color.fromRGBO(52, 192, 209, 1),
+            ],
+          )
+        ],
         minY: 10,
         maxY: 40,
         gridData: FlGridData(

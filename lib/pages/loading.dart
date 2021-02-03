@@ -12,6 +12,11 @@ class Loading extends StatefulWidget {
 
 class _LoadingState extends State<Loading> {
 
+  List<Room> rooms = [];
+  String url = '178.40.227.3';
+  bool isError = false;
+  String errorMessage = "";
+
   SensorType textToType(String text) {
     switch (text) {
       case 'svetlo': return SensorType.light;
@@ -31,15 +36,33 @@ class _LoadingState extends State<Loading> {
     return 'bedroom';
   }
 
-  void setupConnectionToBroker() async {
-    await MqttClientWrapper.connect(url: '91.127.172.175', port: 10000);
+  Future<void> setupConnectionToBroker() async {
+    await MqttClientWrapper.connect(url: url, port: 10000);
+    if (!MqttClientWrapper.isConnected) {
+      isError = true;
+      errorMessage += "Nepodarilo sa pripojiť na broker.\n";
+    }
+  }
+
+  Future<void> connectToDB() async {
+    bool connected = await SensorState.connect(url);
+    if (!connected) {
+      isError = true;
+      errorMessage += "Nepodarilo sa pripojiť na databázu.\n";
+    }
   }
 
   Future<void> setupSensorsData() async {
-    await SensorState.connect();
-    List data = await SensorState.getData();
 
-    List<Room> rooms = [];
+    List data = [];
+
+    try {
+      data = await SensorState.getData();
+    }
+    catch (e) {
+      isError = true;
+      errorMessage += "Nepodarilo sa získať dáta z databázy.\n";
+    }
 
     String lastroom = '';
 
@@ -58,25 +81,40 @@ class _LoadingState extends State<Loading> {
         ));
       }
     }
+  }
 
-    Navigator.pushReplacementNamed(context, '/home', arguments: rooms);
+  void _setupApp() async {
+    await setupConnectionToBroker();
+    await connectToDB();
+    await setupSensorsData();
+
+    if (isError) {
+      Navigator.pushReplacementNamed(context, '/loadingError', arguments: errorMessage);
+    }
+    else {
+      Navigator.pushReplacementNamed(context, '/home', arguments: rooms);
+    }
   }
 
   @override
   void initState() {
     super.initState();
-    setupConnectionToBroker();
-    setupSensorsData();
+    _setupApp();
   }
   
   @override
   Widget build(BuildContext context) {
     return Container(
       color: Color.fromRGBO(52, 192, 209, 1),
-      child: Center(
-        child: SpinKitFoldingCube(
-          color: Colors.white
-        ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          SpinKitFoldingCube(
+            color: Colors.white
+          ),
+          SizedBox(height: 24),
+          Text('Emelyst', style: Theme.of(context).textTheme.headline4),
+       ],
       ),
     );
   }

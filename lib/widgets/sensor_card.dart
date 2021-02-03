@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class SensorCard extends StatelessWidget {
   final String title;
-  final int data;
+  final double data;
   final String postfix;
   final String iconUrl;
 

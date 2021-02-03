@@ -32,14 +32,13 @@ class _RoomState extends State<Room> {
     });
 
     sensors = await SensorState.updateState(sensors);
+    setState(() {});
   }
 
   @override
   void initState() {
     super.initState();
     MqttClientWrapper.onMessage((topic, message) {
-      print(topic);
-      print(message);
       sensors.forEach((sensor) {
         if (topic.contains(sensor.topic)) {
           setState(() {

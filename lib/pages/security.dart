@@ -45,33 +45,11 @@ class _SecurityState extends State<Security> {
   @override
   void initState() {
     super.initState();
-    doors.forEach((door) {
+    /* doors.forEach((door) {
       MqttClientWrapper.subscribe(door.topic);
     });
-    MqttClientWrapper.subscribe(comingRoad.topic);
+    MqttClientWrapper.subscribe(comingRoad.topic); */
 
-    MqttClientWrapper.onMessage((topic, message) {
-      shutters.forEach((shutter) {
-        if (topic.contains(shutter.topic)) {
-          setState(() {
-            shutter.data = message == 'true' ? true : false;
-          });
-        }
-      });
-      doors.forEach((door) {
-        if (topic.contains(door.topic)) {
-          setState(() {
-            door.data = message == 'true' ? true : false;
-          });
-        }
-      });
-
-      if (topic.contains(comingRoad.topic)) {
-        setState(() {
-          comingRoad.data = message == 'true' ? true : false;
-        });
-      }
-    });
   }
 
   @override

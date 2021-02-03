@@ -1,4 +1,6 @@
+import 'package:emelyst/model/Room.dart';
 import 'package:emelyst/model/Sensor.dart';
+import 'package:emelyst/service/home_data.dart';
 import 'package:emelyst/service/mqtt_client_wrapper.dart';
 import 'package:emelyst/service/sensors_state.dart';
 import 'package:emelyst/widgets/header.dart';
@@ -16,41 +18,24 @@ class Lights extends StatefulWidget {
 
 class _LightsState extends State<Lights> {
 
-  String floorPrefix;
   List roomsData;
 
   List<Sensor<bool>> lights = [];
 
   Future<void> generateLightsList(List roomsData) async {
-    roomsData.forEach((room) {
-      room.sensors.forEach((sensor) {
-        if (sensor.sensorType == SensorType.light) {
-          lights.add(Sensor<bool>(
-            name: room.name,
-            data: sensor.data,
-            topic: sensor.topic,
-            sensorType: sensor.sensorType,
-          ));
-        }
-      });
-    });
+    List<Room> rooms = HomeData.allRoomsData;
 
-    lights = await SensorState.updateState(lights);
-    setState(() {
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    MqttClientWrapper.onMessage((topic, message) {
-      lights.forEach((light) {
-        if (topic.contains(light.topic)) {
-          setState(() {
-            light.data = message == 'on' ? true : false;
-          });
+    for (Room room in rooms) {
+      for (Sensor<bool> sensor in room.sensors) {
+        if (sensor.topic.contains('svetlo')) {
+          lights.add(sensor);
         }
-      });
+      }
+    }
+
+    MqttClientWrapper.setListenerData(() {
+      print('Refresh');
+      setState(() {});
     });
   }
 
@@ -59,14 +44,9 @@ class _LightsState extends State<Lights> {
     Map routeData = ModalRoute.of(context).settings.arguments;
     int index = routeData['index'];
     List data = routeData['data'];
-    floorPrefix = routeData['floorPrefix'];
-    roomsData = routeData['roomsData'];
 
     if (lights.isEmpty) {
       generateLightsList(roomsData);
-      lights.forEach((light) { 
-        MqttClientWrapper.subscribe(light.topic);
-      });
     }
 
     int prevIndex = index - 1 < 0 ? data.length - 1 : index - 1;

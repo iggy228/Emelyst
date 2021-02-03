@@ -1,9 +1,10 @@
 import 'package:emelyst/model/Room.dart';
-import 'package:emelyst/model/Sensor.dart';
+import 'package:emelyst/service/home_data.dart';
 import 'package:emelyst/service/mqtt_client_wrapper.dart';
 import 'package:emelyst/service/sensors_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Loading extends StatefulWidget {
   @override
@@ -13,31 +14,13 @@ class Loading extends StatefulWidget {
 class _LoadingState extends State<Loading> {
 
   List<Room> rooms = [];
-  String url = '178.40.227.3';
+  String _url;
+  int _port;
   bool isError = false;
   String errorMessage = "";
 
-  SensorType textToType(String text) {
-    switch (text) {
-      case 'svetlo': return SensorType.light;
-      case 'motorcek': return SensorType.engine;
-      case 'pohyb': return SensorType.detector;
-      case 'servo': return SensorType.servo;
-    }
-    return null;
-  }
-
-  String textToIconName(String text) {
-    switch (text) {
-      case 'obyvacka': return 'hostroom';
-      case 'spalna': return 'bedroom';
-      case 'kuchyna': return 'kitchen';
-    }
-    return 'bedroom';
-  }
-
   Future<void> setupConnectionToBroker() async {
-    await MqttClientWrapper.connect(url: url, port: 10000);
+    await MqttClientWrapper.connect(url: _url, port: _port);
     if (!MqttClientWrapper.isConnected) {
       isError = true;
       errorMessage += "Nepodarilo sa pripojiť na broker.\n";
@@ -45,7 +28,7 @@ class _LoadingState extends State<Loading> {
   }
 
   Future<void> connectToDB() async {
-    bool connected = await SensorState.connect(url);
+    bool connected = await SensorState.connect(_url);
     if (!connected) {
       isError = true;
       errorMessage += "Nepodarilo sa pripojiť na databázu.\n";
@@ -62,37 +45,35 @@ class _LoadingState extends State<Loading> {
     catch (e) {
       isError = true;
       errorMessage += "Nepodarilo sa získať dáta z databázy.\n";
+      return;
     }
 
-    String lastroom = '';
-
-    for (var row in data) {
-      List<String> paths = row['topic'].split('/');
-      if (paths[1] == 'prizemie') {
-        if (lastroom != paths[2]) {
-          rooms.add(Room(name: paths[2], iconName: textToIconName(paths[2]), sensors: []));
-          lastroom = paths[2];
-        }
-        rooms[rooms.length - 1].sensors.add(Sensor<bool>(
-          name: paths[3],
-          data: row['stav'] == 'on' ? true : false,
-          topic: '${paths[1]}/${paths[2]}/${paths[3]}',
-          sensorType: textToType(paths[3]),
-        ));
-      }
-    }
+    HomeData.setData(data);
   }
 
   void _setupApp() async {
-    await setupConnectionToBroker();
-    await connectToDB();
-    await setupSensorsData();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    if (isError) {
-      Navigator.pushReplacementNamed(context, '/loadingError', arguments: errorMessage);
+    if (prefs.getString('url') != null && prefs.getInt('port') != null) {
+      _url = prefs.getString('url');
+      _port = prefs.getInt('port');
+      await setupConnectionToBroker();
+      await connectToDB();
+      await setupSensorsData();
     }
     else {
-      Navigator.pushReplacementNamed(context, '/home', arguments: rooms);
+      isError = true;
+    }
+
+    if (isError) {
+      Navigator.pushReplacementNamed(context, '/loadingError', arguments: {
+        'error': errorMessage,
+        'port': _port,
+        'url': _url
+      });
+    }
+    else {
+      Navigator.pushReplacementNamed(context, '/home');
     }
   }
 

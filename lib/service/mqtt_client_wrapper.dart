@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:emelyst/service/home_data.dart';
 import 'package:mqtt_client/mqtt_client.dart';
 import 'package:mqtt_client/mqtt_server_client.dart';
 
@@ -31,6 +32,8 @@ class MqttClientWrapper {
     } catch (e) {
       isConnected = false;
     }
+
+    setListenerData(() {});
   }
 
   static void subscribe(String topic) {
@@ -45,12 +48,14 @@ class MqttClientWrapper {
     _client.publishMessage(defaultPrefix + topic, MqttQos.atLeastOnce, builder.payload);
   }
 
-  static void onMessage(Function(String topic, String message) func) {
+  /// @postUpdate what have to do post update home data
+  static void setListenerData(Function postUpdate) {
     _client.updates.listen((event) {
       MqttPublishMessage message = event[0].payload;
       var data = MqttPublishPayload.bytesToStringAsString(message.payload.message);
 
-      func(event[0].topic, data);
+      HomeData.updateData(event[0].topic, data);
+
     });
   }
 }

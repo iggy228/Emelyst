@@ -36,20 +36,6 @@ class _RoomState extends State<Room> {
   }
 
   @override
-  void initState() {
-    super.initState();
-    MqttClientWrapper.onMessage((topic, message) {
-      sensors.forEach((sensor) {
-        if (topic.contains(sensor.topic)) {
-          setState(() {
-            sensor.data = message == 'on' ? true : false;
-          });
-        }
-      });
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     Map data = ModalRoute.of(context).settings.arguments;
     roomData = data['roomData'];

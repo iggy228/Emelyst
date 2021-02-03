@@ -34,18 +34,9 @@ class _OverviewState extends State<Overview> {
 
     initTemperature();
 
-    sensorData.forEach((sensor) {
+    /* sensorData.forEach((sensor) {
       MqttClientWrapper.subscribe(sensor.topic);
-    });
-    MqttClientWrapper.onMessage((topic, message) {
-      sensorData.forEach((sensor) {
-        if (topic.contains(sensor.topic)) {
-          setState(() {
-            sensor.data = double.parse(message);
-          });
-        }
-      });
-    });
+    }); */
   }
 
   @override

@@ -1,4 +1,5 @@
 import 'package:emelyst/model/Room.dart';
+import 'package:emelyst/service/home_data.dart';
 import 'package:emelyst/service/sensors_state.dart';
 import 'package:emelyst/widgets/category_card.dart';
 import 'package:emelyst/widgets/home_scroll_view.dart';
@@ -31,21 +32,10 @@ class _HomeState extends State<Home> {
     return roomsData;
   }
 
-  void updateRoomsData() async {
-    for (Room room in rooms) {
-      room.sensors = await SensorState.updateState(room.sensors);
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     if (rooms.isEmpty) {
-      rooms = ModalRoute.of(context).settings.arguments;
+      rooms = HomeData.allRoomsData;
     }
 
     return RadialBackground(
@@ -120,8 +110,6 @@ class _HomeState extends State<Home> {
                           Navigator.pushNamed(context, categories[i]['url'], arguments: {
                             "data": categories,
                             "index": i,
-                            "floorPrefix": floorPrefix,
-                            "roomsData": rooms,
                           });
                           setState(() {});
                         },

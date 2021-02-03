@@ -19,9 +19,9 @@ class Emelyst extends StatelessWidget {
     ]);
 
     return MaterialApp(
-      initialRoute: '/',
+      initialRoute: '/loading',
       routes: {
-        '/': (context) => Loading(),
+        '/loading': (context) => Loading(),
         '/home': (context) => Home(),
         '/lights': (context) => Lights(),
         '/overview': (context) => Overview(),

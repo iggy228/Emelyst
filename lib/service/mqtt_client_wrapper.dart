@@ -33,7 +33,7 @@ class MqttClientWrapper {
       isConnected = false;
     }
 
-    setListenerData(() {});
+    getMessage(null);
   }
 
   static void subscribe(String topic) {
@@ -49,12 +49,16 @@ class MqttClientWrapper {
   }
 
   /// @postUpdate what have to do post update home data
-  static void setListenerData(Function postUpdate) {
+  static void getMessage(Function(String topic, String message) func) {
     _client.updates.listen((event) {
       MqttPublishMessage message = event[0].payload;
       var data = MqttPublishPayload.bytesToStringAsString(message.payload.message);
 
       HomeData.updateData(event[0].topic, data);
+
+      if (func != null) {
+        func(event[0].topic, data);
+      }
 
     });
   }

@@ -59,7 +59,9 @@ class _LoadingState extends State<Loading> {
       _port = prefs.getInt('port');
       await setupConnectionToBroker();
       await connectToDB();
-      await setupSensorsData();
+      if (!isError) {
+        await setupSensorsData();
+      }
     }
     else {
       isError = true;

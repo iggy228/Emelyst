@@ -16,15 +16,17 @@ class Overview extends StatefulWidget {
 
 class _OverviewState extends State<Overview> {
 
-  List<double> avgTemperatures = [];
+  List<double> avgTemperatures = [0];
 
-  List sensorData = [
+  List<Sensor<double>> sensorsData = [
     Sensor<double>(name: 'teplota', data: 0, topic: 'von/meteo/teplota'),
     Sensor<double>(name: 'vlhkost', data: 0, topic: 'von/meteo/vlhkost'),
   ];
 
   Future<void> initTemperature() async {
     avgTemperatures = await SensorState.getAvgTemperature();
+    sensorsData[0].data = await SensorState.getLastTemperature();
+    sensorsData[1].data = await SensorState.getLastHumidity();
     setState(() {});
   }
 
@@ -32,11 +34,22 @@ class _OverviewState extends State<Overview> {
   void initState() {
     super.initState();
 
-    initTemperature();
-
-    /* sensorData.forEach((sensor) {
+    sensorsData.forEach((sensor) {
       MqttClientWrapper.subscribe(sensor.topic);
-    }); */
+    });
+
+    MqttClientWrapper.getMessage((topic, message) {
+      for (Sensor sensor in sensorsData) {
+        print('Some temperature');
+        if (topic.contains(sensor.topic)) {
+          setState(() {
+            sensor.data = double.parse(message);
+          });
+        }
+      }
+    });
+
+    initTemperature();
   }
 
   @override
@@ -75,21 +88,21 @@ class _OverviewState extends State<Overview> {
                   padding: const EdgeInsets.all(24.0),
                   child: Image.asset('images/house.png'),
                 ),
-                // row for boxes
+                /// row for boxes
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: <Widget>[
-                    // Box for temperature
+                    /// Box for temperature
                     SensorCard(
                       title: 'Teplota',
-                      data: sensorData[0].data,
+                      data: sensorsData[0].data,
                       postfix: '°C',
                       iconUrl: 'temperature',
                     ),
-                    // Box for humidity
+                    /// Box for humidity
                     SensorCard(
                       title: 'Vlhkosť',
-                      data: sensorData[1].data,
+                      data: sensorsData[1].data,
                       postfix: '%',
                       iconUrl: 'humidity',
                     ),
@@ -123,13 +136,5 @@ class _OverviewState extends State<Overview> {
         ],
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    sensorData.forEach((sensor) {
-      MqttClientWrapper.unsubscribe(sensor.topic);
-    });
-    super.dispose();
   }
 }

@@ -14,6 +14,7 @@ class SensorState {
 
     try {
       mysqlConn = await MySqlConnection.connect(settings);
+      print('Connected');
       return true;
     }
     catch (_) {
@@ -42,7 +43,6 @@ class SensorState {
 
   static Future<List<double>> getAvgTemperature() async {
     Results result = await mysqlConn.query('SELECT datum, tmp FROM teplota WHERE datum >= CURRENT_DATE() - 6');
-    print(result.length);
     List<double> avgTemperatures = [];
 
     double sumTemp = 0.0;
@@ -66,5 +66,15 @@ class SensorState {
     avgTemperatures.add(sumTemp / count);
 
     return avgTemperatures;
+  }
+
+  static Future<double> getLastTemperature() async {
+    Results result = await mysqlConn.query('SELECT tmp FROM teplota ORDER BY ID DESC LIMIT 1');
+    return result.last['tmp'];
+  }
+
+  static Future<double> getLastHumidity() async {
+    Results result = await mysqlConn.query('SELECT hodnota FROM vlhkost ORDER BY ID DESC LIMIT 1');
+    return result.last['hodnota'];
   }
 }

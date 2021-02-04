@@ -2,7 +2,6 @@ import 'package:emelyst/model/Room.dart';
 import 'package:emelyst/model/Sensor.dart';
 import 'package:emelyst/service/home_data.dart';
 import 'package:emelyst/service/mqtt_client_wrapper.dart';
-import 'package:emelyst/service/sensors_state.dart';
 import 'package:emelyst/widgets/header.dart';
 import 'package:emelyst/widgets/header_grid_view.dart';
 import 'package:emelyst/widgets/header_icon_box.dart';
@@ -28,14 +27,24 @@ class _LightsState extends State<Lights> {
     for (Room room in rooms) {
       for (Sensor<bool> sensor in room.sensors) {
         if (sensor.topic.contains('svetlo')) {
-          lights.add(sensor);
+          lights.add(Sensor(
+            name: sensor.topic.split('/')[1],
+            data: sensor.data,
+            topic: sensor.topic,
+            sensorType: sensor.sensorType,
+          ));
         }
       }
     }
 
-    MqttClientWrapper.setListenerData(() {
-      print('Refresh');
-      setState(() {});
+    MqttClientWrapper.getMessage((topic, message) {
+      for (Sensor<bool> sensor in lights) {
+        if (topic.contains(sensor.topic)) {
+          setState(() {
+            sensor.data = message == 'on' ? true : false;
+          });
+        }
+      }
     });
   }
 
@@ -97,9 +106,6 @@ class _LightsState extends State<Lights> {
 
   @override
   void dispose() {
-    lights.forEach((light) {
-      MqttClientWrapper.unsubscribe(light.topic);
-    });
     lights = [];
     super.dispose();
   }

@@ -1,6 +1,5 @@
 import 'package:emelyst/model/Room.dart';
 import 'package:emelyst/service/home_data.dart';
-import 'package:emelyst/service/sensors_state.dart';
 import 'package:emelyst/widgets/category_card.dart';
 import 'package:emelyst/widgets/home_scroll_view.dart';
 import 'package:emelyst/widgets/navigation.dart';
@@ -17,7 +16,7 @@ class _HomeState extends State<Home> {
   String floorPrefix = 'prizemie/';
 
   List<Map<String, String>> categories = [
-    {'name': 'Prehľad', 'icon': 'home', 'url': '/overview'},
+    {'name': 'Domov', 'icon': 'info', 'url': '/overview'},
     {'name': 'Svetlá', 'icon': 'light', 'url': '/lights'},
     {'name': 'Ochrana', 'icon': 'security', 'url': '/security'},
   ];

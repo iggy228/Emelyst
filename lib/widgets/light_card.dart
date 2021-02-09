@@ -21,7 +21,7 @@ class LightCard extends StatelessWidget {
       onTap: onPress,
       child: Container(
         margin: EdgeInsets.all(8),
-        padding: EdgeInsets.all(16),
+        padding: EdgeInsets.fromLTRB(16, 16, 12, 8),
         decoration: BoxDecoration(
           color: Colors.black,
           borderRadius: BorderRadius.circular(32),
@@ -31,14 +31,15 @@ class LightCard extends StatelessWidget {
           children: [
             Text(
               title,
-              style: Theme.of(context).textTheme.headline5,
+              style: Theme.of(context).textTheme.headline6,
+              textAlign: TextAlign.center,
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Image.asset(
                 iconUrl,
-                width: 70,
-                height: 70,
+                width: title.length > 9 ? 65 : 70,
+                height: title.length > 9 ? 65 : 70,
               ),
             ),
             Card(

@@ -27,20 +27,6 @@ class SensorState {
     return result.toList();
   }
 
-  static Future<List> updateState(List sensors) async {
-    Results result = await mysqlConn.query('SELECT * FROM stav');
-
-    for (var row in result) {
-      sensors.forEach((sensor) {
-        if (row['topic'].contains(sensor.topic)) {
-          sensor.data = row['stav'] == 'on' ? true : false;
-        }
-      });
-    }
-
-    return sensors;
-  }
-
   static Future<List<double>> getAvgTemperature() async {
     Results result = await mysqlConn.query('SELECT datum, tmp FROM teplota WHERE datum >= CURRENT_DATE() - 6');
     List<double> avgTemperatures = [];

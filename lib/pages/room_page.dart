@@ -1,38 +1,52 @@
+import 'package:emelyst/model/Room.dart';
 import 'package:emelyst/model/Sensor.dart';
+import 'package:emelyst/service/home_data.dart';
 import 'package:emelyst/service/mqtt_client_wrapper.dart';
-import 'package:emelyst/service/sensors_state.dart';
 import 'package:emelyst/widgets/header.dart';
 import 'package:emelyst/widgets/light_card.dart';
 import 'package:emelyst/widgets/navigation.dart';
 import 'package:emelyst/widgets/radial_background.dart';
 import 'package:flutter/material.dart';
 
-class Room extends StatefulWidget {
+class RoomPage extends StatefulWidget {
   @override
   _RoomState createState() => _RoomState();
 }
 
-class _RoomState extends State<Room> {
+class _RoomState extends State<RoomPage> {
   Map roomData;
   String floorPrefix;
 
   List<Sensor> sensors = [];
 
-  Future<void> generateSensorsList(Map room) async {
-    room['sensors'].forEach((sensor) {
-      if (sensor.sensorType == SensorType.light) {
-        sensors.add(Sensor(name: 'Svetlo', data: sensor.data, topic: sensor.topic));
-      }
-      if (sensor.sensorType == SensorType.engine) {
-        sensors.add(Sensor(name: 'Roleta', data: sensor.data, topic: sensor.topic));
-      }
-      if (sensor.sensorType == SensorType.detector) {
-        sensors.add(Sensor(name: 'Pohyb', data: sensor.data, topic: sensor.topic));
+  void setOnMessage() {
+    MqttClientWrapper.getMessage((topic, message) {
+      for (Sensor<bool> sensor in sensors) {
+        if (topic.contains(sensor.topic)) {
+          setState(() {
+            sensor.data = message == 'on' ? true : false;
+          });
+        }
       }
     });
+  }
 
-    sensors = await SensorState.updateState(sensors);
-    setState(() {});
+  Future<void> generateSensorsList() async {
+    List<Room> rooms = HomeData.allRoomsData;
+
+    for (Room room in rooms) {
+      for (Sensor sensor in room.sensors) {
+        if (sensor.sensorType == SensorType.light) {
+          sensors.add(Sensor(name: 'Svetlo', data: sensor.data, topic: sensor.topic));
+        }
+        if (sensor.sensorType == SensorType.engine) {
+          sensors.add(Sensor(name: 'Roleta', data: sensor.data, topic: sensor.topic));
+        }
+        if (sensor.sensorType == SensorType.detector) {
+          sensors.add(Sensor(name: 'Pohyb', data: sensor.data, topic: sensor.topic));
+        }
+      }
+    }
   }
 
   @override
@@ -42,12 +56,7 @@ class _RoomState extends State<Room> {
     floorPrefix = data['floorPrefix'];
 
     if (sensors.isEmpty) {
-      setState(() {
-        generateSensorsList(roomData);
-      });
-      sensors.forEach((sensor) {
-        MqttClientWrapper.subscribe(sensor.topic);
-      });
+      generateSensorsList();
     }
 
     return RadialBackground(

@@ -21,22 +21,7 @@ class _LightsState extends State<Lights> {
 
   List<Sensor<bool>> lights = [];
 
-  Future<void> generateLightsList(List roomsData) async {
-    List<Room> rooms = HomeData.allRoomsData;
-
-    for (Room room in rooms) {
-      for (Sensor<bool> sensor in room.sensors) {
-        if (sensor.topic.contains('svetlo')) {
-          lights.add(Sensor(
-            name: sensor.topic.split('/')[1],
-            data: sensor.data,
-            topic: sensor.topic,
-            sensorType: sensor.sensorType,
-          ));
-        }
-      }
-    }
-
+  void setOnMessage() {
     MqttClientWrapper.getMessage((topic, message) {
       for (Sensor<bool> sensor in lights) {
         if (topic.contains(sensor.topic)) {
@@ -46,6 +31,25 @@ class _LightsState extends State<Lights> {
         }
       }
     });
+  }
+
+  Future<void> generateLightsList(List roomsData) async {
+    List<Room> rooms = HomeData.allRoomsData;
+
+    for (Room room in rooms) {
+      for (Sensor<bool> sensor in room.sensors) {
+        if (sensor.topic.contains('svetlo')) {
+          lights.add(Sensor(
+            name: sensor.topic.split('/')[0] + ' ' + sensor.topic.split('/')[1],
+            data: sensor.data,
+            topic: sensor.topic,
+            sensorType: sensor.sensorType,
+          ));
+        }
+      }
+    }
+
+    setOnMessage();
   }
 
   @override

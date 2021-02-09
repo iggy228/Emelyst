@@ -3,7 +3,7 @@ import 'package:emelyst/pages/lights.dart';
 import 'package:emelyst/pages/loading.dart';
 import 'package:emelyst/pages/loading_error.dart';
 import 'package:emelyst/pages/overview.dart';
-import 'package:emelyst/pages/room.dart';
+import 'package:emelyst/pages/room_page.dart';
 import 'package:emelyst/pages/security.dart';
 import 'package:emelyst/pages/settings.dart';
 import 'package:flutter/material.dart';
@@ -26,7 +26,7 @@ class Emelyst extends StatelessWidget {
         '/lights': (context) => Lights(),
         '/overview': (context) => Overview(),
         '/security': (context) => Security(),
-        '/room': (context) => Room(),
+        '/room': (context) => RoomPage(),
         '/settings': (context) => Settings(),
         '/loadingError': (context) => LoadingError(),
       },

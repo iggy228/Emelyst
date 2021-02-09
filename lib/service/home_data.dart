@@ -36,6 +36,9 @@ class HomeData {
       case 'obyvacka': return 'hostroom';
       case 'spalna': return 'bedroom';
       case 'kuchyna': return 'kitchen';
+      case 'garaz': return 'garage';
+      case 'kuchyna': return 'kitchen';
+      case 'kuchyna': return 'kitchen';
     }
     return 'bedroom';
   }
@@ -55,7 +58,7 @@ class HomeData {
 
       if (lastroom != paths[2]) {
         _floors.last.rooms.add(Room(
-          name: paths[2],
+          name: paths[1] + '\n' + paths[2],
           iconName: textToIconName(paths[2]),
           sensors: <Sensor<bool>>[]
         ));

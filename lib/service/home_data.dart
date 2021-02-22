@@ -15,6 +15,7 @@ class HomeData {
     List<Room> rooms = [];
 
     for (Floor floor in _floors) {
+      print(floor.rooms.length);
       rooms.addAll(floor.rooms);
     }
 
@@ -45,6 +46,16 @@ class HomeData {
     return 'bedroom';
   }
 
+  static List<Sensor> getSensorsInRoom(String roomName) {
+    for (Floor floor in _floors) {
+      for (Room room in floor.rooms) {
+        if (room.name == roomName) {
+          return room.sensors;
+        }
+      }
+    }
+  }
+
   static void setData(List<Row> data) {
 
     String lastroom = '';
@@ -64,6 +75,7 @@ class HomeData {
           iconName: textToIconName(paths[2]),
           sensors: <Sensor<bool>>[]
         ));
+        lastroom = paths[2];
       }
 
       _floors.last.rooms.last.sensors.add(Sensor<bool>(

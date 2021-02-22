@@ -10,15 +10,21 @@ class LoadingError extends StatefulWidget {
 class _LoadingErrorState extends State<LoadingError> {
 
   final _formKey = GlobalKey<FormState>();
-  String _url = '';
-  int _port = 0;
+  String _brokerUrl;
+  int _brokerPort = 0;
+
+  String _dbUrl;
+  int _dbPort = 0;
 
   void saveUrl() async {
     if (_formKey.currentState.validate()) {
       SharedPreferences pref = await SharedPreferences.getInstance();
 
-      pref.setString('url', _url);
-      pref.setInt('port', _port);
+      pref.setString('brokerUrl', _brokerUrl);
+      pref.setInt('brokerPort', _brokerPort);
+
+      pref.setString('dbUrl', _dbUrl);
+      pref.setInt('dbPort', _dbPort);
 
       Navigator.pushReplacementNamed(context, '/loading');
     }
@@ -28,9 +34,14 @@ class _LoadingErrorState extends State<LoadingError> {
   Widget build(BuildContext context) {
     Map data = ModalRoute.of(context).settings.arguments;
 
+    print(data['brokerPort'].runtimeType);
+
     String message = data['error'];
-    _url = data['url'];
-    _port = data['port'];
+    _brokerUrl = data['brokerUrl'];
+    _brokerPort = data['brokerPort'];
+
+    _dbUrl = data['dbUrl'];
+    _dbPort = data['dbPort'];
 
     return RadialBackground(
       child: Padding(
@@ -42,34 +53,35 @@ class _LoadingErrorState extends State<LoadingError> {
               // If is error in loading
               Text("$message", style: Theme.of(context).textTheme.headline5),
 
-              // url address field
+              /// field for address of broker
               TextFormField(
-                style: TextStyle(color: Colors.white, fontFamily: 'GillSans', fontSize: 20),
-                initialValue: _url,
+                style: Theme.of(context).textTheme.bodyText2,
+                initialValue: _brokerUrl,
                 decoration: InputDecoration(
-                  hintText: 'Zadaj adresu',
+                  hintText: 'Zadaj adresu brokera',
                 ),
                 onChanged: (url) {
-                  _url = url;
+                  _brokerUrl = url;
                 },
                 validator: (url) {
                   if (url == '' || url == null) {
-                    return 'Nezadal si ip adresu';
+                    return 'Nezadal si platnu adresu';
                   }
                   return null;
                 },
               ),
+
               SizedBox(height: 16),
-              // port number field
+              /// field for port number of broker
               TextFormField(
-                style: TextStyle(color: Colors.white, fontFamily: 'GillSans', fontSize: 20),
-                initialValue: _port.toString(),
+                style: Theme.of(context).textTheme.bodyText2,
+                initialValue: _brokerPort.toString(),
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
-                  hintText: 'Zadaj cislo portu',
+                  hintText: 'Zadaj cislo portu brokera',
                 ),
                 onChanged: (port) {
-                  _port = int.parse(port);
+                  _brokerPort = int.parse(port);
                 },
                 validator: (port) {
                   if (port == null) {
@@ -78,6 +90,46 @@ class _LoadingErrorState extends State<LoadingError> {
                   return null;
                 },
               ),
+
+              SizedBox(height: 16),
+              /// field for DB address
+              TextFormField(
+                style: Theme.of(context).textTheme.bodyText2,
+                initialValue: _dbUrl,
+                decoration: InputDecoration(
+                  hintText: 'Zadaj adresu na Databazu',
+                ),
+                onChanged: (url) {
+                  _dbUrl = url;
+                },
+                validator: (url) {
+                  if (url == '' || url == null) {
+                    return 'Nezadal si platnu adresu';
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 16),
+              /// field for port number of DB
+              TextFormField(
+                style: Theme.of(context).textTheme.bodyText2,
+                initialValue: _dbPort.toString(),
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  hintText: 'Zadaj cislo portu databazy',
+                ),
+                onChanged: (port) {
+                  _dbPort = int.parse(port);
+                },
+                validator: (port) {
+                  if (port == null) {
+                    return 'Nezadal si port';
+                  }
+                  return null;
+                },
+              ),
+
+              /// submit button
               FlatButton(
                 color: Colors.white,
                 onPressed: () => saveUrl(),

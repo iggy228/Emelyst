@@ -14,13 +14,17 @@ class Loading extends StatefulWidget {
 class _LoadingState extends State<Loading> {
 
   List<Room> rooms = [];
-  String _url;
-  int _port;
+  String _brokerUrl = '';
+  int _brokerPort = 0;
+
+  String _dbUrl = '';
+  int _dbPort = 0;
+
   bool isError = false;
   String errorMessage = "";
 
   Future<void> setupConnectionToBroker() async {
-    await MqttClientWrapper.connect(url: _url, port: _port);
+    await MqttClientWrapper.connect(url: _brokerUrl, port: _brokerPort);
     if (!MqttClientWrapper.isConnected) {
       isError = true;
       errorMessage += "Nepodarilo sa pripojiť na broker.\n";
@@ -28,7 +32,7 @@ class _LoadingState extends State<Loading> {
   }
 
   Future<void> connectToDB() async {
-    bool connected = await SensorState.connect(_url);
+    bool connected = await SensorState.connect(_dbUrl, _dbPort);
     if (!connected) {
       isError = true;
       errorMessage += "Nepodarilo sa pripojiť na databázu.\n";
@@ -54,9 +58,14 @@ class _LoadingState extends State<Loading> {
   void _setupApp() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    if (prefs.getString('url') != null && prefs.getInt('port') != null) {
-      _url = prefs.getString('url');
-      _port = prefs.getInt('port');
+    if (prefs.getString('brokerUrl') != null && prefs.getInt('brokerPort') != null
+    && prefs.getString('dbUrl') != null && prefs.getInt('dbPort') != null) {
+      _brokerUrl = prefs.getString('brokerUrl');
+      _brokerPort = prefs.getInt('brokerPort');
+
+      _dbUrl = prefs.getString('dbUrl');
+      _dbPort = prefs.getInt('dbPort');
+
       await setupConnectionToBroker();
       await connectToDB();
       if (!isError) {
@@ -68,10 +77,12 @@ class _LoadingState extends State<Loading> {
     }
 
     if (isError) {
-      Navigator.pushReplacementNamed(context, '/loadingError', arguments: {
+      Navigator.pushReplacementNamed(context, '/loadingError', arguments: <String, dynamic>{
         'error': errorMessage,
-        'port': _port,
-        'url': _url
+        'brokerPort': _brokerPort,
+        'brokerUrl': _brokerUrl,
+        'dbUrl': _dbUrl,
+        'dbPort': _dbPort,
       });
     }
     else {

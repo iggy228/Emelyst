@@ -3,10 +3,10 @@ import 'package:mysql1/mysql1.dart';
 class SensorState {
   static MySqlConnection mysqlConn;
 
-  static Future<bool> connect(String url) async {
+  static Future<bool> connect(String url, int port) async {
     ConnectionSettings settings = ConnectionSettings(
         host: url,
-        port: 3306,
+        port: port,
         user: 'david',
         password: 'barta',
         db: 'dht'

@@ -110,7 +110,6 @@ class _HomeState extends State<Home> {
                             "data": categories,
                             "index": i,
                           });
-                          setState(() {});
                         },
                       ),
                     );
@@ -123,8 +122,7 @@ class _HomeState extends State<Home> {
                   title: rooms[index].name,
                   imageUrl: rooms[index].iconName,
                   routeData: {
-                    'roomData': rooms[index].toMap(),
-                    'floorPrefix': floorPrefix,
+                    'roomName': rooms[index].name,
                   },
                 );
               },

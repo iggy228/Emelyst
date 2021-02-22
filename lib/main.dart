@@ -55,6 +55,11 @@ class Emelyst extends StatelessWidget {
             color: Colors.white,
             fontSize: 12,
           ),
+          bodyText2: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontFamily: 'GillSans'
+          ),
         ),
         inputDecorationTheme: InputDecorationTheme(
           isDense: true,

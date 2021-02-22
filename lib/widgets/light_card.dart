@@ -15,6 +15,16 @@ class LightCard extends StatelessWidget {
     this.onPress,
   });
 
+  double sizeOfIcon(BuildContext context) {
+    print(MediaQuery.of(context).size.width);
+    if (MediaQuery.of(context).size.width < 300) {
+      return title.length > 9 ? 45 : 55;
+    }
+    else {
+      return title.length > 9 ? 55 : 65;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -31,15 +41,15 @@ class LightCard extends StatelessWidget {
           children: [
             Text(
               title,
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.headline5,
               textAlign: TextAlign.center,
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Image.asset(
                 iconUrl,
-                width: title.length > 9 ? 65 : 70,
-                height: title.length > 9 ? 65 : 70,
+                width: sizeOfIcon(context),
+                height: sizeOfIcon(context),
               ),
             ),
             Card(
@@ -47,9 +57,10 @@ class LightCard extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16)),
               child: Padding(
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
                 child: Text(
                   text,
+                  style: TextStyle(color: Colors.black),
                 ),
               ),
             ),

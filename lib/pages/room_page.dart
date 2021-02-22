@@ -1,4 +1,3 @@
-import 'package:emelyst/model/Room.dart';
 import 'package:emelyst/model/Sensor.dart';
 import 'package:emelyst/service/home_data.dart';
 import 'package:emelyst/service/mqtt_client_wrapper.dart';
@@ -14,8 +13,7 @@ class RoomPage extends StatefulWidget {
 }
 
 class _RoomState extends State<RoomPage> {
-  Map roomData;
-  String floorPrefix;
+  String roomName;
 
   List<Sensor> sensors = [];
 
@@ -32,28 +30,15 @@ class _RoomState extends State<RoomPage> {
   }
 
   Future<void> generateSensorsList() async {
-    List<Room> rooms = HomeData.allRoomsData;
+    sensors = HomeData.getSensorsInRoom(roomName);
 
-    for (Room room in rooms) {
-      for (Sensor sensor in room.sensors) {
-        if (sensor.sensorType == SensorType.light) {
-          sensors.add(Sensor(name: 'Svetlo', data: sensor.data, topic: sensor.topic));
-        }
-        if (sensor.sensorType == SensorType.engine) {
-          sensors.add(Sensor(name: 'Roleta', data: sensor.data, topic: sensor.topic));
-        }
-        if (sensor.sensorType == SensorType.detector) {
-          sensors.add(Sensor(name: 'Pohyb', data: sensor.data, topic: sensor.topic));
-        }
-      }
-    }
+    setOnMessage();
   }
 
   @override
   Widget build(BuildContext context) {
     Map data = ModalRoute.of(context).settings.arguments;
-    roomData = data['roomData'];
-    floorPrefix = data['floorPrefix'];
+    roomName = data['roomName'];
 
     if (sensors.isEmpty) {
       generateSensorsList();
@@ -62,7 +47,7 @@ class _RoomState extends State<RoomPage> {
     return RadialBackground(
       child: Column(
         children: [
-          Header(title: roomData['name']),
+          Header(title: roomName),
           Expanded(
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),

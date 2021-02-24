@@ -48,7 +48,7 @@ class MqttClientWrapper {
     _client.publishMessage(defaultPrefix + topic, MqttQos.atLeastOnce, builder.payload);
   }
 
-  /// @postUpdate what have to do post update home data
+  /// what have to do post update home data
   static void getMessage(Function(String topic, String message) func) {
     _client.updates.listen((event) {
       MqttPublishMessage message = event[0].payload;

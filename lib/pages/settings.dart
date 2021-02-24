@@ -1,7 +1,7 @@
-import 'package:emelyst/service/mqtt_client_wrapper.dart';
 import 'package:emelyst/widgets/navigation.dart';
 import 'package:emelyst/widgets/radial_background.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Settings extends StatefulWidget {
   @override
@@ -10,55 +10,147 @@ class Settings extends StatefulWidget {
 
 class _SettingsState extends State<Settings> {
 
-  final _brokerFieldKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
+  String _brokerUrl = '';
+  int _brokerPort = 10000;
+
+  String _dbUrl = '';
+  int _dbPort = 3306;
+
+  void initFormValues() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    _formKey.currentState.setState(() {
+      _brokerUrl = prefs.getString('brokerUrl');
+      _brokerPort = prefs.getInt('brokerPort');
+
+      _dbUrl = prefs.getString('dbUrl');
+      _dbPort = prefs.getInt('dbPort');
+    });
+  }
+
+  void saveUrl() async {
+    if (_formKey.currentState.validate()) {
+      SharedPreferences pref = await SharedPreferences.getInstance();
+
+      pref.setString('brokerUrl', _brokerUrl);
+      pref.setInt('brokerPort', _brokerPort);
+
+      pref.setString('dbUrl', _dbUrl);
+      pref.setInt('dbPort', _dbPort);
+
+      Navigator.pushReplacementNamed(context, '/loading');
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initFormValues();
+  }
 
   @override
   Widget build(BuildContext context) {
+    initFormValues();
+
+    print(_brokerUrl);
     return RadialBackground(
       child: Column(
         children: [
           Expanded(
-            child: ListView(
-              children: [
-                Container(
-                  margin: EdgeInsets.fromLTRB(8, 16, 8, 8),
-                  padding: EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: TextFormField(
-                          key: _brokerFieldKey,
-                          style: TextStyle(color: Colors.white, fontFamily: 'GillSans', fontSize: 20),
-                          validator: (url) {
-                            List<String> urlSplit = url.split(':');
-                            MqttClientWrapper.connect(url: urlSplit[0], port: int.parse(urlSplit[1]));
-                            if (MqttClientWrapper.isConnected) {
-                              return null;
-                            }
-                            return 'Zadal si neplatnu adresu';
-                          },
-                          initialValue: '${MqttClientWrapper.url}:${MqttClientWrapper.port}',
-                          decoration: InputDecoration(
-                            hintText: 'Zadaj adresu brokera',
-                          ),
-                        ),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: <Widget>[
+                    /// field for address of broker
+                    TextFormField(
+                      style: Theme.of(context).textTheme.bodyText2,
+                      initialValue: _brokerUrl,
+                      decoration: InputDecoration(
+                        hintText: 'Zadaj adresu brokera',
                       ),
-                      SizedBox(width: 8),
-                      FlatButton(
-                        color: Colors.white,
-                        onPressed: () => _brokerFieldKey.currentState.validate(),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                        padding: EdgeInsets.all(8),
-                        child: Text('Connect'),
+                      onChanged: (url) {
+                        _brokerUrl = url;
+                      },
+                      validator: (url) {
+                        if (url == '' || url == null) {
+                          return 'Nezadal si platnu adresu';
+                        }
+                        return null;
+                      },
+                    ),
+
+                    SizedBox(height: 16),
+                    /// field for port number of broker
+                    TextFormField(
+                      style: Theme.of(context).textTheme.bodyText2,
+                      initialValue: _brokerPort.toString(),
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        hintText: 'Zadaj cislo portu brokera',
                       ),
-                    ],
-                  ),
+                      onChanged: (port) {
+                        _brokerPort = int.parse(port);
+                      },
+                      validator: (port) {
+                        if (port == null) {
+                          return 'Nezadal si port';
+                        }
+                        return null;
+                      },
+                    ),
+
+                    SizedBox(height: 16),
+                    /// field for DB address
+                    TextFormField(
+                      style: Theme.of(context).textTheme.bodyText2,
+                      initialValue: _dbUrl,
+                      decoration: InputDecoration(
+                        hintText: 'Zadaj adresu na Databazu',
+                      ),
+                      onChanged: (url) {
+                        _dbUrl = url;
+                      },
+                      validator: (url) {
+                        if (url == '' || url == null) {
+                          return 'Nezadal si platnu adresu';
+                        }
+                        return null;
+                      },
+                    ),
+                    SizedBox(height: 16),
+                    /// field for port number of DB
+                    TextFormField(
+                      style: Theme.of(context).textTheme.bodyText2,
+                      initialValue: _dbPort.toString(),
+                      keyboardType: TextInputType.number,
+                      decoration: InputDecoration(
+                        hintText: 'Zadaj cislo portu databazy',
+                      ),
+                      onChanged: (port) {
+                        _dbPort = int.parse(port);
+                      },
+                      validator: (port) {
+                        if (port == null) {
+                          return 'Nezadal si port';
+                        }
+                        return null;
+                      },
+                    ),
+
+                    /// submit button
+                    FlatButton(
+                      color: Colors.white,
+                      onPressed: () => saveUrl(),
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      padding: EdgeInsets.all(8),
+                      child: Text('Connect!'),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
           Navigation(),

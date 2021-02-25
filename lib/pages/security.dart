@@ -58,7 +58,7 @@ class _SecurityState extends State<Security> {
 
     for (Room room in rooms) {
       for (Sensor<bool> sensor in room.sensors) {
-        if (sensor.topic.contains('motorcek') && sensor.topic != doors[1].topic) {
+        if (sensor.topic.contains('motorcek') && sensor.topic != doors[1].topic && sensor.topic != comingRoad.topic) {
           shutters.add(Sensor(
             name: sensor.topic.split('/')[1],
             data: sensor.data,

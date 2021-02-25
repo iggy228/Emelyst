@@ -18,7 +18,7 @@ class LightCard extends StatelessWidget {
   double sizeOfIcon(BuildContext context) {
     print(MediaQuery.of(context).size.width);
     if (MediaQuery.of(context).size.width < 300) {
-      return title.length > 9 ? 45 : 55;
+      return title.length > 9 ? 42 : 55;
     }
     else {
       return title.length > 9 ? 55 : 65;

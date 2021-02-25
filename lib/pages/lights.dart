@@ -75,14 +75,10 @@ class _LightsState extends State<Lights> {
             nextRouteData: {
               'data': data,
               'index': nextIndex,
-              'floorPrefix': routeData['floorPrefix'],
-              'roomsData': routeData['roomsData'],
             },
             prevRouteData: {
               'data': data,
-              'index': nextIndex,
-              'floorPrefix': routeData['floorPrefix'],
-              'roomsData': routeData['roomsData'],
+              'index': prevIndex,
             },
           ),
           Expanded(

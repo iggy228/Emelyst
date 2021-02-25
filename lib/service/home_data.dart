@@ -97,7 +97,7 @@ class HomeData {
         for (Room room in floor.rooms) {
           if (room.name == subTopics[2]) {
             for (Sensor sensor in room.sensors) {
-              if (sensor.name == subTopics[3]) {
+              if (sensor.topic.contain(subTopics[3])) {
                 sensor.data = message == 'on' ? true : false;
               }
             }

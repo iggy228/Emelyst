@@ -91,16 +91,14 @@ class HomeData {
 
   static void updateData(String topic, String message) {
     List<String> subTopics = topic.split('/');
-
     for (Floor floor in _floors) {
-      if (floor.name == subTopics[1]) {
-        for (Room room in floor.rooms) {
-          if (room.name == subTopics[2]) {
-            for (Sensor sensor in room.sensors) {
-              if (sensor.topic.contain(subTopics[3])) {
-                sensor.data = message == 'on' ? true : false;
-              }
-            }
+      for (Room room in floor.rooms) {
+        for (Sensor sensor in room.sensors) {
+          print(sensor.topic);
+          if (topic.contains(sensor.topic)) {
+            print("Change state");
+            sensor.data = message == 'on' ? true : false;
+            return;
           }
         }
       }

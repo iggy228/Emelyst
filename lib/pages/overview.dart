@@ -17,6 +17,7 @@ class Overview extends StatefulWidget {
 class _OverviewState extends State<Overview> {
 
   List<double> avgTemperatures = [0];
+  List<double> avgHumidity = [0];
 
   List<Sensor<double>> sensorsData = [
     Sensor<double>(name: 'teplota', data: 0, topic: 'von/meteo/teplota'),
@@ -25,6 +26,7 @@ class _OverviewState extends State<Overview> {
 
   Future<void> initTemperature() async {
     avgTemperatures = await SensorState.getAvgTemperature();
+    avgHumidity = await SensorState.getAvgHumidity();
     sensorsData[0].data = await SensorState.getLastTemperature();
     sensorsData[1].data = await SensorState.getLastHumidity();
     setState(() {});
@@ -40,7 +42,6 @@ class _OverviewState extends State<Overview> {
 
     MqttClientWrapper.getMessage((topic, message) {
       for (Sensor sensor in sensorsData) {
-        print('Some temperature');
         if (topic.contains(sensor.topic)) {
           setState(() {
             sensor.data = double.parse(message);
@@ -108,7 +109,7 @@ class _OverviewState extends State<Overview> {
                     ),
                   ],
                 ),
-                // box for chart
+                // box for temperature chart
                 Container(
                   margin: EdgeInsets.all(16),
                   padding: EdgeInsets.all(16),
@@ -126,6 +127,27 @@ class _OverviewState extends State<Overview> {
                       ),
                       SizedBox(height: 16),
                       LineChartWrapper(avgTemperatures),
+                    ],
+                  ),
+                ),
+                // box for humidity chart
+                Container(
+                  margin: EdgeInsets.all(16),
+                  padding: EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Text(
+                        'Priemerná denná vlhkosť za týždeň',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.headline6,
+                      ),
+                      SizedBox(height: 16),
+                      LineChartWrapper(avgHumidity),
                     ],
                   ),
                 ),

@@ -63,6 +63,8 @@ class _LoadingState extends State<Loading> {
       _brokerUrl = prefs.getString('brokerUrl');
       _brokerPort = prefs.getInt('brokerPort');
 
+      print(_brokerUrl);
+
       _dbUrl = prefs.getString('dbUrl');
       _dbPort = prefs.getInt('dbPort');
 

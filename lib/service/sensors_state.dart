@@ -28,7 +28,7 @@ class SensorState {
   }
 
   static Future<List<double>> getAvgTemperature() async {
-    Results result = await mysqlConn.query('SELECT datum, tmp FROM teplota WHERE datum >= CURRENT_DATE() - 6');
+    Results result = await mysqlConn.query('SELECT datum, tmp FROM teplota WHERE datum >= DATE(NOW()) - INTERVAL 7 DAY');
     List<double> avgTemperatures = [];
 
     double sumTemp = 0.0;
@@ -52,6 +52,33 @@ class SensorState {
     avgTemperatures.add(sumTemp / count);
 
     return avgTemperatures;
+  }
+
+  static Future<List<double>> getAvgHumidity() async {
+    Results result = await mysqlConn.query('SELECT date, hodnota FROM vlhkost WHERE date >= DATE(NOW()) - INTERVAL 7 DAY');
+    List<double> avgHumidity = [];
+
+    double sumHumidity = 0.0;
+    int count = 0;
+    int lastDate;
+    for (var row in result) {
+      if (lastDate != row['date'].day || lastDate == null) {
+        if (lastDate != null) {
+          avgHumidity.add(sumHumidity / count);
+        }
+        sumHumidity = row['hodnota'];
+        count = 1;
+        lastDate = row['date'].day;
+      }
+      else {
+        sumHumidity += row['hodnota'];
+        count++;
+      }
+    }
+
+    avgHumidity.add(sumHumidity / count);
+
+    return avgHumidity;
   }
 
   static Future<double> getLastTemperature() async {

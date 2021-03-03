@@ -25,6 +25,7 @@ class MqttClientWrapper {
     _url = url;
     _port = port;
     _client = MqttServerClient.withPort(_url, _id, _port);
+    _client.keepAlivePeriod = 6000;
 
     try {
       await _client.connect();

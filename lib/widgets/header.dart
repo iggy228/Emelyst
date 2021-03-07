@@ -32,7 +32,7 @@ class Header extends StatelessWidget {
               size: 40,
               color: Theme.of(context).primaryColor,
             ),
-            onPressed: () => Navigator.pushReplacementNamed(context, '/$prevRouteUrl', arguments: prevRouteData),
+            onPressed: () => Navigator.pushReplacementNamed(context, prevRouteUrl, arguments: prevRouteData),
           ),
           Text(
             title,
@@ -45,7 +45,7 @@ class Header extends StatelessWidget {
               size: 40,
               color: Theme.of(context).primaryColor,
             ),
-            onPressed: () => Navigator.pushReplacementNamed(context, '/$nextRouteUrl', arguments: nextRouteData),
+            onPressed: () => Navigator.pushReplacementNamed(context, nextRouteUrl, arguments: nextRouteData),
           ),
         ],
       ),

@@ -56,34 +56,34 @@ class _LightsState extends State<Lights> {
   Widget build(BuildContext context) {
     Map routeData = ModalRoute.of(context).settings.arguments;
     int index = routeData['index'];
-    List data = routeData['data'];
+    List categories = routeData['categories'];
 
     if (lights.isEmpty) {
       generateLightsList(roomsData);
     }
 
-    int prevIndex = index - 1 < 0 ? data.length - 1 : index - 1;
-    int nextIndex = index + 1 >= data.length ? 0 : index + 1;
+    int prevIndex = index - 1 < 0 ? categories.length - 1 : index - 1;
+    int nextIndex = index + 1 >= categories.length ? 0 : index + 1;
 
     return RadialBackground(
       child: Column(
         children: [
           Header(
-            title: data[index]['name'],
-            nextRouteUrl: data[nextIndex]['url'],
-            prevRouteUrl: data[prevIndex]['url'],
+            title: categories[index]['name'],
+            nextRouteUrl: categories[nextIndex]['url'],
+            prevRouteUrl: categories[prevIndex]['url'],
             nextRouteData: {
-              'data': data,
+              'categories': categories,
               'index': nextIndex,
             },
             prevRouteData: {
-              'data': data,
+              'categories': categories,
               'index': prevIndex,
             },
           ),
           Expanded(
             child: HeaderGridView(
-              header: HeaderIconBox('lights', 'icons/light_off.png'),
+              header: HeaderIconBox('light', 'icons/light_off.png'),
               itemCount: lights.length,
               itemBuilder: (BuildContext context, int index) {
                 return LightCard(

@@ -26,6 +26,7 @@ class MqttClientWrapper {
     _port = port;
     _client = MqttServerClient.withPort(_url, _id, _port);
     _client.keepAlivePeriod = 6000;
+    _client.autoReconnect = true;
 
     try {
       await _client.connect();
@@ -33,6 +34,8 @@ class MqttClientWrapper {
     } catch (e) {
       isConnected = false;
     }
+
+    _client.onDisconnected = () => _client.doAutoReconnect();
 
     getMessage(null);
   }

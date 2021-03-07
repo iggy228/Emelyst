@@ -1,3 +1,4 @@
+import 'package:emelyst/model/Room.dart';
 import 'package:emelyst/model/Sensor.dart';
 import 'package:emelyst/service/home_data.dart';
 import 'package:emelyst/service/mqtt_client_wrapper.dart';
@@ -13,8 +14,6 @@ class RoomPage extends StatefulWidget {
 }
 
 class _RoomState extends State<RoomPage> {
-  String roomName;
-
   List<Sensor> sensors = [];
 
   void setOnMessage() {
@@ -29,7 +28,7 @@ class _RoomState extends State<RoomPage> {
     });
   }
 
-  Future<void> generateSensorsList() async {
+  Future<void> generateSensorsList(String roomName) async {
     sensors = HomeData.getSensorsInRoom(roomName);
 
     setOnMessage();
@@ -38,16 +37,29 @@ class _RoomState extends State<RoomPage> {
   @override
   Widget build(BuildContext context) {
     Map data = ModalRoute.of(context).settings.arguments;
-    roomName = data['roomName'];
+    List<Room> roomsData = data['roomsData'];
+    int index = data['index'];
 
     if (sensors.isEmpty) {
-      generateSensorsList();
+      generateSensorsList(roomsData[index].name);
     }
 
     return RadialBackground(
       child: Column(
         children: [
-          Header(title: roomName),
+          Header(
+            title: roomsData[index].name,
+            prevRouteUrl: '/room',
+            nextRouteUrl: '/room',
+            nextRouteData: {
+              'index': index + 1 > roomsData.length ? 0 : index + 1,
+              'roomsData': roomsData
+            },
+            prevRouteData: {
+              'index': index - 1 < 0 ? roomsData.length : index - 1,
+              'roomsData': roomsData
+            },
+          ),
           Expanded(
             child: GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),

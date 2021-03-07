@@ -90,13 +90,10 @@ class HomeData {
   }
 
   static void updateData(String topic, String message) {
-    List<String> subTopics = topic.split('/');
     for (Floor floor in _floors) {
       for (Room room in floor.rooms) {
         for (Sensor sensor in room.sensors) {
-          print(sensor.topic);
           if (topic.contains(sensor.topic)) {
-            print("Change state");
             sensor.data = message == 'on' ? true : false;
             return;
           }

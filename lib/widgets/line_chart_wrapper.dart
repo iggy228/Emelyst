@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 
 class LineChartWrapper extends StatelessWidget {
   final List<FlSpot> _chartData = [];
+  final Color color;
 
-  LineChartWrapper(List<double> data) {
+  LineChartWrapper({List<double> data, this.color = Colors.red}) {
     for (int i = 0; i < data.length; i++) {
       FlSpot spot = FlSpot(i + 1.0, double.parse(data[i].toStringAsFixed(2)));
       _chartData.add(spot);
@@ -32,12 +33,12 @@ class LineChartWrapper extends StatelessWidget {
           LineChartBarData(
             spots: _chartData,
             colors: [
-              Color.fromRGBO(52, 192, 209, 1),
+              color
             ],
           )
         ],
-        minY: 10,
-        maxY: 40,
+        // minY: 10,
+        // maxY: 40,
         gridData: FlGridData(
           show: false,
         ),

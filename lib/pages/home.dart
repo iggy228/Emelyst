@@ -107,7 +107,7 @@ class _HomeState extends State<Home> {
                         imageUrl: categories[i]['icon'],
                         onPress: () {
                           Navigator.pushNamed(context, categories[i]['url'], arguments: {
-                            "data": categories,
+                            "categories": categories,
                             "index": i,
                           });
                         },
@@ -122,7 +122,8 @@ class _HomeState extends State<Home> {
                   title: rooms[index].name,
                   imageUrl: rooms[index].iconName,
                   routeData: {
-                    'roomName': rooms[index].name,
+                    'index': index,
+                    'roomsData': rooms
                   },
                 );
               },
@@ -137,7 +138,6 @@ class _HomeState extends State<Home> {
   @override
   void dispose() {
     rooms = [];
-    print(rooms);
     super.dispose();
   }
 }

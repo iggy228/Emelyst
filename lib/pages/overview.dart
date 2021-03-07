@@ -57,34 +57,30 @@ class _OverviewState extends State<Overview> {
   Widget build(BuildContext context) {
     Map routeData = ModalRoute.of(context).settings.arguments;
     int index = routeData['index'];
-    List data = routeData['data'];
-    int prevIndex = index - 1 < 0 ? data.length - 1 : index - 1;
-    int nextIndex = index + 1 >= data.length ? 0 : index + 1;
+    List categories = routeData['categories'];
+    int prevIndex = index - 1 < 0 ? categories.length - 1 : index - 1;
+    int nextIndex = index + 1 >= categories.length ? 0 : index + 1;
 
     return RadialBackground(
       child: Column(
         children: [
           Header(
-            title: data[index]['name'],
-            nextRouteUrl: data[nextIndex]['url'],
-            prevRouteUrl: data[prevIndex]['url'],
+            title: categories[index]['name'],
+            nextRouteUrl: categories[nextIndex]['url'],
+            prevRouteUrl: categories[prevIndex]['url'],
             nextRouteData: {
-              'data': data,
+              'categories': categories,
               'index': nextIndex,
-              'floorPrefix': routeData['floorPrefix'],
-              'roomsData': routeData['roomsData'],
             },
             prevRouteData: {
-              'data': data,
+              'categories': categories,
               'index': prevIndex,
-              'floorPrefix': routeData['floorPrefix'],
-              'roomsData': routeData['roomsData'],
             },
           ),
           Expanded(
             child: ListView(
               children: [
-                HeaderIconBox('home', 'icons/home.png'),
+                HeaderIconBox('info', 'icons/info.png'),
                 Padding(
                   padding: const EdgeInsets.all(24.0),
                   child: Image.asset('images/house.png'),
@@ -126,7 +122,7 @@ class _OverviewState extends State<Overview> {
                         style: Theme.of(context).textTheme.headline6,
                       ),
                       SizedBox(height: 16),
-                      LineChartWrapper(avgTemperatures),
+                      LineChartWrapper(data: avgTemperatures, color: Color.fromRGBO(52, 192, 209, 1)),
                     ],
                   ),
                 ),
@@ -147,7 +143,7 @@ class _OverviewState extends State<Overview> {
                         style: Theme.of(context).textTheme.headline6,
                       ),
                       SizedBox(height: 16),
-                      LineChartWrapper(avgHumidity),
+                      LineChartWrapper(data: avgHumidity),
                     ],
                   ),
                 ),

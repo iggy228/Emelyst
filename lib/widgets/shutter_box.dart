@@ -29,7 +29,7 @@ class ShutterBox extends StatelessWidget {
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
             onPressed: onClick,
             child: Text(
-              data ? 'zatvoriť' : 'otvoriť',
+              data ? 'zatvoriť' : '  otvoriť ',
             ),
           ),
         ],

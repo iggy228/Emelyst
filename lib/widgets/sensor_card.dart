@@ -22,7 +22,7 @@ class SensorCard extends StatelessWidget {
             title,
             style: Theme.of(context).textTheme.headline4
           ),
-          SizedBox(height: 8),
+          SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

@@ -108,7 +108,7 @@ class _OverviewState extends State<Overview> {
                 // box for temperature chart
                 Container(
                   margin: EdgeInsets.all(16),
-                  padding: EdgeInsets.all(16),
+                  padding: EdgeInsets.fromLTRB(16, 24, 16, 16),
                   decoration: BoxDecoration(
                     color: Colors.black,
                     borderRadius: BorderRadius.circular(24),
@@ -121,7 +121,7 @@ class _OverviewState extends State<Overview> {
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.headline6,
                       ),
-                      SizedBox(height: 16),
+                      SizedBox(height: 20),
                       LineChartWrapper(data: avgTemperatures, color: Color.fromRGBO(52, 192, 209, 1)),
                     ],
                   ),
@@ -129,7 +129,7 @@ class _OverviewState extends State<Overview> {
                 // box for humidity chart
                 Container(
                   margin: EdgeInsets.all(16),
-                  padding: EdgeInsets.all(16),
+                  padding: EdgeInsets.fromLTRB(16, 24, 16, 16),
                   decoration: BoxDecoration(
                     color: Colors.black,
                     borderRadius: BorderRadius.circular(24),

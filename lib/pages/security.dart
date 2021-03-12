@@ -97,7 +97,7 @@ class _SecurityState extends State<Security> {
             },
             prevRouteData: {
               'categories': categories,
-              'index': nextIndex,
+              'index': prevIndex,
             },
           ),
           Expanded(
@@ -143,7 +143,7 @@ class _SecurityState extends State<Security> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.fromLTRB(16, 4, 16, 16),
+                        padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,

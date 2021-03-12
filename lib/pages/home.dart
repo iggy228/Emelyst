@@ -65,26 +65,10 @@ class _HomeState extends State<Home> {
                       style: Theme.of(context).textTheme.headline4,
                     ),
                   ),
+                  SizedBox(height: 4),
                   Text(
                     'vaša inteligentná domácnosť',
                     style: Theme.of(context).textTheme.bodyText1,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      IconButton(
-                        onPressed: () {},
-                        icon: Image.asset('icons/avatar.png'),
-                        iconSize: 40,
-                        padding: EdgeInsets.fromLTRB(0, 8, 24, 4),
-                      ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: Image.asset('icons/bell.png'),
-                        iconSize: 40,
-                        padding: EdgeInsets.fromLTRB(0, 8, 16, 4),
-                      ),
-                    ],
                   ),
                 ],
               ),

@@ -26,9 +26,12 @@ class CategoryCard extends StatelessWidget {
           'icons/$imageUrl.png',
         ),
       ),
-      label: Text(
-        title,
-        style: Theme.of(context).textTheme.headline5,
+      label: Padding(
+        padding: const EdgeInsets.only(top: 4, left: 4),
+        child: Text(
+          title,
+          style: Theme.of(context).textTheme.headline5,
+        ),
       ),
     );
   }

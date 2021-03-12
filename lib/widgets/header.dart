@@ -36,7 +36,8 @@ class Header extends StatelessWidget {
           ),
           Text(
             title,
-            style: Theme.of(context).textTheme.headline4
+            style: Theme.of(context).textTheme.headline4,
+            textAlign: TextAlign.center,
           ),
           IconButton(
             padding: EdgeInsets.all(0),

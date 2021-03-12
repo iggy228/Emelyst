@@ -38,6 +38,8 @@ class HomeData {
       case 'spalna': return 'bedroom';
       case 'kuchyna': return 'kitchen';
       case 'garaz': return 'garage';
+      case 'prijazd': return 'garage';
+      case 'vchod': return 'garage';
       case 'pracovna': return 'workroom';
       case 'kupelka': return 'bathroom';
       case 'detska_izba': return 'kidsroom';

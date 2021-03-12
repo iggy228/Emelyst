@@ -28,6 +28,16 @@ class _RoomState extends State<RoomPage> {
     });
   }
 
+  String typeToIcon(SensorType sensorType, bool data) {
+    if (sensorType == SensorType.light) {
+      return data ? 'icons/light_on.png' : 'icons/light_off.png';
+    }
+    if (sensorType == SensorType.engine) {
+      return data ? 'icons/shutter_open.png' : 'icons/shutter_close.png';
+    }
+    return data ? 'icons/garage_open.png' : 'icons/garage_close.png';
+  }
+
   Future<void> generateSensorsList(String roomName) async {
     sensors = HomeData.getSensorsInRoom(roomName);
 
@@ -52,11 +62,11 @@ class _RoomState extends State<RoomPage> {
             prevRouteUrl: '/room',
             nextRouteUrl: '/room',
             nextRouteData: {
-              'index': index + 1 > roomsData.length ? 0 : index + 1,
+              'index': index + 1 < roomsData.length ? index + 1 : 0,
               'roomsData': roomsData
             },
             prevRouteData: {
-              'index': index - 1 < 0 ? roomsData.length : index - 1,
+              'index': index - 1 < 0 ? roomsData.length - 1 : index - 1,
               'roomsData': roomsData
             },
           ),
@@ -67,7 +77,7 @@ class _RoomState extends State<RoomPage> {
               itemBuilder: (BuildContext context, int index) {
                 return LightCard(
                   title: sensors[index].name,
-                  iconUrl: sensors[index].data ? 'icons/light_on.png' : 'icons/light_off.png',
+                  iconUrl: typeToIcon(sensors[index].sensorType, sensors[index].data),
                   text: sensors[index].data ? 'vypnúť' : 'zapnúť',
                   color: sensors[index].data ? Colors.amberAccent : Colors.white,
                   onPress: () => MqttClientWrapper.publish(sensors[index].topic, sensors[index].data ? 'off' : 'on'),

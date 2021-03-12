@@ -88,7 +88,7 @@ class _LightsState extends State<Lights> {
               itemBuilder: (BuildContext context, int index) {
                 return LightCard(
                   title: lights[index].name,
-                  text: lights[index].data ? 'on' : 'off',
+                  text: lights[index].data ? 'zapnuté' : 'vypnuté',
                   color: lights[index].data ? Colors.amberAccent : Colors.white,
                   iconUrl: lights[index].data ? 'icons/light_on.png' : 'icons/light_off.png',
                   onPress: () {

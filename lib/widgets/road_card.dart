@@ -29,16 +29,18 @@ class _RoadCardState extends State<RoadCard> {
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
+              children: <Widget>[
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
+                    SizedBox(height: 4),
                     Text(
                       'Stav ' + (widget.data ? 'zapnuté' : 'vypnuté'),
                       style: TextStyle(
                         color: widget.data ? Theme.of(context).primaryColor : Colors.white,
                       ),
                     ),
+                    SizedBox(height: 8),
                     FlatButton(
                       color: Colors.white,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),

@@ -83,7 +83,7 @@ class _LightsState extends State<Lights> {
           ),
           Expanded(
             child: HeaderGridView(
-              header: HeaderIconBox('light', 'icons/light_off.png'),
+              header: HeaderIconBox('light', 'icons/light.png'),
               itemCount: lights.length,
               itemBuilder: (BuildContext context, int index) {
                 return LightCard(

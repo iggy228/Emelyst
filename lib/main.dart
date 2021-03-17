@@ -1,7 +1,7 @@
 import 'package:emelyst/pages/home.dart';
 import 'package:emelyst/pages/lights.dart';
 import 'package:emelyst/pages/loading.dart';
-import 'package:emelyst/pages/loading_error.dart';
+import 'package:emelyst/pages/error_page.dart';
 import 'package:emelyst/pages/overview.dart';
 import 'package:emelyst/pages/room_page.dart';
 import 'package:emelyst/pages/security.dart';
@@ -28,7 +28,7 @@ class Emelyst extends StatelessWidget {
         '/security': (context) => Security(),
         '/room': (context) => RoomPage(),
         '/settings': (context) => Settings(),
-        '/loadingError': (context) => LoadingError(),
+        '/loadingError': (context) => ErrorPage(),
       },
       theme: ThemeData(
         fontFamily: 'Emelyst',
@@ -65,15 +65,15 @@ class Emelyst extends StatelessWidget {
           isDense: true,
           labelStyle: TextStyle(color: Colors.white),
           hintStyle: TextStyle(color: Colors.white60),
-          contentPadding: EdgeInsets.fromLTRB(0, 0, 0, 2),
-          border: UnderlineInputBorder(
-            borderSide: BorderSide(color: Colors.white)
+          contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+          border: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white, width: 2),
           ),
-          enabledBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.white)
+          enabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white,  width: 2),
           ),
-          focusedBorder: UnderlineInputBorder(
-              borderSide: BorderSide(color: Colors.white)
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.white,  width: 2),
           ),
         ),
       ),

@@ -1,14 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class DoorCard extends StatelessWidget {
-  final String name;
-  final bool data;
-  final String openIcon;
-  final String closeIcon;
-  final Function onClick;
+class RoomSensorCard extends StatelessWidget {
+  final String title;
+  final String iconUrl;
+  final String buttonText;
+  final Color buttonColor;
+  final String stateText;
+  final Function onPress;
 
-  DoorCard({this.name, this.data, this.openIcon, this.closeIcon, this.onClick});
+  RoomSensorCard({
+    this.title,
+    this.iconUrl,
+    this.onPress,
+    this.stateText,
+    this.buttonText,
+    this.buttonColor
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,19 +35,22 @@ class DoorCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    name,
+                    title,
                     style: Theme.of(context).textTheme.headline4,
                   ),
+                  SizedBox(height: 8),
+                  Text("Stav"),
                   Text(
-                    "Stav ${data ? 'otvorená' : 'zatvorená'}",
+                    stateText,
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor
+                    ),
                   ),
                   SizedBox(height: 32),
                   FlatButton(
-                    color: Colors.white,
-                    onPressed: onClick,
-                    child: Text(
-                      data ? 'zatvoriť' : 'otvoriť',
-                    ),
+                    color: buttonColor,
+                    onPressed: onPress,
+                    child: Text(buttonText),
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
                   ),
                 ],
@@ -48,9 +59,7 @@ class DoorCard extends StatelessWidget {
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Image.asset(
-                  data ? openIcon : closeIcon,
-                ),
+                child: Image.asset(iconUrl),
               ),
             ),
           ],

@@ -6,7 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+enum WhereLoading {
+  HOME,
+  SETTINGS
+}
+
 class Loading extends StatefulWidget {
+  
+  WhereLoading whereLoading;
+  
+  Loading({this.whereLoading = WhereLoading.HOME});
+  
   @override
   _LoadingState createState() => _LoadingState();
 }
@@ -14,17 +24,16 @@ class Loading extends StatefulWidget {
 class _LoadingState extends State<Loading> {
 
   List<Room> rooms = [];
-  String _brokerUrl = '';
+  String _serverUrl = '';
   int _brokerPort = 0;
 
-  String _dbUrl = '';
   int _dbPort = 0;
 
   bool isError = false;
   String errorMessage = "";
 
   Future<void> setupConnectionToBroker() async {
-    await MqttClientWrapper.connect(url: _brokerUrl, port: _brokerPort);
+    await MqttClientWrapper.connect(url: _serverUrl, port: _brokerPort);
     if (!MqttClientWrapper.isConnected) {
       isError = true;
       errorMessage += "Nepodarilo sa pripojiť na broker.\n";
@@ -32,7 +41,7 @@ class _LoadingState extends State<Loading> {
   }
 
   Future<void> connectToDB() async {
-    bool connected = await SensorState.connect(_dbUrl, _dbPort);
+    bool connected = await SensorState.connect(_serverUrl, _dbPort);
     if (!connected) {
       isError = true;
       errorMessage += "Nepodarilo sa pripojiť na databázu.\n";
@@ -58,32 +67,37 @@ class _LoadingState extends State<Loading> {
   void _setupApp() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    if (prefs.getString('brokerUrl') != null && prefs.getInt('brokerPort') != null
-    && prefs.getString('dbUrl') != null && prefs.getInt('dbPort') != null) {
-      _brokerUrl = prefs.getString('brokerUrl');
+    if (prefs.getString('serverUrl') != null && prefs.getInt('brokerPort') != null
+    && prefs.getInt('dbPort') != null) {
+      _serverUrl = prefs.getString('serverUrl');
       _brokerPort = prefs.getInt('brokerPort');
 
-      print(_brokerUrl);
-
-      _dbUrl = prefs.getString('dbUrl');
       _dbPort = prefs.getInt('dbPort');
 
-      await setupConnectionToBroker();
-      await connectToDB();
-      if (!isError) {
-        await setupSensorsData();
+      if (widget.whereLoading == WhereLoading.HOME) {
+        await setupConnectionToBroker();
+        await connectToDB();
+        if (!isError) {
+          await setupSensorsData();
+        }
       }
     }
     else {
       isError = true;
     }
-
+    
     if (isError) {
       Navigator.pushReplacementNamed(context, '/loadingError', arguments: <String, dynamic>{
         'error': errorMessage,
         'brokerPort': _brokerPort,
-        'brokerUrl': _brokerUrl,
-        'dbUrl': _dbUrl,
+        'serverUrl': _serverUrl,
+        'dbPort': _dbPort,
+      });
+    }
+    else if (widget.whereLoading == WhereLoading.SETTINGS) {
+      Navigator.pushReplacementNamed(context, '/settings', arguments: <String, dynamic>{
+        'brokerPort': _brokerPort,
+        'serverUrl': _serverUrl,
         'dbPort': _dbPort,
       });
     }

@@ -1,3 +1,4 @@
+import 'package:emelyst/pages/loading.dart';
 import 'package:flutter/material.dart';
 
 class Navigation extends StatelessWidget {
@@ -24,7 +25,10 @@ class Navigation extends StatelessWidget {
           Image.asset('images/logo.png', height: 30),
           SizedBox(width: 32),
           IconButton(
-            onPressed: () => Navigator.pushNamed(context, '/settings'),
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Loading(whereLoading: WhereLoading.SETTINGS)),
+            ),
             icon: Image.asset('icons/settings.png'),
           ),
         ],

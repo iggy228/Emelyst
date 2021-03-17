@@ -3,9 +3,9 @@ import 'package:emelyst/model/Sensor.dart';
 import 'package:emelyst/service/home_data.dart';
 import 'package:emelyst/service/mqtt_client_wrapper.dart';
 import 'package:emelyst/widgets/header.dart';
-import 'package:emelyst/widgets/light_card.dart';
 import 'package:emelyst/widgets/navigation.dart';
 import 'package:emelyst/widgets/radial_background.dart';
+import 'package:emelyst/widgets/room_sensor_card.dart';
 import 'package:flutter/material.dart';
 
 class RoomPage extends StatefulWidget {
@@ -71,15 +71,15 @@ class _RoomState extends State<RoomPage> {
             },
           ),
           Expanded(
-            child: GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+            child: ListView.builder(
               itemCount: sensors.length,
               itemBuilder: (BuildContext context, int index) {
-                return LightCard(
+                return RoomSensorCard(
                   title: sensors[index].name,
                   iconUrl: typeToIcon(sensors[index].sensorType, sensors[index].data),
-                  text: sensors[index].data ? 'vypnúť' : 'zapnúť',
-                  color: sensors[index].data ? Colors.amberAccent : Colors.white,
+                  buttonText: sensors[index].data ? 'vypnúť' : 'zapnúť',
+                  stateText: sensors[index].data ? 'Zapnute' : 'Vypnute',
+                  buttonColor: sensors[index].data ? Colors.amberAccent : Colors.white,
                   onPress: () => MqttClientWrapper.publish(sensors[index].topic, sensors[index].data ? 'off' : 'on'),
                 );
               },

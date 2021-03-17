@@ -9,10 +9,10 @@ class Header extends StatelessWidget {
 
   Header({
     this.title,
-    this.prevRouteUrl,
+    this.prevRouteUrl = '/home',
     this.prevRouteData,
     this.nextRouteData,
-    this.nextRouteUrl
+    this.nextRouteUrl = '/home'
   });
 
   @override

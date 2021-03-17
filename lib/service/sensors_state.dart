@@ -3,13 +3,13 @@ import 'package:mysql1/mysql1.dart';
 class SensorState {
   static MySqlConnection mysqlConn;
 
-  static Future<bool> connect(String url, int port) async {
+  static Future<bool> connect({String url, int port, String username, String password, String db}) async {
     ConnectionSettings settings = ConnectionSettings(
         host: url,
         port: port,
-        user: 'david',
-        password: 'barta',
-        db: 'dht'
+        user: username,
+        password: password,
+        db: db
     );
 
     try {
@@ -24,6 +24,11 @@ class SensorState {
 
   static Future<List> getData() async {
     Results result = await mysqlConn.query('SELECT * FROM stav');
+    return result.toList();
+  }
+
+  static Future<List> getRoomsName() async {
+    Results result = await mysqlConn.query('SELECT nazov FROM izby');
     return result.toList();
   }
 

@@ -58,10 +58,12 @@ class HomeData {
     }
   }
 
-  static void setData(List<Row> data) {
+  static void setData(List<Row> data, List<Row> roomsName) {
 
     String lastroom = '';
     String lastfloor = '';
+
+    int roomsNameIndex = 0;
 
     for (var row in data) {
       List<String> paths = row['topic'].split('/');
@@ -72,11 +74,13 @@ class HomeData {
       }
 
       if (lastroom != paths[2]) {
+        String roomName = roomsName[roomsNameIndex]['nazov'].replaceAll(' ', '\n');
         _floors.last.rooms.add(Room(
-          name: paths[1] + '\n' + paths[2],
+          name: roomName,
           iconName: textToIconName(paths[2]),
           sensors: <Sensor<bool>>[]
         ));
+        roomsNameIndex++;
         lastroom = paths[2];
       }
 

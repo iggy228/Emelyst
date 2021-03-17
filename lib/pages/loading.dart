@@ -25,9 +25,12 @@ class _LoadingState extends State<Loading> {
 
   List<Room> rooms = [];
   String _serverUrl = '';
-  int _brokerPort = 0;
+  int _brokerPort = 10000;
+  int _dbPort = 3306;
 
-  int _dbPort = 0;
+  String _username = '';
+  String _password = '';
+  String _dbname = '';
 
   bool isError = false;
   String errorMessage = "";
@@ -41,7 +44,13 @@ class _LoadingState extends State<Loading> {
   }
 
   Future<void> connectToDB() async {
-    bool connected = await SensorState.connect(_serverUrl, _dbPort);
+    bool connected = await SensorState.connect(
+      url: _serverUrl,
+      port: _dbPort,
+      username: _username,
+      password: _password,
+      db: _dbname,
+    );
     if (!connected) {
       isError = true;
       errorMessage += "Nepodarilo sa pripojiť na databázu.\n";
@@ -51,9 +60,11 @@ class _LoadingState extends State<Loading> {
   Future<void> setupSensorsData() async {
 
     List data = [];
+    List roomsName = [];
 
     try {
       data = await SensorState.getData();
+      roomsName = await SensorState.getRoomsName();
     }
     catch (e) {
       isError = true;
@@ -61,7 +72,7 @@ class _LoadingState extends State<Loading> {
       return;
     }
 
-    HomeData.setData(data);
+    HomeData.setData(data, roomsName);
   }
 
   void _setupApp() async {
@@ -71,8 +82,11 @@ class _LoadingState extends State<Loading> {
     && prefs.getInt('dbPort') != null) {
       _serverUrl = prefs.getString('serverUrl');
       _brokerPort = prefs.getInt('brokerPort');
-
       _dbPort = prefs.getInt('dbPort');
+
+      _username = prefs.getString('username');
+      _password = prefs.getString('password');
+      _dbname = prefs.getString('dbname');
 
       if (widget.whereLoading == WhereLoading.HOME) {
         await setupConnectionToBroker();
@@ -92,6 +106,9 @@ class _LoadingState extends State<Loading> {
         'brokerPort': _brokerPort,
         'serverUrl': _serverUrl,
         'dbPort': _dbPort,
+        'username': _username,
+        'password': _password,
+        'dbname': _dbname,
       });
     }
     else if (widget.whereLoading == WhereLoading.SETTINGS) {
@@ -99,6 +116,9 @@ class _LoadingState extends State<Loading> {
         'brokerPort': _brokerPort,
         'serverUrl': _serverUrl,
         'dbPort': _dbPort,
+        'username': _username,
+        'password': _password,
+        'dbname': _dbname,
       });
     }
     else {

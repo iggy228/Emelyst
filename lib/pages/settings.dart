@@ -15,8 +15,11 @@ class _SettingsState extends State<Settings> {
   final _formKey = GlobalKey<FormState>();
   String _serverUrl = '';
   int _brokerPort = 10000;
-
   int _dbPort = 3306;
+
+  String _username = '';
+  String _password = '';
+  String _dbname = '';
 
   void saveUrl() async {
     if (_formKey.currentState.validate()) {
@@ -26,6 +29,10 @@ class _SettingsState extends State<Settings> {
       pref.setInt('brokerPort', _brokerPort);
 
       pref.setInt('dbPort', _dbPort);
+
+      pref.setString('username', _username);
+      pref.setString('password', _password);
+      pref.setString('dbname', _dbname);
 
       Navigator.pushReplacementNamed(context, '/loading');
     }
@@ -37,8 +44,11 @@ class _SettingsState extends State<Settings> {
 
     _serverUrl = data['serverUrl'];
     _brokerPort = data['brokerPort'];
-
     _dbPort = data['dbPort'];
+
+    _username = data['username'];
+    _password = data['password'];
+    _dbname = data['dbname'];
 
     print(_serverUrl);
     return RadialBackground(
@@ -62,6 +72,68 @@ class _SettingsState extends State<Settings> {
                     ),
                     child: Column(
                       children: <Widget>[
+
+
+                        /// field for user
+                        TextFormField(
+                          style: Theme.of(context).textTheme.bodyText2,
+                          initialValue: _username,
+                          decoration: InputDecoration(
+                            hintText: 'Zadaj meno uzivatela',
+                          ),
+                          onChanged: (user) {
+                            _username = user;
+                          },
+                          validator: (user) {
+                            if (user == '' || user == null) {
+                              return 'Nezadal si meno';
+                            }
+                            return null;
+                          },
+                        ),
+
+                        SizedBox(height: 12),
+                        /// field for password
+                        TextFormField(
+                          style: Theme.of(context).textTheme.bodyText2,
+                          initialValue: _password,
+                          decoration: InputDecoration(
+                            hintText: 'Zadaj heslo',
+                          ),
+                          onChanged: (password) {
+                            _password = password;
+                          },
+                          validator: (password) {
+                            if (password == '' || password == null) {
+                              return 'Nezadal si heslo';
+                            }
+                            return null;
+                          },
+                        ),
+
+                        SizedBox(height: 12),
+                        /// field for db name
+                        TextFormField(
+                          style: Theme.of(context).textTheme.bodyText2,
+                          initialValue: _dbname,
+                          decoration: InputDecoration(
+                            hintText: 'Zadaj meno databazy',
+                          ),
+                          onChanged: (db) {
+                            _dbname = db;
+                          },
+                          validator: (db) {
+                            if (db == '' || db == null) {
+                              return 'Nezadal si meno databazy';
+                            }
+                            return null;
+                          },
+                        ),
+
+                        SizedBox(height: 12),
+
+
+
                         /// field for address of broker
                         TextFormField(
                           style: Theme.of(context).textTheme.bodyText2,

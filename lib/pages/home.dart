@@ -58,6 +58,7 @@ class _HomeState extends State<Home> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  SizedBox(height: 6),
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 5),
                     child: Text(
@@ -65,11 +66,11 @@ class _HomeState extends State<Home> {
                       style: Theme.of(context).textTheme.headline4,
                     ),
                   ),
-                  SizedBox(height: 4),
                   Text(
                     'vaša inteligentná domácnosť',
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
+                  SizedBox(height: 24),
                 ],
               ),
             ),

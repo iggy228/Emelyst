@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 class HeaderIconBox extends StatelessWidget {
   final String iconUrl;
   final String name;
+  final double iconWidth;
 
-  HeaderIconBox(this.name, this.iconUrl);
+  HeaderIconBox({this.name, this.iconUrl, this.iconWidth = 30});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +18,7 @@ class HeaderIconBox extends StatelessWidget {
         ),
         child: Hero(
           tag: 'Emelyst-$name',
-          child: Image.asset(iconUrl, width: 30, color: Colors.white),
+          child: Image.asset(iconUrl, width: iconWidth, color: Colors.white),
         ),
       ),
     );

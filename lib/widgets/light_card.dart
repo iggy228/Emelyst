@@ -17,10 +17,10 @@ class LightCard extends StatelessWidget {
 
   double sizeOfIcon(BuildContext context) {
     if (MediaQuery.of(context).size.width < 300) {
-      return title.length > 9 ? 42 : 55;
+      return 42;
     }
     else {
-      return title.length > 9 ? 55 : 65;
+      return 55;
     }
   }
 
@@ -56,10 +56,10 @@ class LightCard extends StatelessWidget {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16)),
               child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 child: Text(
                   text,
-                  style: TextStyle(color: Colors.black),
+                  style: TextStyle(color: Colors.black, fontFamily: 'Emelyst', fontSize: 14),
                 ),
               ),
             ),

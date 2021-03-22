@@ -3,6 +3,8 @@ import 'package:emelyst/model/Sensor.dart';
 import 'package:emelyst/service/home_data.dart';
 import 'package:emelyst/service/mqtt_client_wrapper.dart';
 import 'package:emelyst/widgets/header.dart';
+import 'package:emelyst/widgets/header_icon_box.dart';
+import 'package:emelyst/widgets/header_list_view.dart';
 import 'package:emelyst/widgets/navigation.dart';
 import 'package:emelyst/widgets/radial_background.dart';
 import 'package:emelyst/widgets/room_sensor_card.dart';
@@ -71,7 +73,12 @@ class _RoomState extends State<RoomPage> {
             },
           ),
           Expanded(
-            child: ListView.builder(
+            child: HeaderListView(
+              header: HeaderIconBox(
+                name: roomsData[index].iconName,
+                iconUrl: 'icons/${roomsData[index].iconName}.png',
+                iconWidth: 60,
+              ),
               itemCount: sensors.length,
               itemBuilder: (BuildContext context, int index) {
                 return RoomSensorCard(

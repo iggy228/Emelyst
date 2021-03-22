@@ -15,7 +15,8 @@ class ShutterBox extends StatelessWidget {
         children: [
           Text(
             name,
-            style: Theme.of(context).textTheme.bodyText1
+            style: Theme.of(context).textTheme.headline6,
+            textAlign: TextAlign.center,
           ),
           SizedBox(height: 6),
           Image.asset(

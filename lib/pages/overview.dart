@@ -80,7 +80,7 @@ class _OverviewState extends State<Overview> {
           Expanded(
             child: ListView(
               children: [
-                HeaderIconBox('info', 'icons/info.png'),
+                HeaderIconBox(name: 'info', iconUrl: 'icons/info.png'),
                 Padding(
                   padding: const EdgeInsets.all(24.0),
                   child: Image.asset('images/house.png'),

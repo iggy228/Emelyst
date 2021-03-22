@@ -60,7 +60,7 @@ class _SecurityState extends State<Security> {
       for (Sensor<bool> sensor in room.sensors) {
         if (sensor.topic.contains('motorcek') && sensor.topic != doors[1].topic && sensor.topic != comingRoad.topic) {
           shutters.add(Sensor(
-            name: sensor.topic.split('/')[1],
+            name: room.name,
             data: sensor.data,
             topic: sensor.topic,
             sensorType: sensor.sensorType,
@@ -103,7 +103,10 @@ class _SecurityState extends State<Security> {
           Expanded(
             child: ListView(
               children: [
-                HeaderIconBox('security', 'icons/security.png'),
+                HeaderIconBox(name: 'security', iconUrl: 'icons/security.png'),
+
+                SizedBox(height: 24),
+
                 DoorCard(name: doors[0].name, data: doors[0].data,
                   openIcon: 'icons/door_open.png',
                   closeIcon: 'icons/door_close.png',
@@ -122,14 +125,14 @@ class _SecurityState extends State<Security> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(16.0),
+                        padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
                         child: Text(
                           'Rolety',
                           style: Theme.of(context).textTheme.headline4,
                         ),
                       ),
                       Container(
-                        height: 120,
+                        height: 140,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: shutters.length,

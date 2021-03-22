@@ -60,7 +60,7 @@ class _SettingsState extends State<Settings> {
           Expanded(
             child: ListView(
               children: [
-                HeaderIconBox('settings', 'icons/settings.png'),
+                HeaderIconBox(name: 'settings', iconUrl: 'icons/settings.png'),
                 SizedBox(height: 24),
                 Form(
                   key: _formKey,

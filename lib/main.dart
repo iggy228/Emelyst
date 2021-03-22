@@ -65,14 +65,17 @@ class Emelyst extends StatelessWidget {
           isDense: true,
           labelStyle: TextStyle(color: Colors.white),
           hintStyle: TextStyle(color: Colors.white60),
-          contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+          contentPadding: EdgeInsets.fromLTRB(16, 8, 8, 8),
           border: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16)),
             borderSide: BorderSide(color: Colors.white, width: 2),
           ),
           enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16)),
             borderSide: BorderSide(color: Colors.white,  width: 2),
           ),
           focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(16)),
             borderSide: BorderSide(color: Colors.white,  width: 2),
           ),
         ),

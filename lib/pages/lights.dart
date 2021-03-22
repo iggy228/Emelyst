@@ -40,7 +40,7 @@ class _LightsState extends State<Lights> {
       for (Sensor<bool> sensor in room.sensors) {
         if (sensor.topic.contains('svetlo')) {
           lights.add(Sensor(
-            name: sensor.topic.split('/')[0] + ' ' + sensor.topic.split('/')[1],
+            name: room.name,
             data: sensor.data,
             topic: sensor.topic,
             sensorType: sensor.sensorType,
@@ -83,7 +83,7 @@ class _LightsState extends State<Lights> {
           ),
           Expanded(
             child: HeaderGridView(
-              header: HeaderIconBox('light', 'icons/light.png'),
+              header: HeaderIconBox(name: 'light', iconUrl: 'icons/light.png'),
               itemCount: lights.length,
               itemBuilder: (BuildContext context, int index) {
                 return LightCard(

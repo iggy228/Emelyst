@@ -22,7 +22,7 @@ class RoomSensorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+      margin: EdgeInsets.fromLTRB(0, 32, 0, 0),
       color: Colors.black,
       child: Padding(
         padding: EdgeInsets.all(16),

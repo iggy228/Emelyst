@@ -72,7 +72,7 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: Emelyst
+    - family: Edition
       fonts:
         - asset: fonts/Emelyst.ttf
     - family: GillSans

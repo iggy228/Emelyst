@@ -59,7 +59,7 @@ class LightCard extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 child: Text(
                   text,
-                  style: TextStyle(color: Colors.black, fontFamily: 'Emelyst', fontSize: 14),
+                  style: TextStyle(color: Colors.black, fontFamily: 'Edition', fontSize: 14),
                 ),
               ),
             ),

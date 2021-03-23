@@ -31,7 +31,7 @@ class Emelyst extends StatelessWidget {
         '/loadingError': (context) => ErrorPage(),
       },
       theme: ThemeData(
-        fontFamily: 'Emelyst',
+        fontFamily: 'Edition',
         primaryColor: Color.fromRGBO(52, 192, 209, 1),
         textTheme: TextTheme(
           headline3: TextStyle(

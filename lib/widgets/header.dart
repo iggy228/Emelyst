@@ -1,55 +1,42 @@
 import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget {
-  final String title;
-  final String prevRouteUrl;
-  final Map prevRouteData;
-  final String nextRouteUrl;
-  final Map nextRouteData;
-
-  Header({
-    this.title,
-    this.prevRouteUrl = '/home',
-    this.prevRouteData,
-    this.nextRouteData,
-    this.nextRouteUrl = '/home'
-  });
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
-      decoration: BoxDecoration(
-        color: Colors.black,
-        borderRadius: BorderRadius.only(bottomRight: Radius.circular(16), bottomLeft: Radius.circular(16)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          IconButton(
-            padding: EdgeInsets.all(0),
-            icon: Icon(
-              Icons.arrow_back_rounded,
-              size: 40,
-              color: Theme.of(context).primaryColor,
-            ),
-            onPressed: () => Navigator.pushReplacementNamed(context, prevRouteUrl, arguments: prevRouteData),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.black,
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(16),
+            bottomRight: Radius.circular(16),
           ),
-          Text(
-            title,
-            style: Theme.of(context).textTheme.headline4,
-            textAlign: TextAlign.center,
+          image: DecorationImage(
+            image: AssetImage('images/header_img.png'),
+            alignment: Alignment.centerRight,
           ),
-          IconButton(
-            padding: EdgeInsets.all(0),
-            icon: Icon(
-              Icons.arrow_forward_rounded,
-              size: 40,
-              color: Theme.of(context).primaryColor,
-            ),
-            onPressed: () => Navigator.pushReplacementNamed(context, nextRouteUrl, arguments: nextRouteData),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(12, 13, 0, 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: 6),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: Text(
+                  'Víta Vás',
+                  style: Theme.of(context).textTheme.headline4,
+                ),
+              ),
+              Text(
+                'vaša inteligentná domácnosť',
+                style: Theme.of(context).textTheme.bodyText1,
+              ),
+              SizedBox(height: 24),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

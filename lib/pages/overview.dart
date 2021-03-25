@@ -1,12 +1,13 @@
 import 'package:emelyst/model/Sensor.dart';
 import 'package:emelyst/service/mqtt_client_wrapper.dart';
 import 'package:emelyst/service/sensors_state.dart';
-import 'package:emelyst/widgets/header.dart';
+import 'package:emelyst/widgets/header_navigation.dart';
 import 'package:emelyst/widgets/header_icon_box.dart';
 import 'package:emelyst/widgets/line_chart_wrapper.dart';
 import 'package:emelyst/widgets/navigation.dart';
 import 'package:emelyst/widgets/radial_background.dart';
 import 'package:emelyst/widgets/sensor_card.dart';
+import 'package:emelyst/widgets/chart_card.dart';
 import 'package:flutter/material.dart';
 
 class Overview extends StatefulWidget {
@@ -64,7 +65,7 @@ class _OverviewState extends State<Overview> {
     return RadialBackground(
       child: Column(
         children: [
-          Header(
+          HeaderNavigation(
             title: categories[index]['name'],
             nextRouteUrl: categories[nextIndex]['url'],
             prevRouteUrl: categories[prevIndex]['url'],
@@ -106,46 +107,16 @@ class _OverviewState extends State<Overview> {
                   ],
                 ),
                 // box for temperature chart
-                Container(
-                  margin: EdgeInsets.all(16),
-                  padding: EdgeInsets.fromLTRB(16, 24, 16, 16),
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        'Priemerná denná teplota za týždeň',
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                      SizedBox(height: 20),
-                      LineChartWrapper(data: avgTemperatures, color: Color.fromRGBO(52, 192, 209, 1)),
-                    ],
-                  ),
+                ChartCard(
+                  color: Theme.of(context).primaryColor,
+                  title: 'Priemerná denná teplota za týždeň',
+                  data: avgTemperatures,
                 ),
                 // box for humidity chart
-                Container(
-                  margin: EdgeInsets.all(16),
-                  padding: EdgeInsets.fromLTRB(16, 24, 16, 16),
-                  decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(24),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Text(
-                        'Priemerná denná vlhkosť za týždeň',
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                      SizedBox(height: 16),
-                      LineChartWrapper(data: avgHumidity),
-                    ],
-                  ),
+                ChartCard(
+                  color: Colors.red,
+                  title: 'Priemerná denná teplota za týždeň',
+                  data: getAvgHumidity,
                 ),
               ],
             ),

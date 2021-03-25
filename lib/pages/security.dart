@@ -3,7 +3,7 @@ import 'package:emelyst/model/Sensor.dart';
 import 'package:emelyst/service/home_data.dart';
 import 'package:emelyst/service/mqtt_client_wrapper.dart';
 import 'package:emelyst/widgets/door_card.dart';
-import 'package:emelyst/widgets/header.dart';
+import 'package:emelyst/widgets/header_navigation.dart';
 import 'package:emelyst/widgets/header_icon_box.dart';
 import 'package:emelyst/widgets/navigation.dart';
 import 'package:emelyst/widgets/radial_background.dart';
@@ -87,7 +87,7 @@ class _SecurityState extends State<Security> {
     return RadialBackground(
       child: Column(
         children: [
-          Header(
+          HeaderNavigation(
             title: categories[index]['name'],
             nextRouteUrl: categories[nextIndex]['url'],
             prevRouteUrl: categories[prevIndex]['url'],

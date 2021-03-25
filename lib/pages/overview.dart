@@ -3,7 +3,6 @@ import 'package:emelyst/service/mqtt_client_wrapper.dart';
 import 'package:emelyst/service/sensors_state.dart';
 import 'package:emelyst/widgets/header_navigation.dart';
 import 'package:emelyst/widgets/header_icon_box.dart';
-import 'package:emelyst/widgets/line_chart_wrapper.dart';
 import 'package:emelyst/widgets/navigation.dart';
 import 'package:emelyst/widgets/radial_background.dart';
 import 'package:emelyst/widgets/sensor_card.dart';
@@ -116,7 +115,7 @@ class _OverviewState extends State<Overview> {
                 ChartCard(
                   color: Colors.red,
                   title: 'Priemerná denná teplota za týždeň',
-                  data: getAvgHumidity,
+                  data: avgHumidity,
                 ),
               ],
             ),

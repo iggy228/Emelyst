@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'line_chart_wrapper.dart';
 
 class ChartCard extends StatelessWidget {
-  Color color;
-  String title;
-  List data;
+  final Color color;
+  final String title;
+  final List data;
 
   ChartCard({this.color, this.title, this.data});
 

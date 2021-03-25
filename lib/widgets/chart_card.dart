@@ -29,7 +29,7 @@ class ChartCard extends StatelessWidget {
             LineChartWrapper(data: data, color: color),
           ],
         ),
-      ),,
+      ),
     );
   }
 }

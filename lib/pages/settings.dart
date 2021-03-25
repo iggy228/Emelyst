@@ -1,4 +1,4 @@
-import 'package:emelyst/widgets/header.dart';
+import 'package:emelyst/widgets/header_navigation.dart';
 import 'package:emelyst/widgets/header_icon_box.dart';
 import 'package:emelyst/widgets/navigation.dart';
 import 'package:emelyst/widgets/radial_background.dart';
@@ -54,7 +54,7 @@ class _SettingsState extends State<Settings> {
     return RadialBackground(
       child: Column(
         children: [
-          Header(
+          HeaderNavigation(
             title: 'Nastavenia',
           ),
           Expanded(

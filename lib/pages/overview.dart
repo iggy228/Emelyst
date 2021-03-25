@@ -1,7 +1,7 @@
 import 'package:emelyst/model/Sensor.dart';
 import 'package:emelyst/service/mqtt_client_wrapper.dart';
 import 'package:emelyst/service/sensors_state.dart';
-import 'package:emelyst/widgets/header.dart';
+import 'package:emelyst/widgets/header_navigation.dart';
 import 'package:emelyst/widgets/header_icon_box.dart';
 import 'package:emelyst/widgets/line_chart_wrapper.dart';
 import 'package:emelyst/widgets/navigation.dart';
@@ -65,7 +65,7 @@ class _OverviewState extends State<Overview> {
     return RadialBackground(
       child: Column(
         children: [
-          Header(
+          HeaderNavigation(
             title: categories[index]['name'],
             nextRouteUrl: categories[nextIndex]['url'],
             prevRouteUrl: categories[prevIndex]['url'],

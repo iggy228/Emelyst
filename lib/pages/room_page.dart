@@ -2,7 +2,7 @@ import 'package:emelyst/model/Room.dart';
 import 'package:emelyst/model/Sensor.dart';
 import 'package:emelyst/service/home_data.dart';
 import 'package:emelyst/service/mqtt_client_wrapper.dart';
-import 'package:emelyst/widgets/header.dart';
+import 'package:emelyst/widgets/header_navigation.dart';
 import 'package:emelyst/widgets/header_icon_box.dart';
 import 'package:emelyst/widgets/header_list_view.dart';
 import 'package:emelyst/widgets/navigation.dart';
@@ -59,7 +59,7 @@ class _RoomState extends State<RoomPage> {
     return RadialBackground(
       child: Column(
         children: [
-          Header(
+          HeaderNavigation(
             title: roomsData[index].name,
             prevRouteUrl: '/room',
             nextRouteUrl: '/room',

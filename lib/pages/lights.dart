@@ -6,6 +6,7 @@ import 'package:emelyst/widgets/header_navigation.dart';
 import 'package:emelyst/widgets/header_grid_view.dart';
 import 'package:emelyst/widgets/header_icon_box.dart';
 import 'package:emelyst/widgets/light_card.dart';
+import 'package:emelyst/widgets/light_grid_header.dart';
 import 'package:emelyst/widgets/navigation.dart';
 import 'package:emelyst/widgets/radial_background.dart';
 import 'package:flutter/material.dart';
@@ -17,13 +18,19 @@ class Lights extends StatefulWidget {
 
 class _LightsState extends State<Lights> {
 
-  List roomsData;
-
-  List<Sensor<bool>> lights = [];
+  List<Sensor<bool>> floorlights = [];
+  List<Sensor<bool>> roomslights = [];
 
   void setOnMessage() {
     MqttClientWrapper.getMessage((topic, message) {
-      for (Sensor<bool> sensor in lights) {
+      for (Sensor<bool> sensor in roomslights) {
+        if (topic.contains(sensor.topic)) {
+          setState(() {
+            sensor.data = message == 'on' ? true : false;
+          });
+        }
+      }
+      for (Sensor<bool> sensor in floorlights) {
         if (topic.contains(sensor.topic)) {
           setState(() {
             sensor.data = message == 'on' ? true : false;
@@ -33,18 +40,28 @@ class _LightsState extends State<Lights> {
     });
   }
 
-  Future<void> generateLightsList(List roomsData) async {
+  Future<void> generateLightsList() async {
     List<Room> rooms = HomeData.allRoomsData;
 
     for (Room room in rooms) {
       for (Sensor<bool> sensor in room.sensors) {
         if (sensor.topic.contains('svetlo')) {
-          lights.add(Sensor(
-            name: room.name,
-            data: sensor.data,
-            topic: sensor.topic,
-            sensorType: sensor.sensorType,
-          ));
+          if (room.name.contains('poschodie')) {
+            floorlights.add(Sensor(
+              name: room.name,
+              data: sensor.data,
+              topic: sensor.topic,
+              sensorType: sensor.sensorType,
+            ));
+          }
+          else {
+            roomslights.add(Sensor(
+              name: room.name,
+              data: sensor.data,
+              topic: sensor.topic,
+              sensorType: sensor.sensorType,
+            ));
+          }
         }
       }
     }
@@ -58,8 +75,8 @@ class _LightsState extends State<Lights> {
     int index = routeData['index'];
     List categories = routeData['categories'];
 
-    if (lights.isEmpty) {
-      generateLightsList(roomsData);
+    if (floorlights.isEmpty || roomslights.isEmpty) {
+      generateLightsList();
     }
 
     int prevIndex = index - 1 < 0 ? categories.length - 1 : index - 1;
@@ -84,16 +101,30 @@ class _LightsState extends State<Lights> {
           Expanded(
             child: HeaderGridView(
               header: HeaderIconBox(name: 'light', iconUrl: 'icons/light.png'),
-              itemCount: lights.length,
-              itemBuilder: (BuildContext context, int index) {
+              floorHeader: LightGridHeader(title: 'poschodie', iconUrl: 'icons/up.png'),
+              floorCount: floorlights.length,
+              floorBuilder: (BuildContext context, int index) {
                 return LightCard(
-                  title: lights[index].name,
-                  text: lights[index].data ? 'zapnuté' : 'vypnuté',
-                  color: lights[index].data ? Colors.amberAccent : Colors.white,
-                  iconUrl: lights[index].data ? 'icons/light_on.png' : 'icons/light_off.png',
+                  title: floorlights[index].name,
+                  text: floorlights[index].data ? 'zapnuté' : 'vypnuté',
+                  color: floorlights[index].data ? Colors.amberAccent : Colors.white,
+                  iconUrl: floorlights[index].data ? 'icons/light_on.png' : 'icons/light_off.png',
                   onPress: () {
-                    MqttClientWrapper.publish(lights[index].topic, lights[index].data ? 'off' : 'on');
+                    MqttClientWrapper.publish(floorlights[index].topic, floorlights[index].data ? 'off' : 'on');
                   }
+                );
+              },
+              roomHeader: LightGridHeader(title: 'prizemie', iconUrl: 'icons/down.png'),
+              roomCount: roomslights.length,
+              roomBuilder: (BuildContext context, int index) {
+                return LightCard(
+                    title: roomslights[index].name,
+                    text: roomslights[index].data ? 'zapnuté' : 'vypnuté',
+                    color: roomslights[index].data ? Colors.amberAccent : Colors.white,
+                    iconUrl: roomslights[index].data ? 'icons/light_on.png' : 'icons/light_off.png',
+                    onPress: () {
+                      MqttClientWrapper.publish(floorlights[index].topic, floorlights[index].data ? 'off' : 'on');
+                    }
                 );
               },
             ),
@@ -106,7 +137,8 @@ class _LightsState extends State<Lights> {
 
   @override
   void dispose() {
-    lights = [];
+    roomslights = [];
+    floorlights = [];
     super.dispose();
   }
 }

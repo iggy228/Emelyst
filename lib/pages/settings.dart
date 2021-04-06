@@ -132,8 +132,6 @@ class _SettingsState extends State<Settings> {
 
                         SizedBox(height: 12),
 
-
-
                         /// field for address of broker
                         TextFormField(
                           style: Theme.of(context).textTheme.bodyText2,

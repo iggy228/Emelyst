@@ -24,14 +24,6 @@ class _HomeState extends State<Home> {
 
   List<Room> rooms = [];
 
-  List<Map<String, dynamic>> getRoomsData() {
-    List<Map<String, dynamic>> roomsData = [];
-    rooms.forEach((room) {
-      roomsData.add({'name': room.name, 'sensors': room.sensors});
-    });
-    return roomsData;
-  }
-
   @override
   Widget build(BuildContext context) {
     if (rooms.isEmpty) {

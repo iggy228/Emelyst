@@ -40,6 +40,20 @@ class _RoomState extends State<RoomPage> {
     return data ? 'icons/garage_open.png' : 'icons/garage_close.png';
   }
 
+  String typeToButtonText(SensorType sensorType, bool data) {
+    if (sensorType == SensorType.light) {
+      return data ? 'vypnúť' : 'zapnúť';
+    }
+    return data ? 'zatvoriť' : 'otvoriť';
+  }
+
+  String typeToStateText(SensorType sensorType, bool data) {
+    if (sensorType == SensorType.light) {
+      return data ? 'zapnuté' : 'vypnuté';
+    }
+    return data ? 'otvorené' : 'zatvorené';
+  }
+
   Future<void> generateSensorsList(String roomName) async {
     sensors = HomeData.getSensorsInRoom(roomName);
 
@@ -84,8 +98,8 @@ class _RoomState extends State<RoomPage> {
                 return RoomSensorCard(
                   title: sensors[index].name,
                   iconUrl: typeToIcon(sensors[index].sensorType, sensors[index].data),
-                  buttonText: sensors[index].data ? 'vypnúť' : 'zapnúť',
-                  stateText: sensors[index].data ? 'Zapnute' : 'Vypnute',
+                  buttonText: typeToButtonText(sensors[index].sensorType, sensors[index].data),
+                  stateText: typeToStateText(sensors[index].sensorType, sensors[index].data),
                   buttonColor: sensors[index].data ? Colors.amberAccent : Colors.white,
                   onPress: () => MqttClientWrapper.publish(sensors[index].topic, sensors[index].data ? 'off' : 'on'),
                 );

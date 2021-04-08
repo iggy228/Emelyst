@@ -123,7 +123,7 @@ class _LightsState extends State<Lights> {
                     color: roomslights[index].data ? Colors.amberAccent : Colors.white,
                     iconUrl: roomslights[index].data ? 'icons/light_on.png' : 'icons/light_off.png',
                     onPress: () {
-                      MqttClientWrapper.publish(floorlights[index].topic, floorlights[index].data ? 'off' : 'on');
+                      MqttClientWrapper.publish(roomslights[index].topic, floorlights[index].data ? 'off' : 'on');
                     }
                 );
               },

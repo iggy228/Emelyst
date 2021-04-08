@@ -96,6 +96,9 @@ class _SettingsState extends State<Settings> {
                         /// field for password
                         TextFormField(
                           style: Theme.of(context).textTheme.bodyText2,
+                          obscureText: true,
+                          enableSuggestions: false,
+                          autocorrect: false,
                           initialValue: _password,
                           decoration: InputDecoration(
                             hintText: 'Zadaj heslo',

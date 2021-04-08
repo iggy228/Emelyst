@@ -56,6 +56,7 @@ class HomeData {
         }
       }
     }
+    return [];
   }
 
   static void setData(List<Row> data, List<Row> roomsName) {

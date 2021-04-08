@@ -23,12 +23,12 @@ class SensorState {
   }
 
   static Future<List> getData() async {
-    Results result = await mysqlConn.query('SELECT * FROM stav');
+    Results result = await mysqlConn.query('SELECT * FROM stav ORDER BY topic');
     return result.toList();
   }
 
   static Future<List> getRoomsName() async {
-    Results result = await mysqlConn.query('SELECT nazov FROM izby');
+    Results result = await mysqlConn.query('SELECT nazov FROM izby ORDER BY nazov');
     return result.toList();
   }
 

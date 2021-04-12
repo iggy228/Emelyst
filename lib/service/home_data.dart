@@ -24,26 +24,40 @@ class HomeData {
 
   static SensorType textToSensorType(String text) {
     switch (text) {
-      case 'svetlo': return SensorType.light;
-      case 'motorcek': return SensorType.engine;
-      case 'pohyb': return SensorType.detector;
-      case 'servo': return SensorType.servo;
+      case 'svetlo':
+        return SensorType.light;
+      case 'motorcek':
+        return SensorType.engine;
+      case 'alarm':
+        return SensorType.alarm;
+      case 'servo':
+        return SensorType.servo;
     }
-    return null;
+    return SensorType.light;
   }
 
   static String textToIconName(String text) {
     switch (text) {
-      case 'obyvacka': return 'hostroom';
-      case 'spalna': return 'bedroom';
-      case 'kuchyna': return 'kitchen';
-      case 'garaz': return 'garage';
-      case 'prijazd': return 'garage';
-      case 'vchod': return 'garage';
-      case 'pracovna': return 'workroom';
-      case 'kupelka': return 'bathroom';
-      case 'detska_izba': return 'kidsroom';
-      case 'chodba': return 'hallway';
+      case 'obyvacka':
+        return 'hostroom';
+      case 'spalna':
+        return 'bedroom';
+      case 'kuchyna':
+        return 'kitchen';
+      case 'garaz':
+        return 'garage';
+      case 'prijazd':
+        return 'garage';
+      case 'vchod':
+        return 'garage';
+      case 'pracovna':
+        return 'workroom';
+      case 'kupelka':
+        return 'bathroom';
+      case 'detska_izba':
+        return 'kidsroom';
+      case 'chodba':
+        return 'hallway';
     }
     return 'bedroom';
   }
@@ -60,7 +74,6 @@ class HomeData {
   }
 
   static void setData(List<Row> data, List<Row> roomsName) {
-
     String lastroom = '';
     String lastfloor = '';
 
@@ -75,22 +88,21 @@ class HomeData {
       }
 
       if (lastroom != paths[2]) {
-        String roomName = roomsName[roomsNameIndex]['nazov'].replaceAll(' ', '\n');
+        String roomName =
+            roomsName[roomsNameIndex]['nazov'].replaceAll(' ', '\n');
         _floors.last.rooms.add(Room(
-          name: roomName,
-          iconName: textToIconName(paths[2]),
-          sensors: <Sensor<bool>>[]
-        ));
+            name: roomName,
+            iconName: textToIconName(paths[2]),
+            sensors: <Sensor<bool>>[]));
         roomsNameIndex++;
         lastroom = paths[2];
       }
 
       _floors.last.rooms.last.sensors.add(Sensor<bool>(
-        name: paths[3],
-        data: row['stav'] == 'on' ? true : false,
-        topic: '${paths[1]}/${paths[2]}/${paths[3]}',
-        sensorType: textToSensorType(paths[3])
-      ));
+          name: paths[3],
+          data: row['stav'] == 'on' ? true : false,
+          topic: '${paths[1]}/${paths[2]}/${paths[3]}',
+          sensorType: textToSensorType(paths[3])));
     }
 
     _setSubscribtion();

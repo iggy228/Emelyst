@@ -1,8 +1,8 @@
 enum SensorType {
   light,
   engine,
-  detector,
   servo,
+  alarm,
 }
 
 class Sensor<T> {
@@ -11,12 +11,7 @@ class Sensor<T> {
   String topic;
   SensorType sensorType;
 
-  Sensor({
-    this.name,
-    this.data,
-    this.topic = '',
-    this.sensorType
-  });
+  Sensor({this.name, this.data, this.topic = '', this.sensorType});
 
   Map<String, dynamic> toMap() {
     return {

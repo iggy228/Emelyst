@@ -14,15 +14,22 @@ class LineChartWrapper extends StatelessWidget {
 
   String makeBottomTitle(double value) {
     switch (value.toInt()) {
-      case 1: return 'PO';
-      case 2: return 'UT';
-      case 3: return 'ST';
-      case 4: return 'ŠT';
-      case 5: return 'PI';
-      case 6: return 'SO';
-      case 7: return 'NE';
+      case 1:
+        return 'PO';
+      case 2:
+        return 'UT';
+      case 3:
+        return 'ST';
+      case 4:
+        return 'ŠT';
+      case 5:
+        return 'PI';
+      case 6:
+        return 'SO';
+      case 7:
+        return 'NE';
     }
-    return '';
+    return 'PO';
   }
 
   @override
@@ -32,9 +39,7 @@ class LineChartWrapper extends StatelessWidget {
         lineBarsData: <LineChartBarData>[
           LineChartBarData(
             spots: _chartData,
-            colors: [
-              color
-            ],
+            colors: [color],
           )
         ],
         // minY: 10,
@@ -43,7 +48,9 @@ class LineChartWrapper extends StatelessWidget {
           show: false,
         ),
         borderData: FlBorderData(
-          border: Border(bottom: BorderSide(color: Colors.white), left: BorderSide(color: Colors.white)),
+          border: Border(
+              bottom: BorderSide(color: Colors.white),
+              left: BorderSide(color: Colors.white)),
         ),
         titlesData: FlTitlesData(
           bottomTitles: SideTitles(
@@ -56,8 +63,7 @@ class LineChartWrapper extends StatelessWidget {
           leftTitles: SideTitles(
               showTitles: true,
               getTextStyles: (value) => const TextStyle(color: Colors.white),
-              interval: 5
-          ),
+              interval: 5),
         ),
       ),
     );

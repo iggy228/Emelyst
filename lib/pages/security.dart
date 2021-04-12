@@ -17,7 +17,6 @@ class Security extends StatefulWidget {
 }
 
 class _SecurityState extends State<Security> {
-
   List<Sensor<bool>> shutters = [];
 
   List<Sensor<bool>> doors = [
@@ -25,7 +24,10 @@ class _SecurityState extends State<Security> {
     Sensor<bool>(name: 'Garáž', data: false, topic: 'prizemie/garaz/motorcek'),
   ];
 
-  Sensor<bool> comingRoad = Sensor(name: 'Príjazdová cesta', data: false, topic: 'von/prijazd/motorcek');
+  Sensor<bool> comingRoad = Sensor(
+      name: 'Príjazdová cesta', data: false, topic: 'von/prijazd/motorcek');
+  Sensor<bool> alarm =
+      Sensor(name: 'Alarm', data: false, topic: 'prizemie/chodba/alarm');
 
   void setOnMessage() {
     MqttClientWrapper.getMessage((topic, message) {
@@ -58,7 +60,9 @@ class _SecurityState extends State<Security> {
 
     for (Room room in rooms) {
       for (Sensor<bool> sensor in room.sensors) {
-        if (sensor.topic.contains('motorcek') && sensor.topic != doors[1].topic && sensor.topic != comingRoad.topic) {
+        if (sensor.topic.contains('motorcek') &&
+            sensor.topic != doors[1].topic &&
+            sensor.topic != comingRoad.topic) {
           shutters.add(Sensor(
             name: room.name,
             data: sensor.data,
@@ -104,23 +108,36 @@ class _SecurityState extends State<Security> {
             child: ListView(
               children: [
                 HeaderIconBox(name: 'security', iconUrl: 'icons/security.png'),
-
                 SizedBox(height: 24),
-
-                DoorCard(name: doors[0].name, data: doors[0].data,
+                DoorCard(
+                  name: doors[0].name,
+                  data: doors[0].data,
                   openIcon: 'icons/door_open.png',
                   closeIcon: 'icons/door_close.png',
-                  onClick: () => MqttClientWrapper.publish(doors[0].topic, doors[0].data ? 'off' : 'on'),
+                  onClick: () => MqttClientWrapper.publish(
+                      doors[0].topic, doors[0].data ? 'off' : 'on'),
                 ),
-                DoorCard(name: doors[1].name, data: doors[1].data,
+                DoorCard(
+                  name: doors[1].name,
+                  data: doors[1].data,
                   openIcon: 'icons/garage_open.png',
                   closeIcon: 'icons/garage_close.png',
-                  onClick: () => MqttClientWrapper.publish(doors[1].topic, doors[1].data ? 'off' : 'on'),
+                  onClick: () => MqttClientWrapper.publish(
+                      doors[1].topic, doors[1].data ? 'off' : 'on'),
+                ),
+                DoorCard(
+                  name: alarm.name,
+                  data: alarm.data,
+                  openIcon: 'icons/alarm_on.png',
+                  closeIcon: 'icons/alarm.png',
+                  onClick: () => MqttClientWrapper.publish(
+                      alarm.topic, alarm.data ? 'off' : 'on'),
                 ),
                 Card(
                   margin: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
                   color: Colors.black,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16)),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -138,10 +155,11 @@ class _SecurityState extends State<Security> {
                           itemCount: shutters.length,
                           itemBuilder: (BuildContext context, int i) {
                             return ShutterBox(
-                              name: shutters[i].name,
-                              data: shutters[i].data,
-                              onClick: () => MqttClientWrapper.publish(shutters[i].topic, shutters[i].data ? 'off' : 'on')
-                            );
+                                name: shutters[i].name,
+                                data: shutters[i].data,
+                                onClick: () => MqttClientWrapper.publish(
+                                    shutters[i].topic,
+                                    shutters[i].data ? 'off' : 'on'));
                           },
                         ),
                       ),
@@ -163,21 +181,25 @@ class _SecurityState extends State<Security> {
                                 FlatButton(
                                   onPressed: () {
                                     shutters.forEach((shutter) {
-                                      MqttClientWrapper.publish(shutter.topic, 'on');
+                                      MqttClientWrapper.publish(
+                                          shutter.topic, 'on');
                                     });
                                   },
                                   color: Colors.white,
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(24)),
                                   child: Text(' Otvoriť '),
                                 ),
                                 FlatButton(
                                   onPressed: () {
                                     shutters.forEach((shutter) {
-                                      MqttClientWrapper.publish(shutter.topic, 'off');
+                                      MqttClientWrapper.publish(
+                                          shutter.topic, 'off');
                                     });
                                   },
                                   color: Colors.white,
-                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(24)),
                                   child: Text('Zatvoriť'),
                                 ),
                               ],
@@ -190,7 +212,8 @@ class _SecurityState extends State<Security> {
                 ),
                 RoadCard(
                   data: comingRoad.data,
-                  onPress: () => MqttClientWrapper.publish(comingRoad.topic, comingRoad.data ? 'off' : 'on'),
+                  onPress: () => MqttClientWrapper.publish(
+                      comingRoad.topic, comingRoad.data ? 'off' : 'on'),
                 ),
               ],
             ),

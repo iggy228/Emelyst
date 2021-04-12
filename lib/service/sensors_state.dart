@@ -3,21 +3,20 @@ import 'package:mysql1/mysql1.dart';
 class SensorState {
   static MySqlConnection mysqlConn;
 
-  static Future<bool> connect({String url, int port, String username, String password, String db}) async {
+  static Future<bool> connect(
+      {String url,
+      int port,
+      String username,
+      String password,
+      String db}) async {
     ConnectionSettings settings = ConnectionSettings(
-        host: url,
-        port: port,
-        user: username,
-        password: password,
-        db: db
-    );
+        host: url, port: port, user: username, password: password, db: db);
 
     try {
       mysqlConn = await MySqlConnection.connect(settings);
       print('Connected');
       return true;
-    }
-    catch (_) {
+    } catch (_) {
       return false;
     }
   }
@@ -28,12 +27,14 @@ class SensorState {
   }
 
   static Future<List> getRoomsName() async {
-    Results result = await mysqlConn.query('SELECT nazov FROM izby ORDER BY nazov');
+    Results result =
+        await mysqlConn.query('SELECT nazov FROM izby ORDER BY nazov');
     return result.toList();
   }
 
   static Future<List<double>> getAvgTemperature() async {
-    Results result = await mysqlConn.query('SELECT datum, tmp FROM teplota WHERE datum >= DATE(NOW()) - INTERVAL 7 DAY');
+    Results result = await mysqlConn.query(
+        'SELECT datum, tmp FROM teplota WHERE datum >= DATE(NOW()) - INTERVAL 31 DAY');
     List<double> avgTemperatures = [];
 
     double sumTemp = 0.0;
@@ -47,8 +48,7 @@ class SensorState {
         sumTemp = row['tmp'];
         count = 1;
         lastDate = row['datum'].day;
-      }
-      else {
+      } else {
         sumTemp += row['tmp'];
         count++;
       }
@@ -60,7 +60,8 @@ class SensorState {
   }
 
   static Future<List<double>> getAvgHumidity() async {
-    Results result = await mysqlConn.query('SELECT date, hodnota FROM vlhkost WHERE date >= DATE(NOW()) - INTERVAL 7 DAY');
+    Results result = await mysqlConn.query(
+        'SELECT date, hodnota FROM vlhkost WHERE date >= DATE(NOW()) - INTERVAL 31 DAY');
     List<double> avgHumidity = [];
 
     double sumHumidity = 0.0;
@@ -74,8 +75,7 @@ class SensorState {
         sumHumidity = row['hodnota'];
         count = 1;
         lastDate = row['date'].day;
-      }
-      else {
+      } else {
         sumHumidity += row['hodnota'];
         count++;
       }
@@ -87,12 +87,14 @@ class SensorState {
   }
 
   static Future<double> getLastTemperature() async {
-    Results result = await mysqlConn.query('SELECT tmp FROM teplota ORDER BY ID DESC LIMIT 1');
+    Results result = await mysqlConn
+        .query('SELECT tmp FROM teplota ORDER BY ID DESC LIMIT 1');
     return result.last['tmp'];
   }
 
   static Future<double> getLastHumidity() async {
-    Results result = await mysqlConn.query('SELECT hodnota FROM vlhkost ORDER BY ID DESC LIMIT 1');
+    Results result = await mysqlConn
+        .query('SELECT hodnota FROM vlhkost ORDER BY ID DESC LIMIT 1');
     return result.last['hodnota'];
   }
 }

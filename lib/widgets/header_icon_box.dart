@@ -11,10 +11,10 @@ class HeaderIconBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        padding: EdgeInsets.fromLTRB(38, 0, 38, 8),
+        padding: const EdgeInsets.fromLTRB(38, 0, 38, 8),
         decoration: BoxDecoration(
           color: Colors.black,
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(999))
+          borderRadius: const BorderRadius.vertical(bottom: const Radius.circular(999))
         ),
         child: Hero(
           tag: 'Emelyst-$name',

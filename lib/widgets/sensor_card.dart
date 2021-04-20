@@ -11,7 +11,7 @@ class SensorCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
       decoration: BoxDecoration(
         color: Colors.black,
         borderRadius: BorderRadius.circular(32),
@@ -22,7 +22,7 @@ class SensorCard extends StatelessWidget {
             title,
             style: Theme.of(context).textTheme.headline4
           ),
-          SizedBox(height: 16),
+          const SizedBox(height: 16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

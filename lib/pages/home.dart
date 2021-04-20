@@ -38,9 +38,9 @@ class _HomeState extends State<Home> {
           Expanded(
             child: HomeScrollView(
               header: Container(
-                margin: EdgeInsets.only(top: 24, bottom: 24),
+                margin: const EdgeInsets.only(top: 24, bottom: 24),
                 height: 60,
-                color: Color.fromRGBO(0, 0, 0, 0.4),
+                color: const Color.fromRGBO(0, 0, 0, 0.4),
                 child: ListView.builder(
                   itemCount: categories.length,
                   scrollDirection: Axis.horizontal,

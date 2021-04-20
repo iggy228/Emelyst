@@ -12,8 +12,8 @@ class ChartCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: Container(
-        margin: EdgeInsets.all(16),
-        padding: EdgeInsets.fromLTRB(16, 24, 16, 16),
+        margin: const EdgeInsets.all(16),
+        padding: const EdgeInsets.fromLTRB(16, 24, 16, 16),
         decoration: BoxDecoration(
           color: Colors.black,
           borderRadius: BorderRadius.circular(24),
@@ -26,7 +26,7 @@ class ChartCard extends StatelessWidget {
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.headline6,
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             LineChartWrapper(data: data, color: color),
           ],
         ),

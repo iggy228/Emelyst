@@ -18,16 +18,16 @@ class HeaderNavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 12, 0, 12),
-      decoration: BoxDecoration(
+      padding: const EdgeInsets.fromLTRB(0, 12, 0, 12),
+      decoration: const BoxDecoration(
         color: Colors.black,
-        borderRadius: BorderRadius.only(bottomRight: Radius.circular(16), bottomLeft: Radius.circular(16)),
+        borderRadius: const BorderRadius.only(bottomRight: const Radius.circular(16), bottomLeft: const Radius.circular(16)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           IconButton(
-            padding: EdgeInsets.all(0),
+            padding: const EdgeInsets.all(0),
             icon: Icon(
               Icons.arrow_back_rounded,
               size: 40,
@@ -41,7 +41,7 @@ class HeaderNavigation extends StatelessWidget {
             textAlign: TextAlign.center,
           ),
           IconButton(
-            padding: EdgeInsets.all(0),
+            padding: const EdgeInsets.all(0),
             icon: Icon(
               Icons.arrow_forward_rounded,
               size: 40,

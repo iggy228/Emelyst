@@ -12,8 +12,8 @@ class LightGridHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.fromLTRB(8, 16, 8, 8),
-      padding: EdgeInsets.all(16),
+      margin: const EdgeInsets.fromLTRB(8, 16, 8, 8),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.black,
         borderRadius: BorderRadius.circular(16)
@@ -25,7 +25,7 @@ class LightGridHeader extends StatelessWidget {
             title,
             style: Theme.of(context).textTheme.headline4,
           ),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
           Image.asset(
             iconUrl,
           ),

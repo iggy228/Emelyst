@@ -75,7 +75,7 @@ class _RoomState extends State<RoomPage> {
 
     return RadialBackground(
       child: Column(
-        children: [
+        children: <Widget>[
           HeaderNavigation(
             title: roomsData[index].name,
             prevRouteUrl: '/room',

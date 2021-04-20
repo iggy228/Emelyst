@@ -22,10 +22,10 @@ class RoomSensorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      margin: EdgeInsets.fromLTRB(0, 32, 0, 0),
+      margin: const EdgeInsets.fromLTRB(0, 32, 0, 0),
       color: Colors.black,
       child: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Row(
           children: [
             Expanded(
@@ -33,20 +33,20 @@ class RoomSensorCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: <Widget>[
                   Text(
                     title,
                     style: Theme.of(context).textTheme.headline4,
                   ),
-                  SizedBox(height: 8),
-                  Text("Stav"),
+                  const SizedBox(height: 8),
+                  const Text("Stav"),
                   Text(
                     stateText,
                     style: TextStyle(
                       color: Theme.of(context).primaryColor
                     ),
                   ),
-                  SizedBox(height: 32),
+                  const SizedBox(height: 32),
                   FlatButton(
                     color: buttonColor,
                     onPressed: onPress,

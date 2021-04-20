@@ -14,7 +14,6 @@ class SensorState {
 
     try {
       mysqlConn = await MySqlConnection.connect(settings);
-      print('Connected');
       return true;
     } catch (_) {
       return false;

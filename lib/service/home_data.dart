@@ -15,7 +15,6 @@ class HomeData {
     List<Room> rooms = [];
 
     for (Floor floor in _floors) {
-      print(floor.rooms.length);
       rooms.addAll(floor.rooms);
     }
 

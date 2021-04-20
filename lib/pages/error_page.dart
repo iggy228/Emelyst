@@ -53,16 +53,14 @@ class _ErrorPageState extends State<ErrorPage> {
         child: Form(
           key: _formKey,
           child: Container(
-            padding: EdgeInsets.symmetric(vertical: 24, horizontal: 16),
-            decoration: BoxDecoration(
+            padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+            decoration: const BoxDecoration(
               color: Colors.black,
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: const BorderRadius.all(const Radius.circular(16)),
             ),
             child: Column(
               children: <Widget>[
                 Text(message),
-
-
 
                 /// field for user
                 TextFormField(
@@ -82,7 +80,7 @@ class _ErrorPageState extends State<ErrorPage> {
                   },
                 ),
 
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
                 /// field for password
                 TextFormField(
                   style: Theme.of(context).textTheme.bodyText2,
@@ -104,7 +102,7 @@ class _ErrorPageState extends State<ErrorPage> {
                   },
                 ),
 
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
                 /// field for db name
                 TextFormField(
                   style: Theme.of(context).textTheme.bodyText2,
@@ -123,16 +121,14 @@ class _ErrorPageState extends State<ErrorPage> {
                   },
                 ),
 
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
 
-
-
-                /// field for address of broker
+                /// field for address of server
                 TextFormField(
                   style: Theme.of(context).textTheme.bodyText2,
                   initialValue: _serverUrl,
                   decoration: InputDecoration(
-                    hintText: 'Zadaj adresu brokera',
+                    hintText: 'Zadaj adresu servera',
                   ),
                   onChanged: (url) {
                     _serverUrl = url;
@@ -145,7 +141,7 @@ class _ErrorPageState extends State<ErrorPage> {
                   },
                 ),
 
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
                 /// field for port number of broker
                 TextFormField(
                   style: Theme.of(context).textTheme.bodyText2,
@@ -164,7 +160,7 @@ class _ErrorPageState extends State<ErrorPage> {
                     return null;
                   },
                 ),
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
                 /// field for port number of DB
                 TextFormField(
                   style: Theme.of(context).textTheme.bodyText2,
@@ -183,14 +179,14 @@ class _ErrorPageState extends State<ErrorPage> {
                     return null;
                   },
                 ),
-                SizedBox(height: 12),
+                const SizedBox(height: 12),
                 /// submit button
                 FlatButton(
                   color: Colors.white,
                   onPressed: () => saveUrl(),
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                  padding: EdgeInsets.all(8),
-                  child: Text('Connect!'),
+                  padding: const EdgeInsets.all(8),
+                  child: const Text('Connect!'),
                 ),
               ],
             ),

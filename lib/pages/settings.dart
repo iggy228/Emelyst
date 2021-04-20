@@ -135,12 +135,12 @@ class _SettingsState extends State<Settings> {
 
                         SizedBox(height: 12),
 
-                        /// field for address of broker
+                        /// field for address of server
                         TextFormField(
                           style: Theme.of(context).textTheme.bodyText2,
                           initialValue: _serverUrl,
                           decoration: InputDecoration(
-                            hintText: 'Zadaj adresu brokera',
+                            hintText: 'Zadaj adresu servera',
                           ),
                           onChanged: (url) {
                             _serverUrl = url;

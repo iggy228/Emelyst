@@ -29,8 +29,8 @@ class LightCard extends StatelessWidget {
     return GestureDetector(
       onTap: onPress,
       child: Container(
-        margin: EdgeInsets.all(8),
-        padding: EdgeInsets.fromLTRB(16, 16, 12, 8),
+        margin: const EdgeInsets.all(8),
+        padding: const EdgeInsets.fromLTRB(16, 16, 12, 8),
         decoration: BoxDecoration(
           color: Colors.black,
           borderRadius: BorderRadius.circular(32),

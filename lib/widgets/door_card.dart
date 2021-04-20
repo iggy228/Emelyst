@@ -14,10 +14,10 @@ class DoorCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      margin: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+      margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
       color: Colors.black,
       child: Padding(
-        padding: EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         child: Row(
           children: [
             Expanded(
@@ -33,7 +33,7 @@ class DoorCard extends StatelessWidget {
                   Text(
                     "Stav ${data ? 'otvorená' : 'zatvorená'}",
                   ),
-                  SizedBox(height: 32),
+                  const SizedBox(height: 32),
                   FlatButton(
                     color: Colors.white,
                     onPressed: onClick,

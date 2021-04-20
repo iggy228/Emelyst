@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 class HomeScrollView extends StatelessWidget {
-  Widget header;
-  Function(BuildContext, int) itemBuilder;
-  int itemCount;
+  final Widget header;
+  final Function(BuildContext, int) itemBuilder;
+  final int itemCount;
 
   HomeScrollView({this.header, this.itemCount, this.itemBuilder});
 

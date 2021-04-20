@@ -48,9 +48,9 @@ class LineChartWrapper extends StatelessWidget {
           show: false,
         ),
         borderData: FlBorderData(
-          border: Border(
-              bottom: BorderSide(color: Colors.white),
-              left: BorderSide(color: Colors.white)),
+          border: const Border(
+              bottom: const BorderSide(color: Colors.white),
+              left: const BorderSide(color: Colors.white)),
         ),
         titlesData: FlTitlesData(
           bottomTitles: SideTitles(

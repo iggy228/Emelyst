@@ -1,6 +1,8 @@
+import 'package:emelyst/model/FamilyMember.dart';
 import 'package:emelyst/model/Sensor.dart';
 import 'package:emelyst/service/mqtt_client_wrapper.dart';
 import 'package:emelyst/service/sensors_state.dart';
+import 'package:emelyst/widgets/family_member_box.dart';
 import 'package:emelyst/widgets/header_navigation.dart';
 import 'package:emelyst/widgets/header_icon_box.dart';
 import 'package:emelyst/widgets/navigation.dart';
@@ -19,17 +21,25 @@ class _OverviewState extends State<Overview> {
   List<double> avgTemperatures = [0];
   List<double> avgHumidity = [0];
 
+  List<FamilyMember> familyMembers = [
+    FamilyMember(name: "Otec", isHome: true, iconUrl: 'images/man.png', date: DateTime(2021, 4, 14, 18, 30)),
+  ];
+
   List<Sensor<double>> sensorsData = [
     Sensor<double>(name: 'teplota', data: 0, topic: 'von/meteo/teplota'),
     Sensor<double>(name: 'vlhkost', data: 0, topic: 'von/meteo/vlhkost'),
   ];
 
   Future<void> initTemperature() async {
-    avgTemperatures = await SensorState.getAvgTemperature();
-    avgHumidity = await SensorState.getAvgHumidity();
+    List<double> temperatures = await SensorState.getAvgTemperature();
+    List<double> humidities = await SensorState.getAvgHumidity();
     sensorsData[0].data = await SensorState.getLastTemperature();
     sensorsData[1].data = await SensorState.getLastHumidity();
-    setState(() {});
+    print(temperatures);
+    setState(() {
+      avgTemperatures = temperatures;
+      avgHumidity = humidities;
+    });
   }
 
   @override
@@ -105,6 +115,36 @@ class _OverviewState extends State<Overview> {
                     ),
                   ],
                 ),
+
+                Container(
+                  margin: const EdgeInsets.only(top: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(24)
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                      Text('Moja rodina', style: Theme.of(context).textTheme.headline4),
+                      const SizedBox(height: 20),
+                      Container(
+                        height: 160,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: familyMembers.length,
+                          itemBuilder: (_, int index) {
+                            return FamilyMemberBox(
+                              name: familyMembers[index].name,
+                              avatarIcon: familyMembers[index].iconUrl,
+                              stateText: familyMembers[index].isHome ? 'doma' : 'prec',
+                              timeText: familyMembers[index].getLastTime(),
+                            );
+                          },
+                        ),
+                      )
+                    ]
+                  ),
+                ),
                 // box for temperature chart
                 ChartCard(
                   color: Theme.of(context).primaryColor,
@@ -114,7 +154,7 @@ class _OverviewState extends State<Overview> {
                 // box for humidity chart
                 ChartCard(
                   color: Colors.red,
-                  title: 'Priemerná denná teplota za týždeň',
+                  title: 'Priemerná denná vlhkost za týždeň',
                   data: avgHumidity,
                 ),
               ],

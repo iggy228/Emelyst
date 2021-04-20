@@ -106,9 +106,9 @@ class _SecurityState extends State<Security> {
           ),
           Expanded(
             child: ListView(
-              children: [
+              children: <Widget>[
                 HeaderIconBox(name: 'security', iconUrl: 'icons/security.png'),
-                SizedBox(height: 24),
+                const SizedBox(height: 24),
                 DoorCard(
                   name: doors[0].name,
                   data: doors[0].data,
@@ -134,13 +134,13 @@ class _SecurityState extends State<Security> {
                       alarm.topic, alarm.data ? 'off' : 'on'),
                 ),
                 Card(
-                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+                  margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
                   color: Colors.black,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16)),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       Padding(
                         padding: const EdgeInsets.fromLTRB(16, 16, 16, 24),
                         child: Text(
@@ -164,7 +164,7 @@ class _SecurityState extends State<Security> {
                         ),
                       ),
                       Padding(
-                        padding: EdgeInsets.fromLTRB(16, 16, 16, 16),
+                        padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -177,7 +177,7 @@ class _SecurityState extends State<Security> {
                               ),
                             ),
                             Column(
-                              children: [
+                              children: <Widget>[
                                 FlatButton(
                                   onPressed: () {
                                     shutters.forEach((shutter) {
@@ -188,7 +188,7 @@ class _SecurityState extends State<Security> {
                                   color: Colors.white,
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(24)),
-                                  child: Text(' Otvoriť '),
+                                  child: const Text(' Otvoriť '),
                                 ),
                                 FlatButton(
                                   onPressed: () {
@@ -200,7 +200,7 @@ class _SecurityState extends State<Security> {
                                   color: Colors.white,
                                   shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(24)),
-                                  child: Text('Zatvoriť'),
+                                  child: const Text('Zatvoriť'),
                                 ),
                               ],
                             ),

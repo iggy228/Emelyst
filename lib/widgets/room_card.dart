@@ -12,8 +12,8 @@ class RoomCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => Navigator.pushNamed(context, '/room', arguments: routeData),
       child: Container(
-        margin: EdgeInsets.symmetric(vertical: 8),
-        padding: EdgeInsets.fromLTRB(16, 16, 0, 0),
+        margin: const EdgeInsets.symmetric(vertical: 8),
+        padding: const EdgeInsets.fromLTRB(16, 16, 0, 0),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
           image: DecorationImage(
@@ -28,7 +28,7 @@ class RoomCard extends StatelessWidget {
               title,
               style: Theme.of(context).textTheme.headline4,
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Image.asset('icons/$imageUrl.png', width: 90, height: 90)
           ],
         ),

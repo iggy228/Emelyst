@@ -1,4 +1,4 @@
-import 'package:emelyst/widgets/rgb_slider.dart';
+// import 'package:emelyst/widgets/rgb_slider.dart';
 import 'package:flutter/material.dart';
 
 class RoadCard extends StatefulWidget {
@@ -16,7 +16,7 @@ class _RoadCardState extends State<RoadCard> {
   Widget build(BuildContext context) {
     return Card(
       color: Colors.black,
-      margin: EdgeInsets.symmetric(vertical: 4, horizontal: 0),
+      margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -33,14 +33,14 @@ class _RoadCardState extends State<RoadCard> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    SizedBox(height: 4),
+                    const SizedBox(height: 4),
                     Text(
                       'Stav ' + (widget.data ? 'zapnuté' : 'vypnuté'),
                       style: TextStyle(
                         color: widget.data ? Theme.of(context).primaryColor : Colors.white,
                       ),
                     ),
-                    SizedBox(height: 8),
+                    const SizedBox(height: 8),
                     FlatButton(
                       color: Colors.white,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
@@ -50,7 +50,7 @@ class _RoadCardState extends State<RoadCard> {
                       ),
                     ),
                     SizedBox(height: 16),
-                    RGBSlider(),
+                    // RGBSlider(),
                   ],
                 ),
                 Image.asset(

@@ -16,7 +16,7 @@ class CategoryCard extends StatelessWidget {
     return FlatButton.icon(
       onPressed: onPress,
       color: Colors.black,
-      padding: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(32),
       ),

@@ -13,7 +13,7 @@ enum WhereLoading {
 
 class Loading extends StatefulWidget {
   
-  WhereLoading whereLoading;
+  final WhereLoading whereLoading;
   
   Loading({this.whereLoading = WhereLoading.HOME});
   
@@ -25,7 +25,7 @@ class _LoadingState extends State<Loading> {
 
   List<Room> rooms = [];
   String _serverUrl = '';
-  int _brokerPort = 10000;
+  int _brokerPort = 1883;
   int _dbPort = 3306;
 
   String _username = '';
@@ -36,7 +36,7 @@ class _LoadingState extends State<Loading> {
   String errorMessage = "";
 
   Future<void> setupConnectionToBroker() async {
-    await MqttClientWrapper.connect(url: _serverUrl, port: _brokerPort);
+    await MqttClientWrapper.connect(url: 'broker.hivemq.com', port: _brokerPort);
     if (!MqttClientWrapper.isConnected) {
       isError = true;
       errorMessage += "Nepodarilo sa pripojiť na broker.\n";

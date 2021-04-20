@@ -84,7 +84,7 @@ class _LightsState extends State<Lights> {
 
     return RadialBackground(
       child: Column(
-        children: [
+        children: <Widget>[
           HeaderNavigation(
             title: categories[index]['name'],
             nextRouteUrl: categories[nextIndex]['url'],

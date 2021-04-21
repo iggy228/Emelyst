@@ -17,7 +17,7 @@ class _HomeState extends State<Home> {
   String floorPrefix = 'prizemie/';
 
   List<Map<String, String>> categories = [
-    {'name': 'Domov', 'icon': 'info', 'url': '/overview'},
+    {'name': 'Info', 'icon': 'info', 'url': '/overview'},
     {'name': 'Svetlá', 'icon': 'light', 'url': '/lights'},
     {'name': 'Ochrana', 'icon': 'security', 'url': '/security'},
   ];

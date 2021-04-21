@@ -1,3 +1,4 @@
+import 'package:emelyst/model/FamilyMember.dart';
 import 'package:emelyst/model/Floor.dart';
 import 'package:emelyst/model/Room.dart';
 import 'package:emelyst/model/Sensor.dart';
@@ -6,6 +7,11 @@ import 'package:mysql1/mysql1.dart';
 
 class HomeData {
   static List<Floor> _floors = [];
+  static List<FamilyMember> _users;
+
+  static List<FamilyMember> get allUsers {
+    return _users;
+  }
 
   static List<Floor> get allData {
     return _floors;
@@ -37,28 +43,54 @@ class HomeData {
 
   static String textToIconName(String text) {
     switch (text) {
-      case 'obyvacka':
-        return 'hostroom';
-      case 'spalna':
-        return 'bedroom';
-      case 'kuchyna':
-        return 'kitchen';
-      case 'garaz':
-        return 'garage';
-      case 'prijazd':
-        return 'garage';
-      case 'vchod':
-        return 'garage';
-      case 'pracovna':
-        return 'workroom';
-      case 'kupelka':
-        return 'bathroom';
-      case 'detska_izba':
-        return 'kidsroom';
-      case 'chodba':
-        return 'hallway';
+      case 'obyvacka': return 'hostroom';
+      case 'spalna': return 'bedroom';
+      case 'kuchyna': return 'kitchen';
+      case 'garaz': return 'garage';
+      case 'prijazd': return 'garage';
+      case 'vchod': return 'garage';
+      case 'pracovna': return 'workroom';
+      case 'kupelka': return 'bathroom';
+      case 'detska_izba': return 'kidsroom';
+      case 'chodba': return 'hallway';
     }
     return 'bedroom';
+  }
+
+  static String getSensorName(String name) {
+    if (name == 'motorcek') return 'motorček';
+    return name;
+  }
+
+  static String getRoomName(String floor, String room) {
+    String txt = "${floor == 'prizemie' ? 'prízemie' : floor}\n";
+    switch (room) {
+      case 'kupelna':
+        txt += 'kúpeľna';
+        break;
+      case 'satnik':
+        txt += 'šatník';
+        break;
+      case 'spalna':
+        txt += 'spáľna';
+        break;
+      case 'garaz':
+        txt += 'garáž';
+        break;
+      case 'kuchyna':
+        txt += 'kuchyňa';
+        break;
+      case 'obyvacka':
+        txt += 'obývačka';
+        break;
+      case 'pracovna':
+        txt += 'pracovňa';
+        break;
+      default:
+        txt += room;
+        break;
+    }
+    return txt;
   }
 
   static List<Sensor> getSensorsInRoom(String roomName) {
@@ -72,11 +104,16 @@ class HomeData {
     return [];
   }
 
-  static void setData(List<Row> data, List<Row> roomsName) {
+  static void setData(List<Row> data, [List<FamilyMember> users]) {
+    if (users == null) {
+      _users = [];
+    }
+    else {
+      _users = users;
+    }
+
     String lastroom = '';
     String lastfloor = '';
-
-    int roomsNameIndex = 0;
 
     for (var row in data) {
       List<String> paths = row['topic'].split('/');
@@ -86,22 +123,21 @@ class HomeData {
         lastfloor = paths[1];
       }
 
-      if (lastroom != paths[2]) {
-        String roomName =
-            roomsName[roomsNameIndex]['nazov'].replaceAll(' ', '\n');
+      if (lastroom != paths[2] && paths[2] != 'linka') {
+        String roomName = getRoomName(paths[1], paths[2]);
         _floors.last.rooms.add(Room(
             name: roomName,
             iconName: textToIconName(paths[2]),
             sensors: <Sensor<bool>>[]));
-        roomsNameIndex++;
         lastroom = paths[2];
       }
 
       _floors.last.rooms.last.sensors.add(Sensor<bool>(
-          name: paths[3],
+          name: getSensorName(paths[3]),
           data: row['stav'] == 'on' ? true : false,
           topic: '${paths[1]}/${paths[2]}/${paths[3]}',
-          sensorType: textToSensorType(paths[3])));
+          sensorType: textToSensorType(paths[3])
+      ));
     }
 
     _setSubscribtion();

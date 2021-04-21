@@ -8,6 +8,7 @@ import 'package:emelyst/widgets/header_icon_box.dart';
 import 'package:emelyst/widgets/navigation.dart';
 import 'package:emelyst/widgets/radial_background.dart';
 import 'package:emelyst/widgets/road_card.dart';
+import 'package:emelyst/widgets/rotating_icon.dart';
 import 'package:emelyst/widgets/shutter_box.dart';
 import 'package:flutter/material.dart';
 
@@ -17,17 +18,19 @@ class Security extends StatefulWidget {
 }
 
 class _SecurityState extends State<Security> {
+
+  bool garageLoading = false;
+  bool doorLoading = false;
+
   List<Sensor<bool>> shutters = [];
 
   List<Sensor<bool>> doors = [
-    Sensor<bool>(name: 'Dvere', data: false, topic: 'von/vchod/servo'),
+    Sensor<bool>(name: 'Dvere', data: false, topic: 'prizemie/chodba/servo'),
     Sensor<bool>(name: 'Garáž', data: false, topic: 'prizemie/garaz/motorcek'),
   ];
 
-  Sensor<bool> comingRoad = Sensor(
-      name: 'Príjazdová cesta', data: false, topic: 'von/prijazd/motorcek');
-  Sensor<bool> alarm =
-      Sensor(name: 'Alarm', data: false, topic: 'prizemie/chodba/alarm');
+  Sensor<bool> comingRoad = Sensor(name: 'Príjazdová cesta', data: false, topic: 'von/prijazd/motorcek');
+  Sensor<bool> alarm = Sensor(name: 'Alarm', data: false, topic: 'prizemie/chodba/alarm');
 
   void setOnMessage() {
     MqttClientWrapper.getMessage((topic, message) {
@@ -37,10 +40,22 @@ class _SecurityState extends State<Security> {
         });
       }
 
+      if (topic.contains(alarm.topic)) {
+        setState(() {
+          alarm.data = message == 'on' ? true : false;
+        });
+      }
+
       for (Sensor<bool> sensor in doors) {
         if (topic.contains(sensor.topic)) {
           setState(() {
             sensor.data = message == 'on' ? true : false;
+            if (sensor.name == "Dvere") {
+              doorLoading = false;
+            }
+            else {
+              garageLoading = false;
+            }
           });
         }
       }
@@ -111,25 +126,35 @@ class _SecurityState extends State<Security> {
                 const SizedBox(height: 24),
                 DoorCard(
                   name: doors[0].name,
-                  data: doors[0].data,
-                  openIcon: 'icons/door_open.png',
-                  closeIcon: 'icons/door_close.png',
-                  onClick: () => MqttClientWrapper.publish(
-                      doors[0].topic, doors[0].data ? 'off' : 'on'),
+                  stateIcon: doors[0].data ? 'icons/door_open.png' : 'icons/door_close.png',
+                  stateText: doors[0].data ? 'otvorené' : 'zatvorené',
+                  buttonText: doors[0].data ? 'zatvoriť' : 'otvoriť',
+                  onClick: () {
+                    MqttClientWrapper.publish(doors[0].topic, doors[0].data ? 'off' : 'on');
+                    setState(() {
+                      doorLoading = true;
+                    });
+                  },
+                  animatedIcon: doorLoading ? RotatingIcon() : null,
                 ),
                 DoorCard(
                   name: doors[1].name,
-                  data: doors[1].data,
-                  openIcon: 'icons/garage_open.png',
-                  closeIcon: 'icons/garage_close.png',
-                  onClick: () => MqttClientWrapper.publish(
-                      doors[1].topic, doors[1].data ? 'off' : 'on'),
+                  stateIcon: doors[1].data ? 'icons/garage_open.png' : 'icons/garage_close.png',
+                  stateText: doors[1].data ? 'otvorené' : 'zatvorené',
+                  buttonText: doors[1].data ? 'zatvoriť' : 'otvoriť',
+                  onClick: () {
+                    MqttClientWrapper.publish(doors[1].topic, doors[1].data ? 'off' : 'on');
+                    setState(() {
+                      garageLoading = true;
+                    });
+                  },
+                  animatedIcon: garageLoading ? RotatingIcon() : null,
                 ),
                 DoorCard(
                   name: alarm.name,
-                  data: alarm.data,
-                  openIcon: 'icons/alarm_on.png',
-                  closeIcon: 'icons/alarm.png',
+                  stateIcon: alarm.data ? 'icons/alarm_on.png' : 'icons/alarm.png',
+                  stateText: alarm.data ? 'zapnuté' : 'vypnuté',
+                  buttonText: alarm.data ? 'vypnúť' : 'zapnúť',
                   onClick: () => MqttClientWrapper.publish(
                       alarm.topic, alarm.data ? 'off' : 'on'),
                 ),

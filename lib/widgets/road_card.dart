@@ -1,4 +1,3 @@
-// import 'package:emelyst/widgets/rgb_slider.dart';
 import 'package:flutter/material.dart';
 
 class RoadCard extends StatefulWidget {
@@ -22,7 +21,7 @@ class _RoadCardState extends State<RoadCard> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             Text(
               'Príjazdova cesta',
               style: Theme.of(context).textTheme.headline4
@@ -50,7 +49,6 @@ class _RoadCardState extends State<RoadCard> {
                       ),
                     ),
                     SizedBox(height: 16),
-                    // RGBSlider(),
                   ],
                 ),
                 Image.asset(

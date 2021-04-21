@@ -3,12 +3,20 @@ import 'package:flutter/material.dart';
 
 class DoorCard extends StatelessWidget {
   final String name;
-  final bool data;
-  final String openIcon;
-  final String closeIcon;
+  final String stateText;
+  final String stateIcon;
+  final String buttonText;
+  final Widget animatedIcon;
   final Function onClick;
 
-  DoorCard({this.name, this.data, this.openIcon, this.closeIcon, this.onClick});
+  DoorCard({
+    this.name,
+    this.stateText,
+    this.stateIcon,
+    this.onClick,
+    this.buttonText,
+    this.animatedIcon,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,22 +33,28 @@ class DoorCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: <Widget>[
                   Text(
                     name,
                     style: Theme.of(context).textTheme.headline4,
                   ),
                   Text(
-                    "Stav ${data ? 'otvorená' : 'zatvorená'}",
+                    "Stav $stateText",
                   ),
                   const SizedBox(height: 32),
-                  FlatButton(
-                    color: Colors.white,
-                    onPressed: onClick,
-                    child: Text(
-                      data ? 'zatvoriť' : 'otvoriť',
-                    ),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                  Row(
+                    children: <Widget>[
+                      FlatButton(
+                        color: Colors.white,
+                        onPressed: onClick,
+                        child: Text(
+                          buttonText,
+                        ),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                      ),
+                      const SizedBox(width: 8),
+                      if (animatedIcon != null) animatedIcon,
+                    ],
                   ),
                 ],
               ),
@@ -49,7 +63,7 @@ class DoorCard extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Image.asset(
-                  data ? openIcon : closeIcon,
+                  stateIcon
                 ),
               ),
             ),

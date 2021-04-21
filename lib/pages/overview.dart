@@ -1,5 +1,6 @@
 import 'package:emelyst/model/FamilyMember.dart';
 import 'package:emelyst/model/Sensor.dart';
+import 'package:emelyst/service/home_data.dart';
 import 'package:emelyst/service/mqtt_client_wrapper.dart';
 import 'package:emelyst/service/sensors_state.dart';
 import 'package:emelyst/widgets/family_member_box.dart';
@@ -21,9 +22,7 @@ class _OverviewState extends State<Overview> {
   List<double> avgTemperatures = [0];
   List<double> avgHumidity = [0];
 
-  List<FamilyMember> familyMembers = [
-    FamilyMember(name: "Otec", isHome: true, iconUrl: 'images/man.png', date: DateTime(2021, 4, 14, 18, 30)),
-  ];
+  List<FamilyMember> familyMembers = [];
 
   List<Sensor<double>> sensorsData = [
     Sensor<double>(name: 'teplota', data: 0, topic: 'von/meteo/teplota'),
@@ -35,7 +34,6 @@ class _OverviewState extends State<Overview> {
     List<double> humidities = await SensorState.getAvgHumidity();
     sensorsData[0].data = await SensorState.getLastTemperature();
     sensorsData[1].data = await SensorState.getLastHumidity();
-    print(temperatures);
     setState(() {
       avgTemperatures = temperatures;
       avgHumidity = humidities;
@@ -45,6 +43,8 @@ class _OverviewState extends State<Overview> {
   @override
   void initState() {
     super.initState();
+
+    familyMembers = HomeData.allUsers;
 
     sensorsData.forEach((sensor) {
       MqttClientWrapper.subscribe(sensor.topic);

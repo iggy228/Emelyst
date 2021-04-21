@@ -1,3 +1,4 @@
+import 'package:emelyst/model/FamilyMember.dart';
 import 'package:emelyst/model/Room.dart';
 import 'package:emelyst/service/home_data.dart';
 import 'package:emelyst/service/mqtt_client_wrapper.dart';
@@ -61,10 +62,11 @@ class _LoadingState extends State<Loading> {
 
     List data = [];
     List roomsName = [];
+    List<FamilyMember> users = [];
 
     try {
       data = await SensorState.getData();
-      roomsName = await SensorState.getRoomsName();
+      users = await SensorState.getUsers();
     }
     catch (e) {
       isError = true;
@@ -72,7 +74,7 @@ class _LoadingState extends State<Loading> {
       return;
     }
 
-    HomeData.setData(data, roomsName);
+    HomeData.setData(data, users);
   }
 
   void _setupApp() async {

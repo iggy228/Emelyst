@@ -20,7 +20,7 @@ class FamilyMemberBox extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Text(name, style: Theme.of(context).textTheme.headline5),
-          Image.asset(avatarIcon, width: 50),
+          Image.asset(avatarIcon, width: 60, height: 70),
           const SizedBox(height: 6),
           Row(
             children: <Widget>[

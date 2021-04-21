@@ -1,3 +1,4 @@
+import 'package:emelyst/model/FamilyMember.dart';
 import 'package:mysql1/mysql1.dart';
 
 class SensorState {
@@ -24,11 +25,30 @@ class SensorState {
     Results result = await mysqlConn.query('SELECT * FROM stav ORDER BY topic');
     return result.toList();
   }
+  
+  static Future<List<FamilyMember>> getUsers() async {
+    List<FamilyMember> users = [];
 
-  static Future<List> getRoomsName() async {
-    Results result =
-        await mysqlConn.query('SELECT nazov FROM izby ORDER BY nazov');
-    return result.toList();
+    Results results = await mysqlConn.query('SELECT uzivatel, cas, datum, stav FROM karta');
+    for (var row in results) {
+      int hours = row['cas'].inHours;
+      int minutes = row['cas'].inMinutes - row['cas'].inHours * 60;
+      int seconds = row['cas'].inSeconds - row['cas'].inMinutes * 60;
+      users.add(FamilyMember(
+        name: row['uzivatel'],
+        isHome: row['stav'] == 1,
+        iconUrl: 'images/${row["uzivatel"]}.png',
+        date: DateTime(
+          row['datum'].year,
+          row['datum'].month,
+          row['datum'].day,
+          hours,
+          minutes,
+          seconds
+        ),
+      ));
+    }
+    return users;
   }
 
   static Future<List<double>> getAvgTemperature() async {

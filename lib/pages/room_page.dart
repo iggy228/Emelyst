@@ -30,17 +30,21 @@ class _RoomState extends State<RoomPage> {
     });
   }
 
-  String typeToIcon(SensorType sensorType, bool data) {
+  String typeToIcon(SensorType sensorType, bool data, String topic) {
     if (sensorType == SensorType.light) {
       return data ? 'icons/light_on.png' : 'icons/light_off.png';
     }
     if (sensorType == SensorType.engine) {
+      if (topic == 'prizemie/garaz/motorcek' || topic == 'von/prijazd/motorcek') {
+        return data ? 'icons/garage_open.png' : 'icons/garage_close.png';
+      }
       return data ? 'icons/shutter_open.png' : 'icons/shutter_close.png';
     }
     if (sensorType == SensorType.alarm) {
       return data ? 'icons/alarm_on.png' : 'icons/alarm.png';
     }
-    return data ? 'icons/garage_open.png' : 'icons/garage_close.png';
+
+    return data ? 'icons/door_open.png' : 'icons/door_close.png';
   }
 
   String typeToButtonText(SensorType sensorType, bool data) {
@@ -100,16 +104,11 @@ class _RoomState extends State<RoomPage> {
               itemBuilder: (BuildContext context, int index) {
                 return RoomSensorCard(
                   title: sensors[index].name,
-                  iconUrl: typeToIcon(
-                      sensors[index].sensorType, sensors[index].data),
-                  buttonText: typeToButtonText(
-                      sensors[index].sensorType, sensors[index].data),
-                  stateText: typeToStateText(
-                      sensors[index].sensorType, sensors[index].data),
-                  buttonColor:
-                      sensors[index].data ? Colors.amberAccent : Colors.white,
-                  onPress: () => MqttClientWrapper.publish(
-                      sensors[index].topic, sensors[index].data ? 'off' : 'on'),
+                  iconUrl: typeToIcon(sensors[index].sensorType, sensors[index].data, sensors[index].topic),
+                  buttonText: typeToButtonText(sensors[index].sensorType, sensors[index].data),
+                  stateText: typeToStateText(sensors[index].sensorType, sensors[index].data),
+                  buttonColor: sensors[index].data ? Colors.amberAccent : Colors.white,
+                  onPress: () => MqttClientWrapper.publish(sensors[index].topic, sensors[index].data ? 'off' : 'on'),
                 );
               },
             ),
@@ -122,10 +121,7 @@ class _RoomState extends State<RoomPage> {
 
   @override
   void dispose() {
-    sensors.forEach((sensor) {
-      MqttClientWrapper.unsubscribe(sensor.topic);
-    });
-    sensors = [];
     super.dispose();
+    sensors = [];
   }
 }

@@ -51,56 +51,60 @@ class SensorState {
     return users;
   }
 
-  static Future<List<double>> getAvgTemperature() async {
+  static Future<Map<String, double>> getAvgTemperature() async {
     Results result = await mysqlConn.query(
-        'SELECT datum, tmp FROM teplota WHERE datum >= DATE(NOW()) - INTERVAL 31 DAY');
-    List<double> avgTemperatures = [];
+        'SELECT datum, tmp FROM teplota WHERE datum >= DATE(NOW()) - INTERVAL 7 DAY');
+    Map<String, double> avgTemperatures = {};
 
     double sumTemp = 0.0;
     int count = 0;
-    int lastDate;
+    int lastDay;
+    int lastMonth;
     for (var row in result) {
-      if (lastDate != row['datum'].day || lastDate == null) {
-        if (lastDate != null) {
-          avgTemperatures.add(sumTemp / count);
+      if (lastDay != row['datum'].day || lastDay == null) {
+        if (lastDay != null) {
+          avgTemperatures['$lastDay.$lastMonth'] = sumTemp / count;
         }
         sumTemp = row['tmp'];
         count = 1;
-        lastDate = row['datum'].day;
+        lastDay = row['datum'].day;
+        lastMonth = row['datum'].month;
       } else {
         sumTemp += row['tmp'];
         count++;
       }
     }
 
-    avgTemperatures.add(sumTemp / count);
+    avgTemperatures['${result.last["datum"].day}.${result.last["datum"].month}'] = sumTemp / count;
 
     return avgTemperatures;
   }
 
-  static Future<List<double>> getAvgHumidity() async {
+  static Future<Map<String, double>> getAvgHumidity() async {
     Results result = await mysqlConn.query(
-        'SELECT date, hodnota FROM vlhkost WHERE date >= DATE(NOW()) - INTERVAL 31 DAY');
-    List<double> avgHumidity = [];
+        'SELECT date, hodnota FROM vlhkost WHERE date >= DATE(NOW()) - INTERVAL 7 DAY');
+    Map<String, double> avgHumidity = {};
 
     double sumHumidity = 0.0;
     int count = 0;
-    int lastDate;
+    int lastDay;
+    int lastMonth;
     for (var row in result) {
-      if (lastDate != row['date'].day || lastDate == null) {
-        if (lastDate != null) {
-          avgHumidity.add(sumHumidity / count);
+      if (lastDay != row['date'].day || lastDay == null) {
+        if (lastDay != null) {
+          avgHumidity['$lastDay.$lastMonth'] = sumHumidity / count;
         }
         sumHumidity = row['hodnota'];
         count = 1;
-        lastDate = row['date'].day;
+        lastDay = row['date'].day;
+        lastMonth = row['date'].month;
       } else {
         sumHumidity += row['hodnota'];
         count++;
       }
     }
 
-    avgHumidity.add(sumHumidity / count);
+    avgHumidity['${result.last["date"].day}.${result.last["date"].month}'] = sumHumidity / count;
 
     return avgHumidity;
   }

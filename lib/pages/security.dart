@@ -24,13 +24,10 @@ class _SecurityState extends State<Security> {
 
   List<Sensor<bool>> shutters = [];
 
-  List<Sensor<bool>> doors = [
-    Sensor<bool>(name: 'Dvere', data: false, topic: 'prizemie/chodba/servo'),
-    Sensor<bool>(name: 'Garáž', data: false, topic: 'prizemie/garaz/motorcek'),
-  ];
+  List<Sensor<bool>> doors = [];
 
-  Sensor<bool> comingRoad = Sensor(name: 'Príjazdová cesta', data: false, topic: 'von/prijazd/motorcek');
-  Sensor<bool> alarm = Sensor(name: 'Alarm', data: false, topic: 'prizemie/chodba/alarm');
+  Sensor<bool> comingRoad;
+  Sensor<bool> alarm;
 
   void setOnMessage() {
     MqttClientWrapper.getMessage((topic, message) {
@@ -70,14 +67,24 @@ class _SecurityState extends State<Security> {
     });
   }
 
-  void generateShuttersList() async {
+  void generateShuttersList() {
     List<Room> rooms = HomeData.allRoomsData;
 
     for (Room room in rooms) {
       for (Sensor<bool> sensor in room.sensors) {
-        if (sensor.topic.contains('motorcek') &&
-            sensor.topic != doors[1].topic &&
-            sensor.topic != comingRoad.topic) {
+        if (sensor.topic == 'prizemie/chodba/alarm') {
+          alarm = Sensor(name: 'Alarm', data: sensor.data, topic: sensor.topic, sensorType: sensor.sensorType);
+        }
+        else if (sensor.topic == 'von/prijazd/motorcek') {
+          comingRoad = Sensor(name: 'Príjazdová cesta', data: sensor.data, topic: sensor.topic, sensorType: sensor.sensorType);
+        }
+        else if (sensor.topic == 'prizemie/chodba/servo') {
+          doors.add(Sensor(name: 'Dvere', data: sensor.data, topic: sensor.topic, sensorType: sensor.sensorType));
+        }
+        else if (sensor.topic == 'prizemie/garaz/motorcek') {
+          doors.add(Sensor(name: 'Garáž', data: sensor.data, topic: sensor.topic, sensorType: sensor.sensorType));
+        }
+        else if (sensor.topic.contains('motorcek')) {
           shutters.add(Sensor(
             name: room.name,
             data: sensor.data,
@@ -247,5 +254,12 @@ class _SecurityState extends State<Security> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    shutters = [];
+    doors = [];
   }
 }

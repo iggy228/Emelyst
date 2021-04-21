@@ -19,8 +19,8 @@ class Overview extends StatefulWidget {
 
 class _OverviewState extends State<Overview> {
 
-  List<double> avgTemperatures = [0];
-  List<double> avgHumidity = [0];
+  Map<String, double> avgTemperatures = {'0': 0};
+  Map<String, double> avgHumidity = {'0': 0};
 
   List<FamilyMember> familyMembers = [];
 
@@ -30,8 +30,8 @@ class _OverviewState extends State<Overview> {
   ];
 
   Future<void> initTemperature() async {
-    List<double> temperatures = await SensorState.getAvgTemperature();
-    List<double> humidities = await SensorState.getAvgHumidity();
+    Map<String, double> temperatures = await SensorState.getAvgTemperature();
+    Map<String, double> humidities = await SensorState.getAvgHumidity();
     sensorsData[0].data = await SensorState.getLastTemperature();
     sensorsData[1].data = await SensorState.getLastHumidity();
     setState(() {
@@ -164,5 +164,11 @@ class _OverviewState extends State<Overview> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    familyMembers = [];
   }
 }

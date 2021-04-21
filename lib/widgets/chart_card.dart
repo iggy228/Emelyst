@@ -4,9 +4,17 @@ import 'line_chart_wrapper.dart';
 class ChartCard extends StatelessWidget {
   final Color color;
   final String title;
-  final List data;
+  List<double> _data = [];
+  List<String> _dates = [];
 
-  ChartCard({this.color, this.title, this.data});
+  ChartCard({this.color, this.title, Map<String, double> data}) {
+    for (double i in data.values) {
+      _data.add(i);
+    }
+    for (String i in data.keys) {
+      _dates.add(i);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +35,7 @@ class ChartCard extends StatelessWidget {
               style: Theme.of(context).textTheme.headline6,
             ),
             const SizedBox(height: 20),
-            LineChartWrapper(data: data, color: color),
+            LineChartWrapper(data: _data, color: color, dates: _dates),
           ],
         ),
       ),

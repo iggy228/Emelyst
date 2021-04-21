@@ -37,7 +37,7 @@ class _LoadingState extends State<Loading> {
   String errorMessage = "";
 
   Future<void> setupConnectionToBroker() async {
-    await MqttClientWrapper.connect(url: 'broker.hivemq.com', port: _brokerPort);
+    await MqttClientWrapper.connect(url: _serverUrl, port: _brokerPort);
     if (!MqttClientWrapper.isConnected) {
       isError = true;
       errorMessage += "Nepodarilo sa pripojiť na broker.\n";
@@ -61,7 +61,6 @@ class _LoadingState extends State<Loading> {
   Future<void> setupSensorsData() async {
 
     List data = [];
-    List roomsName = [];
     List<FamilyMember> users = [];
 
     try {

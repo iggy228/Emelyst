@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:emelyst/model/FamilyMember.dart';
 import 'package:emelyst/model/Sensor.dart';
 import 'package:emelyst/service/home_data.dart';
@@ -97,6 +99,13 @@ class _OverviewState extends State<Overview> {
     });
 
     initTemperature();
+
+    Timer.periodic(Duration(seconds: 30), (timer) {
+      print('Updating');
+      setState(() {
+
+      });
+    });
   }
 
   @override
@@ -173,8 +182,7 @@ class _OverviewState extends State<Overview> {
                           return FamilyMemberBox(
                             name: familyMembers[index].name,
                             avatarIcon: familyMembers[index].iconUrl,
-                            stateText:
-                                familyMembers[index].isHome ? 'doma' : 'prec',
+                            stateText: familyMembers[index].isHome ? 'doma' : 'preč',
                             timeText: familyMembers[index].getLastTime(),
                           );
                         },

@@ -10,7 +10,7 @@ class FamilyMember {
     DateTime dateNow = DateTime.now();
     Duration dur = dateNow.difference(date);
     if (dur.inMinutes < 60) return '${dur.inMinutes} min.';
-    if (dur.inHours < 24) return '${dur.inMinutes} hod.';
+    if (dur.inHours < 24) return '${dur.inHours} hod.';
     return '${dur.inDays} dni.';
   }
 

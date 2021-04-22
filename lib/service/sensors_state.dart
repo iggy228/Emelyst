@@ -39,7 +39,7 @@ class SensorState {
         name: row['uzivatel'],
         isHome: row['stav'] == 1,
         iconUrl: 'images/${row["uzivatel"]}.png',
-        date: DateTime(row['datum'].year, row['datum'].month, row['datum'].day,
+        date: DateTime(row['datum'].year, row['datum'].month, row['datum'].day + 1,
             hours, minutes, seconds),
       ));
     }

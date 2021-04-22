@@ -18,7 +18,6 @@ class Overview extends StatefulWidget {
 }
 
 class _OverviewState extends State<Overview> {
-
   Map<String, double> avgTemperatures = {'0': 0};
   Map<String, double> avgHumidity = {'0': 0};
 
@@ -51,6 +50,43 @@ class _OverviewState extends State<Overview> {
     });
 
     MqttClientWrapper.getMessage((topic, message) {
+      print(topic);
+      print(message);
+      switch (topic) {
+        case "EMELYST/karta/otec/stav":
+          {
+            setState(() {
+              familyMembers[0].isHome = message == "1";
+              familyMembers[0].updateDate();
+            });
+            break;
+          }
+        case "EMELYST/karta/mama/stav":
+          {
+            setState(() {
+              familyMembers[1].isHome = message == "1";
+              familyMembers[1].updateDate();
+            });
+            break;
+          }
+        case "EMELYST/karta/syn/stav":
+          {
+            setState(() {
+              familyMembers[2].isHome = message == "1";
+              familyMembers[2].updateDate();
+            });
+            break;
+          }
+        case "EMELYST/karta/dcera/stav":
+          {
+            setState(() {
+              familyMembers[3].isHome = message == "1";
+              familyMembers[3].updateDate();
+            });
+            break;
+          }
+      }
+
       for (Sensor sensor in sensorsData) {
         if (topic.contains(sensor.topic)) {
           setState(() {
@@ -95,6 +131,7 @@ class _OverviewState extends State<Overview> {
                   padding: const EdgeInsets.all(24.0),
                   child: Image.asset('images/house.png'),
                 ),
+
                 /// row for boxes
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -106,6 +143,7 @@ class _OverviewState extends State<Overview> {
                       postfix: '°C',
                       iconUrl: 'temperature',
                     ),
+
                     /// Box for humidity
                     SensorCard(
                       title: 'Vlhkosť',
@@ -120,30 +158,29 @@ class _OverviewState extends State<Overview> {
                   margin: const EdgeInsets.only(top: 16),
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   decoration: BoxDecoration(
-                    color: Colors.black,
-                    borderRadius: BorderRadius.circular(24)
-                  ),
-                  child: Column(
-                    children: <Widget>[
-                      Text('Moja rodina', style: Theme.of(context).textTheme.headline4),
-                      const SizedBox(height: 20),
-                      Container(
-                        height: 160,
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: familyMembers.length,
-                          itemBuilder: (_, int index) {
-                            return FamilyMemberBox(
-                              name: familyMembers[index].name,
-                              avatarIcon: familyMembers[index].iconUrl,
-                              stateText: familyMembers[index].isHome ? 'doma' : 'prec',
-                              timeText: familyMembers[index].getLastTime(),
-                            );
-                          },
-                        ),
-                      )
-                    ]
-                  ),
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(24)),
+                  child: Column(children: <Widget>[
+                    Text('Moja rodina',
+                        style: Theme.of(context).textTheme.headline4),
+                    const SizedBox(height: 20),
+                    Container(
+                      height: 160,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: familyMembers.length,
+                        itemBuilder: (_, int index) {
+                          return FamilyMemberBox(
+                            name: familyMembers[index].name,
+                            avatarIcon: familyMembers[index].iconUrl,
+                            stateText:
+                                familyMembers[index].isHome ? 'doma' : 'prec',
+                            timeText: familyMembers[index].getLastTime(),
+                          );
+                        },
+                      ),
+                    )
+                  ]),
                 ),
                 // box for temperature chart
                 ChartCard(

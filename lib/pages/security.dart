@@ -18,7 +18,6 @@ class Security extends StatefulWidget {
 }
 
 class _SecurityState extends State<Security> {
-
   bool garageLoading = false;
   bool doorLoading = false;
 
@@ -47,10 +46,7 @@ class _SecurityState extends State<Security> {
         if (topic.contains(sensor.topic)) {
           setState(() {
             sensor.data = message == 'on' ? true : false;
-            if (sensor.name == "Dvere") {
-              doorLoading = false;
-            }
-            else {
+            if (sensor.name == "Garáž") {
               garageLoading = false;
             }
           });
@@ -73,18 +69,30 @@ class _SecurityState extends State<Security> {
     for (Room room in rooms) {
       for (Sensor<bool> sensor in room.sensors) {
         if (sensor.topic == 'prizemie/chodba/alarm') {
-          alarm = Sensor(name: 'Alarm', data: sensor.data, topic: sensor.topic, sensorType: sensor.sensorType);
-        }
-        else if (sensor.topic == 'von/prijazd/motorcek') {
-          comingRoad = Sensor(name: 'Príjazdová cesta', data: sensor.data, topic: sensor.topic, sensorType: sensor.sensorType);
-        }
-        else if (sensor.topic == 'prizemie/chodba/servo') {
-          doors.add(Sensor(name: 'Dvere', data: sensor.data, topic: sensor.topic, sensorType: sensor.sensorType));
-        }
-        else if (sensor.topic == 'prizemie/garaz/motorcek') {
-          doors.add(Sensor(name: 'Garáž', data: sensor.data, topic: sensor.topic, sensorType: sensor.sensorType));
-        }
-        else if (sensor.topic.contains('motorcek')) {
+          alarm = Sensor(
+              name: 'Alarm',
+              data: sensor.data,
+              topic: sensor.topic,
+              sensorType: sensor.sensorType);
+        } else if (sensor.topic == 'von/prijazd/svetlo') {
+          comingRoad = Sensor(
+              name: 'Príjazdová cesta',
+              data: sensor.data,
+              topic: sensor.topic,
+              sensorType: sensor.sensorType);
+        } else if (sensor.topic == 'von/vchod/servo') {
+          doors.add(Sensor(
+              name: 'Dvere',
+              data: sensor.data,
+              topic: sensor.topic,
+              sensorType: sensor.sensorType));
+        } else if (sensor.topic == 'prizemie/garaz/motorcek') {
+          doors.add(Sensor(
+              name: 'Garáž',
+              data: sensor.data,
+              topic: sensor.topic,
+              sensorType: sensor.sensorType));
+        } else if (sensor.topic.contains('motorcek')) {
           shutters.add(Sensor(
             name: room.name,
             data: sensor.data,
@@ -133,11 +141,14 @@ class _SecurityState extends State<Security> {
                 const SizedBox(height: 24),
                 DoorCard(
                   name: doors[0].name,
-                  stateIcon: doors[0].data ? 'icons/door_open.png' : 'icons/door_close.png',
+                  stateIcon: doors[0].data
+                      ? 'icons/garage_open.png'
+                      : 'icons/garage_close.png',
                   stateText: doors[0].data ? 'otvorené' : 'zatvorené',
                   buttonText: doors[0].data ? 'zatvoriť' : 'otvoriť',
                   onClick: () {
-                    MqttClientWrapper.publish(doors[0].topic, doors[0].data ? 'off' : 'on');
+                    MqttClientWrapper.publish(
+                        doors[0].topic, doors[0].data ? 'off' : 'on');
                     setState(() {
                       doorLoading = true;
                     });
@@ -146,27 +157,31 @@ class _SecurityState extends State<Security> {
                 ),
                 DoorCard(
                   name: doors[1].name,
-                  stateIcon: doors[1].data ? 'icons/garage_open.png' : 'icons/garage_close.png',
+                  stateIcon: doors[1].data
+                      ? 'icons/door_open.png'
+                      : 'icons/door_close.png',
                   stateText: doors[1].data ? 'otvorené' : 'zatvorené',
                   buttonText: doors[1].data ? 'zatvoriť' : 'otvoriť',
                   onClick: () {
-                    MqttClientWrapper.publish(doors[1].topic, doors[1].data ? 'off' : 'on');
+                    MqttClientWrapper.publish(
+                        doors[1].topic, doors[1].data ? 'off' : 'on');
                     setState(() {
                       garageLoading = true;
                     });
                   },
-                  animatedIcon: garageLoading ? RotatingIcon() : null,
                 ),
                 DoorCard(
                   name: alarm.name,
-                  stateIcon: alarm.data ? 'icons/alarm_on.png' : 'icons/alarm.png',
+                  stateIcon:
+                      alarm.data ? 'icons/alarm_on.png' : 'icons/alarm.png',
                   stateText: alarm.data ? 'zapnuté' : 'vypnuté',
                   buttonText: alarm.data ? 'vypnúť' : 'zapnúť',
                   onClick: () => MqttClientWrapper.publish(
                       alarm.topic, alarm.data ? 'off' : 'on'),
                 ),
                 Card(
-                  margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
+                  margin:
+                      const EdgeInsets.symmetric(vertical: 8, horizontal: 0),
                   color: Colors.black,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16)),

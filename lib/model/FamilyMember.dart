@@ -13,4 +13,8 @@ class FamilyMember {
     if (dur.inHours < 24) return '${dur.inMinutes} hod.';
     return '${dur.inDays} dni.';
   }
+
+  void updateDate() {
+    date = DateTime.now();
+  }
 }

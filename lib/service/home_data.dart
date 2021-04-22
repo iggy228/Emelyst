@@ -43,22 +43,33 @@ class HomeData {
 
   static String textToIconName(String text) {
     switch (text) {
-      case 'obyvacka': return 'hostroom';
-      case 'spalna': return 'bedroom';
-      case 'kuchyna': return 'kitchen';
-      case 'garaz': return 'garage';
-      case 'prijazd': return 'garage';
-      case 'vchod': return 'garage';
-      case 'pracovna': return 'workroom';
-      case 'kupelka': return 'bathroom';
-      case 'detska_izba': return 'kidsroom';
-      case 'chodba': return 'hallway';
+      case 'obyvacka':
+        return 'hostroom';
+      case 'spalna':
+        return 'bedroom';
+      case 'kuchyna':
+        return 'kitchen';
+      case 'garaz':
+        return 'garage';
+      case 'prijazd':
+        return 'garage';
+      case 'vchod':
+        return 'garage';
+      case 'pracovna':
+        return 'workroom';
+      case 'kupelka':
+        return 'bathroom';
+      case 'detska_izba':
+        return 'kidsroom';
+      case 'chodba':
+        return 'hallway';
     }
     return 'bedroom';
   }
 
   static String getSensorName(String name) {
     if (name == 'motorcek') return 'motorček';
+    if (name == 'motorcek2') return 'motorček2';
     return name;
   }
 
@@ -107,8 +118,7 @@ class HomeData {
   static void setData(List<Row> data, [List<FamilyMember> users]) {
     if (users == null) {
       _users = [];
-    }
-    else {
+    } else {
       _users = users;
     }
 
@@ -132,12 +142,21 @@ class HomeData {
         lastroom = paths[2];
       }
 
-      _floors.last.rooms.last.sensors.add(Sensor<bool>(
+      if (paths[2] == "linka") {
+        _floors.last.rooms[_floors.last.rooms.length - 2].sensors
+            .add(Sensor<bool>(
           name: getSensorName(paths[3]),
           data: row['stav'] == 'on' ? true : false,
           topic: '${paths[1]}/${paths[2]}/${paths[3]}',
-          sensorType: textToSensorType(paths[3])
-      ));
+          sensorType: textToSensorType(paths[3]),
+        ));
+      } else {
+        _floors.last.rooms.last.sensors.add(Sensor<bool>(
+            name: getSensorName(paths[3]),
+            data: row['stav'] == 'on' ? true : false,
+            topic: '${paths[1]}/${paths[2]}/${paths[3]}',
+            sensorType: textToSensorType(paths[3])));
+      }
     }
 
     _setSubscribtion();
@@ -154,6 +173,33 @@ class HomeData {
         }
       }
     }
+
+    switch (topic) {
+      case "EMELYST/karta/otec/stav":
+        {
+          _users[0].isHome = message == "1";
+          _users[0].updateDate();
+          break;
+        }
+      case "EMELYST/karta/mama/stav":
+        {
+          _users[1].isHome = message == "1";
+          _users[1].updateDate();
+          break;
+        }
+      case "EMELYST/karta/syn/stav":
+        {
+          _users[2].isHome = message == "1";
+          _users[2].updateDate();
+          break;
+        }
+      case "EMELYST/karta/dcera/stav":
+        {
+          _users[3].isHome = message == "1";
+          _users[3].updateDate();
+          break;
+        }
+    }
   }
 
   static void _setSubscribtion() {
@@ -164,5 +210,10 @@ class HomeData {
         }
       }
     }
+
+    MqttClientWrapper.subscribe("karta/otec/stav");
+    MqttClientWrapper.subscribe("karta/mama/stav");
+    MqttClientWrapper.subscribe("karta/syn/stav");
+    MqttClientWrapper.subscribe("karta/dcera/stav");
   }
 }

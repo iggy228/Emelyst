@@ -25,11 +25,12 @@ class SensorState {
     Results result = await mysqlConn.query('SELECT * FROM stav ORDER BY topic');
     return result.toList();
   }
-  
+
   static Future<List<FamilyMember>> getUsers() async {
     List<FamilyMember> users = [];
 
-    Results results = await mysqlConn.query('SELECT uzivatel, cas, datum, stav FROM karta');
+    Results results =
+        await mysqlConn.query('SELECT uzivatel, cas, datum, stav FROM karta');
     for (var row in results) {
       int hours = row['cas'].inHours;
       int minutes = row['cas'].inMinutes - row['cas'].inHours * 60;
@@ -38,14 +39,8 @@ class SensorState {
         name: row['uzivatel'],
         isHome: row['stav'] == 1,
         iconUrl: 'images/${row["uzivatel"]}.png',
-        date: DateTime(
-          row['datum'].year,
-          row['datum'].month,
-          row['datum'].day,
-          hours,
-          minutes,
-          seconds
-        ),
+        date: DateTime(row['datum'].year, row['datum'].month, row['datum'].day,
+            hours, minutes, seconds),
       ));
     }
     return users;
@@ -75,7 +70,9 @@ class SensorState {
       }
     }
 
-    avgTemperatures['${result.last["datum"].day}.${result.last["datum"].month}'] = sumTemp / count;
+    avgTemperatures[
+            '${result.last["datum"].day}.${result.last["datum"].month}'] =
+        sumTemp / count;
 
     return avgTemperatures;
   }
@@ -104,7 +101,8 @@ class SensorState {
       }
     }
 
-    avgHumidity['${result.last["date"].day}.${result.last["date"].month}'] = sumHumidity / count;
+    avgHumidity['${result.last["date"].day}.${result.last["date"].month}'] =
+        sumHumidity / count;
 
     return avgHumidity;
   }

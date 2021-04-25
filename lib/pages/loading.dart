@@ -25,13 +25,13 @@ class Loading extends StatefulWidget {
 class _LoadingState extends State<Loading> {
 
   List<Room> rooms = [];
-  String _serverUrl = '';
+  String _serverUrl = '192.168.0.5';
   int _brokerPort = 1883;
   int _dbPort = 3306;
 
-  String _username = '';
-  String _password = '';
-  String _dbname = '';
+  String _username = 'emelyst';
+  String _password = 'emelyst';
+  String _dbname = 'emelyst';
 
   bool isError = false;
   String errorMessage = "";
@@ -88,17 +88,14 @@ class _LoadingState extends State<Loading> {
       _username = prefs.getString('username');
       _password = prefs.getString('password');
       _dbname = prefs.getString('dbname');
-
-      if (widget.whereLoading == WhereLoading.HOME) {
-        await setupConnectionToBroker();
-        await connectToDB();
-        if (!isError) {
-          await setupSensorsData();
-        }
-      }
     }
-    else {
-      isError = true;
+
+    if (widget.whereLoading == WhereLoading.HOME) {
+      await setupConnectionToBroker();
+      await connectToDB();
+      if (!isError) {
+        await setupSensorsData();
+      }
     }
     
     if (isError) {

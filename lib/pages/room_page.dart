@@ -21,7 +21,7 @@ class _RoomState extends State<RoomPage> {
   void setOnMessage() {
     MqttClientWrapper.getMessage((topic, message) {
       for (Sensor<bool> sensor in sensors) {
-        if (topic.contains(sensor.topic)) {
+        if (topic == 'EMELYST/${sensor.topic}') {
           setState(() {
             sensor.data = message == 'on' ? true : false;
           });
@@ -59,6 +59,28 @@ class _RoomState extends State<RoomPage> {
       return data ? 'zapnuté' : 'vypnuté';
     }
     return data ? 'otvorené' : 'zatvorené';
+  }
+
+  String topicToName(String topic) {
+    if (topic.contains('svetlo')) {
+      if (topic.contains('linka')) {
+        return 'linka';
+      }
+      return 'svetlo';
+    }
+    if (topic == 'von/vchod/servo') {
+      return 'dvere';
+    }
+    if (topic == 'prizemie/garaz/motorcek') {
+      return 'garáž';
+    }
+    if (topic == 'poschodie/izba/motorcek') {
+      return 'predná roleta';
+    }
+    if (topic == 'poschodie/izba/motorcek2') {
+      return 'bočná roleta';
+    }
+    return 'roleta';
   }
 
   Future<void> generateSensorsList(String roomName) async {
@@ -103,7 +125,7 @@ class _RoomState extends State<RoomPage> {
               itemCount: sensors.length,
               itemBuilder: (BuildContext context, int index) {
                 return RoomSensorCard(
-                  title: sensors[index].name,
+                  title: topicToName(sensors[index].topic),
                   iconUrl: typeToIcon(sensors[index].sensorType, sensors[index].data, sensors[index].topic),
                   buttonText: typeToButtonText(sensors[index].sensorType, sensors[index].data),
                   stateText: typeToStateText(sensors[index].sensorType, sensors[index].data),

@@ -33,6 +33,8 @@ class HomeData {
         return SensorType.light;
       case 'motorcek':
         return SensorType.engine;
+      case 'motorcek2':
+        return SensorType.engine;
       case 'alarm':
         return SensorType.alarm;
       case 'servo':
@@ -96,6 +98,9 @@ class HomeData {
         break;
       case 'pracovna':
         txt += 'pracovňa';
+        break;
+      case 'izba':
+        txt += 'detská';
         break;
       default:
         txt += room;
@@ -166,7 +171,7 @@ class HomeData {
     for (Floor floor in _floors) {
       for (Room room in floor.rooms) {
         for (Sensor sensor in room.sensors) {
-          if (topic.contains(sensor.topic)) {
+          if (topic == 'EMELYST/${sensor.topic}') {
             sensor.data = message == 'on' ? true : false;
             return;
           }

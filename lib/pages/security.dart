@@ -54,7 +54,7 @@ class _SecurityState extends State<Security> {
       }
 
       for (Sensor<bool> sensor in shutters) {
-        if (topic.contains(sensor.topic)) {
+        if (topic == 'EMELYST/${sensor.topic}') {
           setState(() {
             sensor.data = message == 'on' ? true : false;
           });
@@ -93,8 +93,17 @@ class _SecurityState extends State<Security> {
               topic: sensor.topic,
               sensorType: sensor.sensorType));
         } else if (sensor.topic.contains('motorcek')) {
+          String roomName = room.name;
+          if (sensor.topic.contains('izba')) {
+            if (sensor.topic.contains('motorcek2')) {
+              roomName = 'detská izba\n' + 'bok';
+            }
+            else {
+              roomName = 'detská izba\n' + 'pred';
+            }
+          }
           shutters.add(Sensor(
-            name: room.name,
+            name: roomName,
             data: sensor.data,
             topic: sensor.topic,
             sensorType: sensor.sensorType,
@@ -153,7 +162,6 @@ class _SecurityState extends State<Security> {
                       doorLoading = true;
                     });
                   },
-                  animatedIcon: doorLoading ? RotatingIcon() : null,
                 ),
                 DoorCard(
                   name: doors[1].name,
